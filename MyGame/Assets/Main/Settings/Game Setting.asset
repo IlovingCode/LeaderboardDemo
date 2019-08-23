@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 097b8dcf39ef6b545a09f1daddd6cc9c, type: 3}
+  m_Name: Game Setting
+  m_EditorClassIdentifier: 
+  countdownTime: 3
+  gameplayTime: 300
+  useWebSocket: 1
+  useMatchMaker: 1
+  hostDelay: 0.7
+  serverIP: 127.0.0.1
+  getPointsCmd: http://{0}:8080/mygame/user/{1}
+  drawResultCmd: http://{0}:8080/mygame/result/draw/{1}
+  fullResultCmd: http://{0}:8080/mygame/result/{1}/{2}/{3}
+  portCmd: http://{0}:8080/mygame/port/{1}/{2}
+  swordColor:
+  - {r: 1, g: 1, b: 0, a: 1}
+  - {r: 1, g: 0, b: 1, a: 1}
+  bodyColor:
+  - {r: 1, g: 0, b: 0, a: 1}
+  - {r: 0.13921927, g: 0.75735295, b: 0.57830733, a: 1}
+  characterClass:
+  - skin: {fileID: 21300000, guid: 1ec89239bcac3ac4081e288658956588, type: 3}
+    str: 0.2
+    agi: 0.8
+  - skin: {fileID: 21300000, guid: 4c9f47b02d8aab7418f15d69b24b5a75, type: 3}
+    str: 0.4
+    agi: 0.6
+  - skin: {fileID: 21300000, guid: 008a97426a085b24d9aee9f205cdd858, type: 3}
+    str: 0.5
+    agi: 0.5
+  - skin: {fileID: 21300000, guid: 94ae08a03fd6065418376d28ca91883e, type: 3}
+    str: 0.6
+    agi: 0.4
+  - skin: {fileID: 21300000, guid: d236f3dab6b54f245ac46d4c49afd2f1, type: 3}
+    str: 0.8
+    agi: 0.2
