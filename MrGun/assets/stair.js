@@ -34,6 +34,30 @@ cc.Class({
         return c;
     },
 
+    swap(p1, p2) {
+        let t = p1.x;
+        p1.x = p2.x;
+        p2.x = t;
+
+        t = p1.y;
+        p1.y = p2.y;
+        p2.y = t;
+    },
+
+    check(p1, p2) {
+        let node = this.node;
+        node.scaleX > 0 && this.swap(p1, p2);
+        let bound = node.children[0].getBoundingBoxToWorld();
+        if (p2.x < bound.xMin || p1.y > bound.yMax) {
+            //return null;
+        } else {
+            for (let i = 0; i < 1; i += 0.1) {
+                hit.x = p1.x + (p2.x - p1.x) * i;
+                hit.y = p1.y + (p2.y - p1.y) * i;
+            }
+        }
+    },
+
     getEnemyPos() {
         let stair = this.stair;
         let node = this.node;

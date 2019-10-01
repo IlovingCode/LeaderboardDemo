@@ -53,53 +53,31 @@ cc.Class({
         node.scaleX > 0 && this.swap(p1, p2);
         // body
         let bound = node.getBoundingBox();
-        if (p2.x < bound.xMin || p1.x > bound.xMax) {
-            return null;
-        }
-
-        let hit = null;
-        if (p2.x - bound.xMax > bound.xMin - p1.x) {
-            hit = cc.v2(p2);
-            while (hit.x > bound.xMax) {
-                hit.x = (p1.x + hit.x) * 0.5;
-                hit.y = (p1.y + hit.y) * 0.5;
-            }
+        let hit = cc.v2();
+        if (p2.x < bound.xMin || p1.x > bound.xMax || p1.y > bound.yMax) {
+            //return null;
         } else {
-            hit = cc.v2(p1);
-            while (hit.x < bound.xMin) {
-                hit.x = (p2.x + hit.x) * 0.5;
-                hit.y = (p2.y + hit.y) * 0.5;
+            for (let i = 0; i < 1; i += 0.1) {
+                hit.x = p1.x + (p2.x - p1.x) * i;
+                hit.y = p1.y + (p2.y - p1.y) * i;
+                if (bound.contains(hit)) return hit;
             }
         }
-
-        if (bound.contains(hit)) return hit;
 
         //head
         bound = node.children[0].getBoundingBoxToWorld();
-        if (p2.x < bound.xMin || p1.x > bound.xMax) {
+        if (p2.x < bound.xMin || p1.x > bound.xMax || p1.y > bound.yMax) {
             return null;
         }
 
-        hit = null;
-        if (p2.x - bound.xMax > bound.xMin - p1.x) {
-            hit = cc.v2(p2);
-            while (hit.x > bound.xMax) {
-                hit.x = (p1.x + hit.x) * 0.5;
-                hit.y = (p1.y + hit.y) * 0.5;
-            }
-        } else {
-            hit = cc.v2(p1);
-            while (hit.x < bound.xMin) {
-                hit.x = (p2.x + hit.x) * 0.5;
-                hit.y = (p2.y + hit.y) * 0.5;
+        for (let i = 0; i < 1; i += 0.1) {
+            hit.x = p1.x + (p2.x - p1.x) * i;
+            hit.y = p1.y + (p2.y - p1.y) * i;
+            if (bound.contains(hit)) {
+                cc.log('head shot');
+                return hit;
             }
         }
-
-        if (bound.contains(hit)) {
-            cc.log('head shot');
-            return hit;
-        }
-
     },
 
     kill() {
