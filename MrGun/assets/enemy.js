@@ -22,6 +22,7 @@ cc.Class({
         this.node.setPosition(this.x > 540 ? 1200 : -100, p.y);
         //this.enabled = true;
         this.node.runAction(cc.jumpTo(0.3, p, 50, 1));
+        this.stair = stair;
     },
 
     up(stair) {

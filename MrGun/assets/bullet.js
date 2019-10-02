@@ -34,7 +34,14 @@ cc.Class({
         p.x += this.vx * dt;
         p.y += this.vy * dt;
 
-        let hit = this.enemy.check(node.getPosition(), cc.v2(p));
+        let hit = this.enemy.stair.check(node.getPosition(), cc.v2(p));
+        if (hit) {
+            node.setPosition(hit);
+            this.enabled = false;
+            return;
+        }
+
+        hit = this.enemy.check(node.getPosition(), cc.v2(p));
         if (hit) {
             node.setPosition(hit);
             this.enabled = false;
