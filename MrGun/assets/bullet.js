@@ -30,18 +30,19 @@ cc.Class({
 
     update(dt) {
         let node = this.node;
-        let p = node.getPosition();
+        let pos = node.getPosition();
+        let p = cc.v2(pos);
         p.x += this.vx * dt;
         p.y += this.vy * dt;
 
-        let hit = this.enemy.stair.check(node.getPosition(), cc.v2(p));
+        let hit = this.enemy.stair.check(pos, cc.v2(p));
         if (hit) {
             node.setPosition(hit);
             this.enabled = false;
             return;
         }
 
-        hit = this.enemy.check(node.getPosition(), cc.v2(p));
+        hit = this.enemy.check(pos, cc.v2(p));
         if (hit) {
             node.setPosition(hit);
             this.enabled = false;
