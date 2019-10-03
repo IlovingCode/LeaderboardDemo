@@ -51,13 +51,20 @@ cc.Class({
 
     check(p1, p2) {
         let node = this.node;
-        node.scaleX > 0 && this.swap(p1, p2);
+        //node.scaleX > 0 && this.swap(p1, p2);
         // body
         let bound = node.getBoundingBox();
         let hit = cc.v2();
-        if (p2.x < bound.xMin || p1.x > bound.xMax || p1.y > bound.yMax) {
-            //return null;
+        let pass = true;
+        if (node.scaleX < 0) {
+            if (p2.x < bound.xMin || p1.x > bound.xMax || p1.y > bound.yMax)
+                pass = false;
         } else {
+            if (p2.x > bound.xMax || p1.x < bound.xMin || p1.y > bound.yMax)
+                pass = false;
+        }
+
+        if (pass) {
             for (let i = 0; i < 1; i += 0.1) {
                 hit.x = p1.x + (p2.x - p1.x) * i;
                 hit.y = p1.y + (p2.y - p1.y) * i;
@@ -67,18 +74,29 @@ cc.Class({
 
         //head
         bound = node.children[0].getBoundingBoxToWorld();
-        if (p2.x < bound.xMin || p1.x > bound.xMax || p1.y > bound.yMax) {
-            return null;
+        pass = true;
+        if (node.scaleX < 0) {
+            if (p2.x < bound.xMin || p1.x > bound.xMax || p1.y > bound.yMax)
+                pass = false;
+        } else {
+            if (p2.x > bound.xMax || p1.x < bound.xMin || p1.y > bound.yMax)
+                pass = false;
         }
 
-        for (let i = 0; i < 1; i += 0.1) {
-            hit.x = p1.x + (p2.x - p1.x) * i;
-            hit.y = p1.y + (p2.y - p1.y) * i;
-            if (bound.contains(hit)) {
-                cc.log('head shot');
-                return hit;
+        if (pass) {
+            for (let i = 0; i < 1; i += 0.1) {
+                hit.x = p1.x + (p2.x - p1.x) * i;
+                hit.y = p1.y + (p2.y - p1.y) * i;
+                if (bound.contains(hit)) {
+                    cc.log('head shot');
+                    return hit;
+                }
             }
         }
+    },
+
+    checkAlive() {
+        //if still alive, aim and fire on player
     },
 
     kill() {

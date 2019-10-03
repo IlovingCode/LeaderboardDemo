@@ -54,6 +54,7 @@ cc.Class({
         //cc.find('enemy').getComponent('enemy').up(this.stack[1].getComponent('stair'));
         //cc.find('player').getComponent('PlayerController').up(this.stack[0].getComponent('stair'));
         this.player.fire();
+        setTimeout(this.enemy.checkAlive.bind(this.enemy), 2000);
     },
 
     // update (dt) {},
