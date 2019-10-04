@@ -4,6 +4,7 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
+        gun: cc.Node,
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -11,6 +12,8 @@ cc.Class({
     // onLoad() { },
 
     onFinish() {
+        this.bulletPos = this.gun.children[0];
+        this.bulletPool = cc.find('bulletPool');
         this.node.rotation = 0;
         this.node.scaleX *= -1;
         gameEvent.invoke('ENEMY_KILLED');
@@ -23,6 +26,7 @@ cc.Class({
         //this.enabled = true;
         this.node.runAction(cc.jumpTo(0.3, p, 50, 1));
         this.stair = stair;
+        this.dead = false;
     },
 
     up(stair) {
@@ -97,9 +101,22 @@ cc.Class({
 
     checkAlive() {
         //if still alive, aim and fire on player
+        if (!this.dead) {
+            let bullet = null;
+            // get from pool
+            for (let i of pool) !i.active && (bullet = i);
+            if (!bullet) { // if not, create new one
+                bullet = cc.instantiate(this.bullet);
+                bullet.parent = this.bulletPool;
+            }
+            bullet.active = true;
+            
+        }
     },
 
     kill() {
+        if (this.dead) return;
+        this.dead = true;
         let scale = this.node.scaleX;
         this.seq = cc.sequence(
             cc.spawn(

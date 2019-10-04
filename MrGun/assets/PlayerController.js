@@ -16,6 +16,7 @@ cc.Class({
     onLoad() {
         this.bulletPos = this.gun.children[0];
         this.bulletPool = cc.find('bulletPool');
+        this.count = 1;
     },
 
     onDisable() {
@@ -33,18 +34,18 @@ cc.Class({
     },
 
     onFaceBack() {
+        this.fireCount = 0;
         let scale = this.node.scaleX;
         this.node.scaleX = -scale;
     },
 
     fire() {
-        this.count = 1;
-        this.fireCount = this.count * fireInterval;
+        !this.fireCount && (this.fireCount = this.count * fireInterval);
     },
 
     update(dt) {
         let c = this.fireCount;
-        if (c) {
+        if (c > 1) {
             if (c % fireInterval == 0) {
                 let pool = this.bulletPool.children;
                 let bullet = null;
@@ -57,8 +58,7 @@ cc.Class({
                 bullet.getComponent('bullet').set(
                     this.gun.convertToWorldSpaceAR(this.bulletPos),
                     this.node.scaleX > 0 ? (this.gun.rotation - 90) : (270 - this.gun.rotation),
-                    1.0 / this.count
-                )
+                    1.0 / this.count);
                 this.rot *= -1;
             }
 

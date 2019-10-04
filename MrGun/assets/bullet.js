@@ -50,6 +50,8 @@ cc.Class({
             this.enemy.kill();
         } else node.setPosition(p);
 
-        if (p.x < 0 || p.x > 1100) node.active = false;
+        if (pos.x < 0 || pos.x > 1100) {
+            node.active = false;
+        }
     },
 });
