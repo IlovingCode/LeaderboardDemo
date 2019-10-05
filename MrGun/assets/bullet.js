@@ -8,24 +8,44 @@ cc.Class({
     // LIFE-CYCLE CALLBACKS:
 
     start() {
-        this.enemy = cc.find('enemy').getComponent('enemy');
-
-        this.seq = cc.sequence(cc.scaleTo(0.1, 1), cc.callFunc(this.onFinish.bind(this)));
+        this.seq2 = cc.sequence(cc.fadeOut(0.1), cc.callFunc(this.onFinish.bind(this)));
+        this.seq = cc.sequence(cc.scaleTo(0.1, 1), this.seq2);
     },
 
     onFinish() {
-        this.node.active = false;
-        this.enabled = true;
-        this.node.children[0].setScale(0);
+        let node = this.node;
+        node.active = false;
+        node.opacity = 255;
+        node.children[0].setScale(0);
+        node.children[0].opacity = 255;
+        this.target.checkAlive();
     },
 
-    set(pos, rot, c) {
+    set(pos, rot, c, target) {
         rot *= Math.PI / 180;
         this.vx = Math.cos(rot) * this.speed * c;
         this.vy = -Math.sin(rot) * this.speed * c;
+        this.target = target;
 
         this.node.setPosition(pos);
         this.node.active = true;
+        this.enabled = true;
+    },
+
+    onHit(target) {
+        this.enabled = false;
+        this.node.children[0].runAction(this.seq);
+        target.kill();
+    },
+
+    aimPlayer(p1, p2, target) {
+        this.node.active = true;
+        this.enabled = false;
+        this.node.setPosition(p1);
+
+        let seq = cc.sequence(cc.moveTo(0.1, p2), cc.callFunc(this.onHit.bind(this, target)));
+
+        this.node.runAction(seq);
     },
 
     update(dt) {
@@ -35,23 +55,21 @@ cc.Class({
         p.x += this.vx * dt;
         p.y += this.vy * dt;
 
-        let hit = this.enemy.stair.check(pos, cc.v2(p));
+        let hit = this.target.stair.check(pos, cc.v2(p));
         if (hit) {
             node.setPosition(hit);
-            this.enabled = false;
+            node.children[0].runAction(this.seq2);
             return;
         }
 
-        hit = this.enemy.check(pos, cc.v2(p));
+        hit = this.target.check(pos, cc.v2(p));
         if (hit) {
             node.setPosition(hit);
-            this.enabled = false;
-            node.children[0].runAction(this.seq);
-            this.enemy.kill();
+            this.onHit(this.target);
         } else node.setPosition(p);
 
         if (pos.x < 0 || pos.x > 1100) {
-            node.active = false;
+            this.onFinish();
         }
     },
 });

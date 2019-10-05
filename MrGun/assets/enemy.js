@@ -9,11 +9,13 @@ cc.Class({
 
     // LIFE-CYCLE CALLBACKS:
 
-    // onLoad() { },
-
-    onFinish() {
+    onLoad() {
         this.bulletPos = this.gun.children[0];
         this.bulletPool = cc.find('bulletPool');
+        this.player = cc.find('player').getComponent('PlayerController');
+    },
+
+    onFinish() {
         this.node.rotation = 0;
         this.node.scaleX *= -1;
         gameEvent.invoke('ENEMY_KILLED');
@@ -102,15 +104,31 @@ cc.Class({
     checkAlive() {
         //if still alive, aim and fire on player
         if (!this.dead) {
+            this.dead = true;
+            let pool = this.bulletPool.children;
             let bullet = null;
             // get from pool
-            for (let i of pool) !i.active && (bullet = i);
-            if (!bullet) { // if not, create new one
-                bullet = cc.instantiate(this.bullet);
-                bullet.parent = this.bulletPool;
-            }
-            bullet.active = true;
-            
+            for (let i of pool) !i.active && (bullet = i.getComponent('bullet'));
+
+            let node = this.player.node;
+            let p2 = node.convertToWorldSpaceAR(node.children[0]);
+            let p1 = this.gun.convertToWorldSpaceAR(this.bulletPool);
+            let d = cc.v2(p2.x - p1.x, p2.y - p1.y);
+            let angle = 270 + Math.atan2(d.y, -d.x * this.node.scaleX) * 180 / Math.PI;
+
+
+            this.gun.rotation = angle;
+            p1 = this.gun.convertToWorldSpaceAR(this.bulletPos);
+            this.gun.rotation = 90;
+            //cc.log(angle);
+
+            let seq = cc.sequence(cc.rotateTo(0.2, angle),
+                cc.callFunc(bullet.aimPlayer.bind(bullet,
+                    p1, p2, this.player
+                ))
+            );
+
+            this.gun.runAction(seq);
         }
     },
 

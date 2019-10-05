@@ -1,3 +1,5 @@
+var gameEvent = require('GameEvent');
+
 var fireInterval = 5;
 
 cc.Class({
@@ -13,10 +15,20 @@ cc.Class({
 
     // LIFE-CYCLE CALLBACKS:
 
-    onLoad() {
+    // onLoad() { },
+
+    start() {
+        this.enemy = cc.find('enemy').getComponent('enemy');
         this.bulletPos = this.gun.children[0];
         this.bulletPool = cc.find('bulletPool');
         this.count = 1;
+        this.enabled = false;
+
+        gameEvent.GAME_START.push(this.onGameStart.bind(this));
+    },
+
+    onGameStart() {
+        this.enabled = true;
     },
 
     onDisable() {
@@ -58,7 +70,7 @@ cc.Class({
                 bullet.getComponent('bullet').set(
                     this.gun.convertToWorldSpaceAR(this.bulletPos),
                     this.node.scaleX > 0 ? (this.gun.rotation - 90) : (270 - this.gun.rotation),
-                    1.0 / this.count);
+                    1.0 / this.count, this.enemy);
                 this.rot *= -1;
             }
 
@@ -70,5 +82,25 @@ cc.Class({
         if (r > this.max) this.rot = Math.abs(this.rot);
         if (r < this.min) this.rot = -Math.abs(this.rot);
         this.gun.rotation = r;
+    },
+
+    kill() {
+        //if (this.dead) return;
+        //this.dead = true;
+        let scale = this.node.scaleX;
+        this.seq = cc.sequence(
+            cc.spawn(
+                cc.rotateBy(0.5, -scale * 1000),
+                cc.jumpTo(0.5, cc.v2(
+                    scale < 0 ? 1300 : (-100), this.node.y - 500),
+                    500, 1)),
+            cc.callFunc(this.onFinish.bind(this)));
+        this.node.runAction(this.seq);
+    },
+
+    onFinish() {
+        //this.node.rotation = 0;
+        //this.node.scaleX *= -1;
+        gameEvent.invoke('GAME_OVER');
     },
 });

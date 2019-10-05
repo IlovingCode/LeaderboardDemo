@@ -36,12 +36,12 @@ cc.Class({
         this.node.on(cc.Node.EventType.TOUCH_START, this.onTouchStart.bind(this));
 
         this.enemy = cc.find('enemy').getComponent('enemy');
-        this.enemy.set(stack[0].getComponent('stair'));
         this.id = 0;
 
         this.player = cc.find('player').getComponent('PlayerController');
 
         gameEvent.ENEMY_KILLED.push(this.onEnemyKilled.bind(this));
+        gameEvent.GAME_START.push(this.onEnemyKilled.bind(this));
     },
 
     onEnemyKilled() {
@@ -54,7 +54,6 @@ cc.Class({
         //cc.find('enemy').getComponent('enemy').up(this.stack[1].getComponent('stair'));
         //cc.find('player').getComponent('PlayerController').up(this.stack[0].getComponent('stair'));
         this.player.fire();
-        setTimeout(this.enemy.checkAlive.bind(this.enemy), 2000);
     },
 
     // update (dt) {},
