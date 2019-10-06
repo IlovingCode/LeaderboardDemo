@@ -28,7 +28,7 @@ cc.Class({
         this.bulletPool = cc.find('bulletPool');
         this.player = cc.find('player').getComponent('PlayerController');
 
-        this.seq = cc.sequence(cc.fadeTo(0.05, 150), cc.fadeOut(0.05));
+        this.seq = cc.sequence(cc.delayTime(0.2), cc.fadeTo(0.05, 150), cc.fadeOut(0.05));
     },
 
     reset() {
@@ -53,9 +53,9 @@ cc.Class({
         //this.enabled = true;
         let i = this.updateColor();
 
-        if (i == 1)
-            this.node.runAction(cc.jumpTo(0.3, p, 50, 1));
-        else this.node.runAction(cc.moveTo(0.3, p));
+        i == 0 && this.node.runAction(cc.moveTo(0.3, p));
+        i == 1 && this.node.runAction(cc.jumpTo(0.3, p, 50, 1));
+        i == 2 && this.node.runAction(cc.jumpTo(0.5, p, 20, 5));
     },
 
     updateColor() {
