@@ -80,6 +80,13 @@ cc.Class({
         return cc.v2(stair.x * node.scaleX + node.x, stair.y + stair.height + node.y);
     },
 
+    getCoinPos() {
+        let stair = this.stair;
+        let node = this.node;
+        let c = this.c + 3;
+        return cc.v2((stair.x - c * 50) * node.scaleX + node.x, node.y);
+    },
+
     getFootPos() {
         let stair = this.stair;
         let node = this.node;

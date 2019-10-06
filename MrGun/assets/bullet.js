@@ -60,16 +60,17 @@ cc.Class({
         p.x += this.vx * dt;
         p.y += this.vy * dt;
 
-        let hit = this.target.stair.check(pos, cc.v2(p));
+        let target = this.target;
+        let hit = target.stair.check(pos, cc.v2(p));
         if (hit) {
             this.onFinish();
             return;
         }
 
-        hit = this.target.check(pos, cc.v2(p));
+        hit = target.check(pos, cc.v2(p));
         if (hit) {
             node.setPosition(hit);
-            this.onHit(this.target);
+            this.onHit(target);
         } else node.setPosition(p);
 
         if (pos.x < 0 || pos.x > 1100) {

@@ -19,6 +19,7 @@ cc.Class({
     properties: {
         gun: cc.Node,
         gunFire: cc.Node,
+        coin: cc.Prefab,
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -26,10 +27,13 @@ cc.Class({
     onLoad() {
         this.bulletPos = this.gun.children[0];
         this.bulletPool = cc.find('bulletPool');
+        this.coinPool = cc.find('coinPool');
         this.player = cc.find('player').getComponent('PlayerController');
 
         this.seq = cc.sequence(cc.delayTime(0.2), cc.fadeTo(0.05, 150), cc.fadeOut(0.05));
     },
+
+
 
     reset() {
         let node = this.node;
@@ -42,12 +46,13 @@ cc.Class({
     onFinish() {
         this.node.rotation = 0;
         this.node.scaleX *= -1;
-        gameEvent.invoke('ENEMY_KILLED');
+        gameEvent.invoke('ENEMY_KILLED', this.isHeadShot);
     },
 
     set(stair) {
         this.stair = stair;
         this.dead = false;
+        this.isHeadShot = false;
         let p = stair.getEnemyPos();
         this.node.setPosition(p.x > 540 ? 1200 : -100, p.y);
         //this.enabled = true;
@@ -138,6 +143,7 @@ cc.Class({
                 hit.y = p1.y + (p2.y - p1.y) * i;
                 if (bound.contains(hit)) {
                     cc.log('head shot');
+                    this.isHeadShot = true;
                     return hit;
                 }
             }
@@ -176,6 +182,19 @@ cc.Class({
         }
     },
 
+    spawnCoin() {
+        let pool = this.coinPool.children;
+        let coin = null;
+        // get from pool
+        for (let i of pool) !i.active && (coin = i);
+        if (!coin) { // if not, create new one
+            coin = cc.instantiate(this.coin);
+            coin.parent = this.coinPool;
+        }
+
+        coin.getComponent('coin').set(this, this.player.node);
+    },
+
     kill() {
         if (this.dead) return;
         this.dead = true;
@@ -188,5 +207,6 @@ cc.Class({
                     500, 1)),
             cc.callFunc(this.onFinish.bind(this)));
         this.node.runAction(seq);
+        this.spawnCoin();
     },
 });
