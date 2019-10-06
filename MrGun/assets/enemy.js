@@ -5,6 +5,7 @@ cc.Class({
 
     properties: {
         gun: cc.Node,
+        gunFire: cc.Node,
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -13,6 +14,8 @@ cc.Class({
         this.bulletPos = this.gun.children[0];
         this.bulletPool = cc.find('bulletPool');
         this.player = cc.find('player').getComponent('PlayerController');
+
+        this.seq = cc.sequence(cc.fadeIn(0.05), cc.fadeOut(0.05));
     },
 
     onFinish() {
@@ -22,12 +25,11 @@ cc.Class({
     },
 
     set(stair) {
+        this.stair = stair;
         let p = stair.getEnemyPos();
-        this.x = p.x;
-        this.node.setPosition(this.x > 540 ? 1200 : -100, p.y);
+        this.node.setPosition(p.x > 540 ? 1200 : -100, p.y);
         //this.enabled = true;
         this.node.runAction(cc.jumpTo(0.3, p, 50, 1));
-        this.stair = stair;
         this.dead = false;
     },
 
@@ -128,6 +130,7 @@ cc.Class({
                 ))
             );
 
+            this.gunFire.runAction(this.seq);
             this.gun.runAction(seq);
         }
     },
@@ -136,20 +139,13 @@ cc.Class({
         if (this.dead) return;
         this.dead = true;
         let scale = this.node.scaleX;
-        this.seq = cc.sequence(
+        let seq = cc.sequence(
             cc.spawn(
                 cc.rotateBy(0.5, -scale * 1000),
                 cc.jumpTo(0.5, cc.v2(
                     scale < 0 ? 1300 : (-100), this.node.y - 500),
                     500, 1)),
             cc.callFunc(this.onFinish.bind(this)));
-        this.node.runAction(this.seq);
+        this.node.runAction(seq);
     },
-
-    // update(dt) {
-    //     let x = this.node.x;
-    //     x = (x + this.x) * 0.5;
-    //     if (Math.abs(this.x - x) < 0.01) this.enabled = false;
-    //     this.node.x = x;
-    // },
 });

@@ -8,16 +8,15 @@ cc.Class({
     // LIFE-CYCLE CALLBACKS:
 
     start() {
-        this.seq2 = cc.sequence(cc.fadeOut(0.1), cc.callFunc(this.onFinish.bind(this)));
-        this.seq = cc.sequence(cc.scaleTo(0.1, 1), this.seq2);
+        let seq2 = cc.sequence(cc.fadeOut(0.3), cc.callFunc(this.onFinish.bind(this)));
+        this.seq = cc.spawn(cc.scaleTo(0.3, 7), seq2);
     },
 
     onFinish() {
         let node = this.node;
         node.active = false;
         node.opacity = 255;
-        node.children[0].setScale(0);
-        node.children[0].opacity = 255;
+        node.setScale(0.5);
         this.target.checkAlive();
     },
 
@@ -33,19 +32,22 @@ cc.Class({
     },
 
     onHit(target) {
+        let node = this.node;
         this.enabled = false;
-        this.node.children[0].runAction(this.seq);
+        node.runAction(this.seq);
         target.kill();
     },
 
     aimPlayer(p1, p2, target) {
-        this.node.active = true;
+        let node = this.node;
         this.enabled = false;
-        this.node.setPosition(p1);
+        node.active = true;
+        node.setPosition(p1);
 
-        let seq = cc.sequence(cc.moveTo(0.1, p2), cc.callFunc(this.onHit.bind(this, target)));
+        let seq = cc.sequence(cc.moveTo(0.1, p2),
+            cc.callFunc(this.onHit.bind(this, target)));
 
-        this.node.runAction(seq);
+        node.runAction(seq);
     },
 
     update(dt) {
@@ -57,8 +59,7 @@ cc.Class({
 
         let hit = this.target.stair.check(pos, cc.v2(p));
         if (hit) {
-            node.setPosition(hit);
-            node.children[0].runAction(this.seq2);
+            this.onFinish();
             return;
         }
 

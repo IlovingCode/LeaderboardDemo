@@ -11,13 +11,11 @@ cc.Class({
         this.wall = this.node.children[0];
     },
 
-    set(color, scale, pos) {
+    set(pos) {
         let node = this.node;
-        this.wall.color = color;
-        this.stair.color = color;
 
         // random position
-        let c = this.c = 2 + Math.floor(Math.random() * 4);
+        let c = this.c = 2 + Math.floor(Math.random() * 3) * 2;
         let x = 5 - Math.floor(Math.random() * (7 - c));
         let y = c * 50;
         let p = cc.v2(x * 50, y - this.stair.height);
@@ -25,13 +23,17 @@ cc.Class({
         this.wall.setPosition(p);
 
         node.setPosition(540, pos.y);
-        node.color = color;
-        node.setScale(scale, 1);
         node.setSiblingIndex(0);
 
         pos.y += y;
 
         return c;
+    },
+
+    updateColor(color) {
+        this.wall.color = color;
+        this.stair.color = color;
+        this.node.color = color;
     },
 
     swap(p1, p2) {
@@ -56,8 +58,8 @@ cc.Class({
             for (let i = 0; i < 1; i += 0.1) {
                 hit.x = p1.x + (p2.x - p1.x) * i;
                 hit.y = p1.y + (p2.y - p1.y) * i;
-                
-                if(hit.y > bound.yMax) return null;
+
+                if (hit.y > bound.yMax) return null;
                 let c = Math.floor((hit.y - bound.yMin - 12) / 50);
                 if (node.scaleX < 0) {
                     if (hit.x < bound.xMax - c * 50) {

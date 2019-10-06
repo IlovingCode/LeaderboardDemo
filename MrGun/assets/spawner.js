@@ -4,6 +4,7 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
+        color: cc.Color,
         obj: cc.Prefab,
         count: 10,
     },
@@ -20,17 +21,16 @@ cc.Class({
         let stack = this.stack = [];
 
         let pos = this.pos = cc.v2(0, player.y);
-        let color = cc.color('006464');
-        let black = cc.color('000000');
         let content = this.content;
         let count = this.count;
         for (let i = 0; i < count; i++) {
-            let obj = cc.instantiate(this.obj);
+            let obj = cc.instantiate(this.obj)
+            let stair = obj.getComponent('stair');
             obj.parent = content;
-            color = color.lerp(black, (pos.y - player.y) / 1920);
-            obj.getComponent('stair').set(color, (i % 2) ? -1 : 1, pos);
+            obj.scaleX = (i % 2) ? -1 : 1;
+            stair.set(pos);
 
-            stack.push(obj);
+            stack.push(stair);
         }
 
         this.node.on(cc.Node.EventType.TOUCH_START, this.onTouchStart.bind(this));
@@ -38,16 +38,21 @@ cc.Class({
         this.enemy = cc.find('enemy').getComponent('enemy');
         this.id = 0;
 
-        this.player = cc.find('player').getComponent('PlayerController');
+        this.player = player.getComponent('PlayerController');
+        this.delta = this.node.y - player.y;
+        this.node.y = 0;
 
         gameEvent.ENEMY_KILLED.push(this.onEnemyKilled.bind(this));
         gameEvent.GAME_START.push(this.onEnemyKilled.bind(this));
     },
 
     onEnemyKilled() {
-        this.player.up(this.stack[this.id].getComponent('stair'));
-        this.id++;
-        this.enemy.set(this.stack[this.id].getComponent('stair'));
+        let id = this.id;
+        let stack = this.stack;
+        this.player.up(stack[id]);
+        if (++id >= stack.length) id = 0;
+        this.enemy.set(stack[id]);
+        this.id = id;
     },
 
     onTouchStart(e) {
@@ -56,5 +61,29 @@ cc.Class({
         this.player.fire();
     },
 
-    // update (dt) {},
+    updateStack() {
+        let stack = this.stack;
+        let y = this.player.node.y;
+        let color = this.color;
+        let black = cc.Color.BLACK;
+        for (let i of stack) {
+            let d = i.node.y - y;
+
+            if (d < -1300) {
+                i.set(this.pos);
+            } else {
+                let c = color.lerp(black, d / 1300);
+                i.updateColor(c);
+            }
+        }
+    },
+
+    update(dt) {
+        let y = this.player.node.y + this.delta;
+        let node = this.node;
+        if (node.y < y) {
+            node.y = (node.y + y) * 0.5;
+            this.updateStack();
+        }
+    },
 });

@@ -7,6 +7,7 @@ cc.Class({
 
     properties: {
         gun: cc.Node,
+        gunFire: cc.Node,
         rot: 1,
         min: 45,
         max: 90,
@@ -22,9 +23,12 @@ cc.Class({
         this.bulletPos = this.gun.children[0];
         this.bulletPool = cc.find('bulletPool');
         this.count = 1;
+        this.fireCount = 1;
         this.enabled = false;
 
         gameEvent.GAME_START.push(this.onGameStart.bind(this));
+
+        this.seq = cc.sequence(cc.fadeIn(0.05), cc.fadeOut(0.05));
     },
 
     onGameStart() {
@@ -41,7 +45,7 @@ cc.Class({
         this.node.runAction(cc.sequence(
             cc.moveTo(0.3, foot),
             cc.jumpTo(stair.c * 0.1, p, 50, stair.c),
-            cc.jumpTo(0.1, cc.v2(this.node.scaleX < 0 ? 250 : 850, p.y), 50, 1),
+            cc.jumpTo(0.1, cc.v2(this.node.scaleX < 0 ? 200 : 900, p.y), 50, 1),
             cc.callFunc(this.onFaceBack.bind(this))));
     },
 
@@ -72,6 +76,9 @@ cc.Class({
                     this.node.scaleX > 0 ? (this.gun.rotation - 90) : (270 - this.gun.rotation),
                     1.0 / this.count, this.enemy);
                 this.rot *= -1;
+
+                this.gunFire.stopAllActions();
+                this.gunFire.runAction(this.seq);
             }
 
             this.fireCount--;
@@ -88,14 +95,14 @@ cc.Class({
         //if (this.dead) return;
         //this.dead = true;
         let scale = this.node.scaleX;
-        this.seq = cc.sequence(
+        let seq = cc.sequence(
             cc.spawn(
                 cc.rotateBy(0.5, -scale * 1000),
                 cc.jumpTo(0.5, cc.v2(
                     scale < 0 ? 1300 : (-100), this.node.y - 500),
                     500, 1)),
             cc.callFunc(this.onFinish.bind(this)));
-        this.node.runAction(this.seq);
+        this.node.runAction(seq);
     },
 
     onFinish() {
