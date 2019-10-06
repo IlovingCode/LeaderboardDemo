@@ -15,6 +15,19 @@ cc.Class({
         gameEvent.resetAll();
     },
 
+    reset() {
+        this.player.reset();
+        this.enemy.reset();
+        this.node.y = 0;
+        this.id = 0;
+        let pos = this.pos = cc.v2(0, this.player.node.y);
+
+        let stack = this.stack;
+        let count = this.count;
+        for (let i = 0; i < count; i++)
+            stack[i].set(pos);
+    },
+
     start() {
         this.content = cc.director.getScene();
         let player = cc.find('player');
@@ -44,6 +57,7 @@ cc.Class({
 
         gameEvent.ENEMY_KILLED.push(this.onEnemyKilled.bind(this));
         gameEvent.GAME_START.push(this.onEnemyKilled.bind(this));
+        gameEvent.GAME_OVER.push(this.reset.bind(this));
     },
 
     onEnemyKilled() {

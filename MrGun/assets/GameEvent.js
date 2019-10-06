@@ -20,7 +20,7 @@ gameEvent.reset = function(name) {
     } else gameEvent[name] = [];
 }
 
-gameEvent.list = ['ENEMY_KILLED', 'GAME_START'];
+gameEvent.list = ['ENEMY_KILLED', 'GAME_START', 'GAME_OVER'];
 
 gameEvent.resetAll = function() {
     gameEvent.reset(gameEvent.list);

@@ -9,7 +9,7 @@ cc.Class({
 
     start() {
         let seq2 = cc.sequence(cc.fadeOut(0.3), cc.callFunc(this.onFinish.bind(this)));
-        this.seq = cc.spawn(cc.scaleTo(0.3, 7), seq2);
+        this.seq = cc.spawn(cc.scaleTo(0.3, 10), seq2);
     },
 
     onFinish() {
@@ -26,8 +26,10 @@ cc.Class({
         this.vy = -Math.sin(rot) * this.speed * c;
         this.target = target;
 
-        this.node.setPosition(pos);
-        this.node.active = true;
+        let node = this.node;
+        node.setPosition(pos);
+        node.color = cc.Color.WHITE;
+        node.active = true;
         this.enabled = true;
     },
 
@@ -35,6 +37,7 @@ cc.Class({
         let node = this.node;
         this.enabled = false;
         node.runAction(this.seq);
+        node.color = target.node.color;
         target.kill();
     },
 

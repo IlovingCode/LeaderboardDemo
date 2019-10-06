@@ -23,20 +23,26 @@ cc.Class({
         this.bulletPos = this.gun.children[0];
         this.bulletPool = cc.find('bulletPool');
         this.count = 1;
-        this.fireCount = 1;
-        this.enabled = false;
+        this.reset();
 
         gameEvent.GAME_START.push(this.onGameStart.bind(this));
 
-        this.seq = cc.sequence(cc.fadeIn(0.05), cc.fadeOut(0.05));
+        this.seq = cc.sequence(cc.fadeTo(0.05, 150), cc.fadeOut(0.05));
+    },
+
+    reset() {
+        let node = this.node;
+        this.fireCount = 1;
+        this.enabled = false;
+        this.bulletPos.active = false;
+        node.setPosition(200, 0);
+        node.rotation = 0;
+        node.scaleX = 1;
+        this.gun.rotation = 90;
     },
 
     onGameStart() {
         this.enabled = true;
-    },
-
-    onDisable() {
-        this.gun.rotation = 90;
     },
 
     up(stair) {
@@ -53,9 +59,11 @@ cc.Class({
         this.fireCount = 0;
         let scale = this.node.scaleX;
         this.node.scaleX = -scale;
+        this.bulletPos.active = true;
     },
 
     fire() {
+        this.bulletPos.active = false;
         !this.fireCount && (this.fireCount = this.count * fireInterval);
     },
 
@@ -94,12 +102,13 @@ cc.Class({
     kill() {
         //if (this.dead) return;
         //this.dead = true;
+        //this.bulletPos.active = false;
         let scale = this.node.scaleX;
         let seq = cc.sequence(
             cc.spawn(
                 cc.rotateBy(0.5, -scale * 1000),
                 cc.jumpTo(0.5, cc.v2(
-                    scale < 0 ? 1300 : (-100), this.node.y - 500),
+                    this.node.x, this.node.y - 500),
                     500, 1)),
             cc.callFunc(this.onFinish.bind(this)));
         this.node.runAction(seq);

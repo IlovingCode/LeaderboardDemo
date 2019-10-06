@@ -1,4 +1,17 @@
 var gameEvent = require('GameEvent');
+var sizeList = [
+    { x: 50, y: 60, z: 70, w: 50 },
+    { x: 40, y: 90, z: 40, w: 30 },
+    { x: 90, y: 60, z: 80, w: 50 },
+];
+
+var colorList = [
+    '00ffff',
+    'ff00ff',
+    'ff0000',
+    '0000ff',
+    '00ff00'
+]
 
 cc.Class({
     extends: cc.Component,
@@ -15,7 +28,15 @@ cc.Class({
         this.bulletPool = cc.find('bulletPool');
         this.player = cc.find('player').getComponent('PlayerController');
 
-        this.seq = cc.sequence(cc.fadeIn(0.05), cc.fadeOut(0.05));
+        this.seq = cc.sequence(cc.fadeTo(0.05, 150), cc.fadeOut(0.05));
+    },
+
+    reset() {
+        let node = this.node;
+        node.setPosition(-1000, 0);
+        node.rotation = 0;
+        node.scaleX = 1;
+        this.gun.rotation = 90;
     },
 
     onFinish() {
@@ -26,11 +47,31 @@ cc.Class({
 
     set(stair) {
         this.stair = stair;
+        this.dead = false;
         let p = stair.getEnemyPos();
         this.node.setPosition(p.x > 540 ? 1200 : -100, p.y);
         //this.enabled = true;
-        this.node.runAction(cc.jumpTo(0.3, p, 50, 1));
-        this.dead = false;
+        let i = this.updateColor();
+
+        if (i == 1)
+            this.node.runAction(cc.jumpTo(0.3, p, 50, 1));
+        else this.node.runAction(cc.moveTo(0.3, p));
+    },
+
+    updateColor() {
+        let node = this.node;
+        let i = Math.floor(Math.random() * colorList.length);
+        node.color = cc.color(colorList[i]);
+
+        i = Math.floor(Math.random() * sizeList.length);
+        let size = sizeList[i];
+        node.setContentSize(size.x, size.y);
+
+        node = this.node.children[0];
+        node.setContentSize(size.z, size.w);
+        node.y = size.y;
+
+        return i;
     },
 
     up(stair) {
