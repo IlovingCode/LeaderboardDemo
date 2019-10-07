@@ -9,6 +9,7 @@ cc.Class({
         actionPhase: cc.Node,
         coinTxt: cc.Label,
         scoreTxt: cc.Label,
+        bestScoreTxt: cc.Label,
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -20,6 +21,7 @@ cc.Class({
         this.bestScore = 0;
         this.coin = 0;
         this.coinTxt.string = '0';
+        this.bestScoreTxt.string = '0';
     },
 
     onEnemyKilled(headshot) {
@@ -44,7 +46,10 @@ cc.Class({
         this.mainMenu.active = true;
         this.actionPhase.active = false;
 
-        this.score > this.bestScore && (this.bestScore = this.score);
+        if (this.score > this.bestScore) {
+            this.bestScore = this.score;
+            this.bestScoreTxt.string = this.score;
+        }
     }
 
     // update (dt) {},

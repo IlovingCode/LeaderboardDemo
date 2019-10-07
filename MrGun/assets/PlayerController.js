@@ -12,6 +12,7 @@ cc.Class({
         min: 45,
         max: 90,
         bullet: cc.Prefab,
+        matLoader: require('MaterialLoader')
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -34,6 +35,7 @@ cc.Class({
         let node = this.node;
         this.fireCount = 1;
         this.enabled = false;
+        this.matLoader.set(0);
         this.bulletPos.active = false;
         node.setPosition(200, 0);
         node.rotation = 0;
@@ -42,7 +44,7 @@ cc.Class({
     },
 
     onGameStart() {
-        this.enabled = true;
+        //this.enabled = true;
     },
 
     up(stair) {
@@ -60,10 +62,12 @@ cc.Class({
         let scale = this.node.scaleX;
         this.node.scaleX = -scale;
         this.bulletPos.active = true;
+        this.enabled = true;
     },
 
     fire() {
         this.bulletPos.active = false;
+        this.matLoader.set(0);
         !this.fireCount && (this.fireCount = this.count * fireInterval);
     },
 
@@ -90,13 +94,14 @@ cc.Class({
             }
 
             this.fireCount--;
+        } else if (!c) {
+            let r = this.gun.rotation;
+            r -= dt * this.rot;
+            if (r > this.max) this.rot = Math.abs(this.rot);
+            if (r < this.min) this.rot = -Math.abs(this.rot);
+            this.matLoader.set((this.max - r) / (this.max - this.min));
+            this.gun.rotation = r;
         }
-
-        let r = this.gun.rotation;
-        r -= dt * this.rot;
-        if (r > this.max) this.rot = Math.abs(this.rot);
-        if (r < this.min) this.rot = -Math.abs(this.rot);
-        this.gun.rotation = r;
     },
 
     kill() {
