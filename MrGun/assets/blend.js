@@ -30,7 +30,7 @@ var shader = {
     params: ['a1f'],
 
     set(mat, a) {
-        mat.setParam('a1f', a * 0.19);
+        mat.setParam('a1f', a * 0.2 - 0.004);
     },
 };
 
