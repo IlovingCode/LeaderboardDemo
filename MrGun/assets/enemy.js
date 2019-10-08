@@ -33,7 +33,10 @@ cc.Class({
         this.seq = cc.sequence(cc.delayTime(0.2), cc.fadeTo(0.05, 150), cc.fadeOut(0.05));
     },
 
-
+    boss(on) {
+        this.maxHealth = on ? (2 + Math.floor(Math.random() * 4)) : 1;
+        gameEvent.invoke('BOSS_HEALTH', on ? 1 : 0);
+    },
 
     reset() {
         let node = this.node;
@@ -52,10 +55,11 @@ cc.Class({
     set(stair) {
         this.stair = stair;
         this.dead = false;
+        this.enabled = true;
+        this.health = this.maxHealth;
         this.isHeadShot = false;
         let p = stair.getEnemyPos();
         this.node.setPosition(p.x > 540 ? 1200 : -100, p.y);
-        //this.enabled = true;
         let i = this.updateColor();
 
         i == 0 && this.node.runAction(cc.moveTo(0.3, p));
@@ -80,11 +84,16 @@ cc.Class({
     },
 
     up(stair) {
+        this.stair = stair;
+        this.dead = false;
+        this.enabled = true;
+        this.isHeadShot = false;
+
         let foot = stair.getFootPos();
         let p = stair.getEnemyPos();
         this.node.runAction(cc.sequence(
             cc.moveTo(0.3, foot),
-            cc.jumpTo(0.5, p, 50, stair.c),
+            cc.jumpTo(stair.c * 0.1, p, 50, stair.c),
             cc.callFunc(this.onFaceBack.bind(this))));
     },
 
@@ -151,9 +160,10 @@ cc.Class({
     },
 
     checkAlive() {
+        if (this.health < 1 || !this.enabled) return;
+        this.enabled = false;
         //if still alive, aim and fire on player
         if (!this.dead) {
-            this.dead = true;
             let pool = this.bulletPool.children;
             let bullet = null;
             // get from pool
@@ -179,7 +189,7 @@ cc.Class({
 
             this.gunFire.runAction(this.seq);
             this.gun.runAction(seq);
-        }
+        } else gameEvent.invoke('BOSS_HIT', this.isHeadShot);
     },
 
     spawnCoin() {
@@ -196,8 +206,10 @@ cc.Class({
     },
 
     kill() {
-        if (this.dead) return;
+        this.health--;
+        this.maxHealth > 1 && gameEvent.invoke('BOSS_HEALTH', (this.health + 0.01) / this.maxHealth);
         this.dead = true;
+        if (this.health > 0) return;
         let scale = this.node.scaleX;
         let seq = cc.sequence(
             cc.spawn(
@@ -207,6 +219,6 @@ cc.Class({
                     500, 1)),
             cc.callFunc(this.onFinish.bind(this)));
         this.node.runAction(seq);
-        this.spawnCoin();
+        (Math.random() + this.maxHealth) > 1.7 && this.spawnCoin();
     },
 });

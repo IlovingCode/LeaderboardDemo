@@ -4,7 +4,7 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
-        color: cc.Color,
+        colors: [cc.Color],
         obj: cc.Prefab,
         count: 10,
     },
@@ -50,6 +50,7 @@ cc.Class({
 
         this.enemy = cc.find('enemy').getComponent('enemy');
         this.id = 0;
+        this.color = this.colors[Math.floor(Math.random() * this.colors.length)];
 
         this.player = player.getComponent('PlayerController');
         this.delta = this.node.y - player.y;
@@ -58,6 +59,7 @@ cc.Class({
         gameEvent.ENEMY_KILLED.push(this.onEnemyKilled.bind(this));
         gameEvent.GAME_START.push(this.onEnemyKilled.bind(this));
         gameEvent.GAME_OVER.push(this.reset.bind(this));
+        gameEvent.BOSS_HIT.push(this.onBossHit.bind(this));
     },
 
     onEnemyKilled() {
@@ -65,7 +67,17 @@ cc.Class({
         let stack = this.stack;
         this.player.up(stack[id]);
         if (++id >= stack.length) id = 0;
+        this.enemy.boss(id % 10 == 0);
         this.enemy.set(stack[id]);
+        this.id = id;
+    },
+
+    onBossHit() {
+        let id = this.id;
+        let stack = this.stack;
+        this.player.up(stack[id]);
+        if (++id >= stack.length) id = 0;
+        this.enemy.up(stack[id]);
         this.id = id;
     },
 
