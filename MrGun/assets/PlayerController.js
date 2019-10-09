@@ -83,13 +83,19 @@ cc.Class({
                     bullet = cc.instantiate(this.bullet);
                     bullet.parent = this.bulletPool;
                 }
+                let a = this.gun.rotation;
                 bullet.getComponent('bullet').set(
                     this.gun.convertToWorldSpaceAR(this.bulletPos),
-                    this.node.scaleX > 0 ? (this.gun.rotation - 90) : (270 - this.gun.rotation),
+                    this.node.scaleX > 0 ? (a - 90) : (270 - a),
                     1.0 / this.count, this.enemy);
                 this.rot *= -1;
 
-                this.gunFire.stopAllActions();
+                //this.gunFire.stopAllActions();
+
+                a *= Math.PI / 180;
+                let d = cc.v2(Math.sin(a) * -20, Math.cos(a) * -20);
+                this.gun.runAction(cc.sequence(cc.moveBy(0.05, d), cc.moveTo(0.05, this.gun)));
+
                 this.gunFire.runAction(this.seq);
             }
 

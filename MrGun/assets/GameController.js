@@ -11,6 +11,7 @@ cc.Class({
         scoreTxt: cc.Label,
         bestScoreTxt: cc.Label,
         lifeBar: cc.ProgressBar,
+        subScore: cc.Label,
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -24,16 +25,25 @@ cc.Class({
         this.coin = 0;
         this.coinTxt.string = '0';
         this.bestScoreTxt.string = '0';
+
+        this.seq = cc.spawn(cc.moveBy(0.5, 0, 100), cc.fadeOut(0.5));
     },
 
     onEnemyKilled(headshot) {
         this.score += headshot ? 2 : 1;
         this.scoreTxt.string = this.score;
+
+        this.subScore.string = '+' + (headshot ? 2 : 1);
+
+        let node = this.subScore.node;
+        node.opacity = 255;
+        node.y = -200;
+        node.runAction(this.seq);
     },
 
     onBossHealth(amount) {
         this.lifeBar.node.active = amount > 0;
-        this.lifeBar.progress= amount;
+        this.lifeBar.progress = amount;
     },
 
     onCoinChanged(amount) {

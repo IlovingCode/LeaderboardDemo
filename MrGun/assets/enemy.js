@@ -187,6 +187,10 @@ cc.Class({
                 ))
             );
 
+            angle *= Math.PI / 180;
+            d = cc.v2(Math.sin(angle) * -20, Math.cos(angle) * -20);
+            this.gun.runAction(cc.sequence(cc.delayTime(0.2), cc.moveBy(0.05, d), cc.moveTo(0.05, this.gun)));
+
             this.gunFire.runAction(this.seq);
             this.gun.runAction(seq);
         } else gameEvent.invoke('BOSS_HIT', this.isHeadShot);
