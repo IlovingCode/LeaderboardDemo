@@ -153,6 +153,7 @@ cc.Class({
                 if (bound.contains(hit)) {
                     cc.log('head shot');
                     this.isHeadShot = true;
+                    gameEvent.invoke('SPLASH');
                     return hit;
                 }
             }
@@ -214,7 +215,7 @@ cc.Class({
         this.health--;
         if (this.maxHealth > 1) {
             node.runAction(cc.sequence(cc.moveBy(0.05, -30 * node.scaleX, 0), cc.moveTo(0.1, node)));
-            gameEvent.invoke('BOSS_HEALTH', (this.health + 0.01) / this.maxHealth);
+            gameEvent.invoke('BOSS_HEALTH', (this.health + 0.001) / this.maxHealth);
         }
         this.dead = true;
         if (this.health > 0) return;
@@ -227,6 +228,6 @@ cc.Class({
                     500, 1)),
             cc.callFunc(this.onFinish.bind(this)));
         node.runAction(seq);
-        (Math.random() + this.maxHealth) > 1.7 && this.spawnCoin();
+        this.isHeadShot && this.spawnCoin(this.maxHealth);
     },
 });

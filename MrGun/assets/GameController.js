@@ -12,6 +12,7 @@ cc.Class({
         bestScoreTxt: cc.Label,
         lifeBar: cc.ProgressBar,
         subScore: cc.Label,
+        splash: cc.Node,
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -21,12 +22,19 @@ cc.Class({
         gameEvent.ENEMY_KILLED.push(this.onEnemyKilled.bind(this));
         gameEvent.COIN_CHANGED.push(this.onCoinChanged.bind(this));
         gameEvent.BOSS_HEALTH.push(this.onBossHealth.bind(this));
+
+        gameEvent.SPLASH.push(this.onHeadShot.bind(this));
+
         this.bestScore = 0;
         this.coin = 0;
         this.coinTxt.string = '0';
         this.bestScoreTxt.string = '0';
 
         this.seq = cc.spawn(cc.moveBy(0.5, 0, 100), cc.fadeOut(0.5));
+    },
+
+    onHeadShot() {
+        this.splash.runAction(cc.sequence(cc.fadeTo(0.1, 100), cc.fadeOut(0.5)));
     },
 
     onEnemyKilled(headshot) {
