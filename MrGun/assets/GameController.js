@@ -36,6 +36,7 @@ cc.Class({
         this.subScore.string = '+' + (headshot ? 2 : 1);
 
         let node = this.subScore.node;
+        node.color = cc.color(headshot ? 'ffc800' : 'ffffff');
         node.opacity = 255;
         node.y = -200;
         node.runAction(this.seq);

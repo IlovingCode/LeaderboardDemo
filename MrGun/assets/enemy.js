@@ -210,19 +210,23 @@ cc.Class({
     },
 
     kill() {
+        let node = this.node;
         this.health--;
-        this.maxHealth > 1 && gameEvent.invoke('BOSS_HEALTH', (this.health + 0.01) / this.maxHealth);
+        if (this.maxHealth > 1) {
+            node.runAction(cc.sequence(cc.moveBy(0.05, -30 * node.scaleX, 0), cc.moveTo(0.1, node)));
+            gameEvent.invoke('BOSS_HEALTH', (this.health + 0.01) / this.maxHealth);
+        }
         this.dead = true;
         if (this.health > 0) return;
-        let scale = this.node.scaleX;
+        let scale = node.scaleX;
         let seq = cc.sequence(
             cc.spawn(
                 cc.rotateBy(0.5, -scale * 1000),
                 cc.jumpTo(0.5, cc.v2(
-                    scale < 0 ? 1300 : (-100), this.node.y - 500),
+                    scale < 0 ? 1300 : (-100), node.y - 500),
                     500, 1)),
             cc.callFunc(this.onFinish.bind(this)));
-        this.node.runAction(seq);
+        node.runAction(seq);
         (Math.random() + this.maxHealth) > 1.7 && this.spawnCoin();
     },
 });
