@@ -11,11 +11,11 @@ cc.Class({
         this.wall = this.node.children[0];
     },
 
-    set(pos) {
+    set(pos, c) {
         let node = this.node;
 
         // random position
-        let c = this.c = 2 + Math.floor(Math.random() * 3) * 2;
+        this.c = c;
         let x = 5 - Math.floor(Math.random() * (7 - c));
         let y = c * 50;
         let p = cc.v2(x * 50, y - this.stair.height);
@@ -26,6 +26,9 @@ cc.Class({
         node.setSiblingIndex(0);
 
         pos.y += y;
+
+        c += Math.floor((Math.random() + 0.3) * 3);
+        c = c % 7 + 2;
 
         return c;
     },
@@ -83,7 +86,7 @@ cc.Class({
     getCoinPos() {
         let stair = this.stair;
         let node = this.node;
-        let c = this.c + 3;
+        let c = this.c + 1;
         return cc.v2((stair.x - c * 50) * node.scaleX + node.x, node.y);
     },
 

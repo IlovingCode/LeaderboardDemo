@@ -25,10 +25,13 @@ cc.Class({
         this.target = p2;
 
         node.active = true;
+        let p = p1.stair.getCoinPos();
+        let s = p1.node.scaleX;
+        p.x += Math.random() * 200 * s;
         node.runAction(cc.sequence(
-            cc.jumpTo(this.delay * 0.3, p1.stair.getCoinPos(), 200, 1),
-            cc.moveBy(this.delay * 0.7, 100 * p1.node.scaleX, 0)));
-        this.time = 0;
+            cc.jumpTo(this.delay * 0.3, p, 150 + Math.random() * 100, 1),
+            cc.moveBy(this.delay * 0.7, (Math.random() + 0.3) * 300 * s, 0)));
+        this.time = Math.random() * 0.3;
     },
 
     update(dt) {

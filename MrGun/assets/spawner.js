@@ -20,12 +20,17 @@ cc.Class({
         this.enemy.reset();
         this.node.y = 0;
         this.id = 0;
+        this.prevC = 2;
         let pos = this.pos = cc.v2(0, this.player.node.y);
+        this.color = this.colors[Math.floor(Math.random() * this.colors.length)];
 
         let stack = this.stack;
         let count = this.count;
+        let c = this.prevC;
         for (let i = 0; i < count; i++)
-            stack[i].set(pos);
+            c = stack[i].set(pos, c);
+
+        this.prevC = c;
     },
 
     start() {
@@ -33,7 +38,6 @@ cc.Class({
         let player = cc.find('player');
         let stack = this.stack = [];
 
-        let pos = this.pos = cc.v2(0, player.y);
         let content = this.content;
         let count = this.count;
         for (let i = 0; i < count; i++) {
@@ -41,21 +45,16 @@ cc.Class({
             let stair = obj.getComponent('stair');
             obj.parent = content;
             obj.scaleX = (i % 2) ? -1 : 1;
-            stair.set(pos);
-
             stack.push(stair);
         }
 
-        this.node.on(cc.Node.EventType.TOUCH_START, this.onTouchStart.bind(this));
-
         this.enemy = cc.find('enemy').getComponent('enemy');
-        this.id = 0;
-        this.color = this.colors[Math.floor(Math.random() * this.colors.length)];
-
         this.player = player.getComponent('PlayerController');
         this.delta = this.node.y - player.y;
-        this.node.y = 0;
 
+        this.reset();
+
+        this.node.on(cc.Node.EventType.TOUCH_START, this.onTouchStart.bind(this));
         gameEvent.ENEMY_KILLED.push(this.onEnemyKilled.bind(this));
         gameEvent.GAME_START.push(this.onEnemyKilled.bind(this));
         gameEvent.GAME_OVER.push(this.reset.bind(this));
@@ -96,7 +95,7 @@ cc.Class({
             let d = i.node.y - y;
 
             if (d < -1300) {
-                i.set(this.pos);
+                this.prevC = i.set(this.pos, this.prevC);
             } else {
                 let c = color.lerp(black, d / 1300);
                 i.updateColor(c);

@@ -216,17 +216,19 @@ cc.Class({
         } else gameEvent.invoke('BOSS_HIT', this.isHeadShot);
     },
 
-    spawnCoin() {
+    spawnCoin(count) {
         let pool = this.coinPool.children;
-        let coin = null;
-        // get from pool
-        for (let i of pool) !i.active && (coin = i);
-        if (!coin) { // if not, create new one
-            coin = cc.instantiate(this.coin);
-            coin.parent = this.coinPool;
-        }
+        while (count-- > 0) {
+            let coin = null;
+            // get from pool
+            for (let i of pool) !i.active && (coin = i);
+            if (!coin) { // if not, create new one
+                coin = cc.instantiate(this.coin);
+                coin.parent = this.coinPool;
+            }
 
-        coin.getComponent('coin').set(this, this.player.node);
+            coin.getComponent('coin').set(this, this.player.node);
+        }
     },
 
     kill() {
@@ -247,6 +249,6 @@ cc.Class({
                     500, 1)),
             cc.callFunc(this.onFinish.bind(this)));
         node.runAction(seq);
-        this.isHeadShot && this.spawnCoin(this.maxHealth);
+        (this.isHeadShot || this.maxHealth > 1) && this.spawnCoin(this.maxHealth);
     },
 });

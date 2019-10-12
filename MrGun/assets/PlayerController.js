@@ -17,18 +17,16 @@ cc.Class({
 
     // LIFE-CYCLE CALLBACKS:
 
-    // onLoad() { },
-
-    start() {
+    onLoad() {
         this.enemy = cc.find('enemy').getComponent('enemy');
         this.bulletPos = this.gun.children[0];
         this.bulletPool = cc.find('bulletPool');
         this.count = 1;
-        this.reset();
-
-        gameEvent.GAME_START.push(this.onGameStart.bind(this));
-
         this.seq = cc.sequence(cc.fadeTo(0.05, 150), cc.fadeOut(0.05));
+    },
+
+    start() {
+        gameEvent.GAME_START.push(this.onGameStart.bind(this));
     },
 
     reset() {
