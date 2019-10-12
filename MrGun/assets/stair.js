@@ -2,6 +2,8 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
+        decoration: cc.Sprite,
+        decoList: [cc.SpriteFrame],
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -13,6 +15,11 @@ cc.Class({
 
     set(pos, c) {
         let node = this.node;
+        if (c > 5 || Math.random() > 0.1) this.decoration.node.active = false;
+        else {
+            this.decoration.node.active = true;
+            this.decoration.spriteFrame = this.decoList[c - 2];
+        }
 
         // random position
         this.c = c;
@@ -37,6 +44,7 @@ cc.Class({
         this.wall.color = color;
         this.stair.color = color;
         this.node.color = color;
+        this.decoration.node.color = color;
     },
 
     swap(p1, p2) {

@@ -20,6 +20,7 @@ cc.Class({
         gun: cc.Node,
         gunFire: cc.Node,
         coin: cc.Prefab,
+        particle: cc.Prefab,
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -29,6 +30,7 @@ cc.Class({
         this.teleport = cc.find('teleport_light_0');
         this.bulletPool = cc.find('bulletPool');
         this.coinPool = cc.find('coinPool');
+        this.particlePool = cc.find('particlePool');
         this.player = cc.find('player').getComponent('PlayerController');
 
         this.seq = cc.sequence(cc.delayTime(0.2), cc.fadeTo(0.05, 150), cc.fadeOut(0.05));
@@ -111,7 +113,7 @@ cc.Class({
         let foot = stair.getFootPos();
         let p = stair.getEnemyPos();
         this.node.runAction(cc.sequence(
-            cc.moveTo(0.3, foot),
+            cc.moveTo(0.2, foot),
             cc.jumpTo(stair.c * 0.1, p, 50, stair.c),
             cc.callFunc(this.onFaceBack.bind(this))));
     },
@@ -172,6 +174,7 @@ cc.Class({
                 if (bound.contains(hit)) {
                     cc.log('head shot');
                     this.isHeadShot = true;
+                    this.spawnParticle((Math.random() + 0.5) * 20);
                     gameEvent.invoke('SPLASH');
                     return hit;
                 }
@@ -228,6 +231,21 @@ cc.Class({
             }
 
             coin.getComponent('coin').set(this, this.player.node);
+        }
+    },
+
+    spawnParticle(count) {
+        let pool = this.particlePool.children;
+        while (count-- > 0) {
+            let particle = null;
+            // get from pool
+            for (let i of pool) !i.active && (particle = i);
+            if (!particle) { // if not, create new one
+                particle = cc.instantiate(this.particle);
+                particle.parent = this.particlePool;
+            }
+
+            particle.getComponent('particle').set(this);
         }
     },
 

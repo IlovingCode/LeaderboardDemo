@@ -31,7 +31,7 @@ cc.Class({
         node.runAction(cc.sequence(
             cc.jumpTo(this.delay * 0.3, p, 150 + Math.random() * 100, 1),
             cc.moveBy(this.delay * 0.7, (Math.random() + 0.3) * 300 * s, 0)));
-        this.time = Math.random() * 0.3;
+        this.time = -Math.random() * 0.3;
     },
 
     update(dt) {
