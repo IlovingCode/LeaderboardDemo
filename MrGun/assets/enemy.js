@@ -26,6 +26,7 @@ cc.Class({
 
     onLoad() {
         this.bulletPos = this.gun.children[0];
+        this.teleport = cc.find('teleport_light_0');
         this.bulletPool = cc.find('bulletPool');
         this.coinPool = cc.find('coinPool');
         this.player = cc.find('player').getComponent('PlayerController');
@@ -35,6 +36,7 @@ cc.Class({
 
     boss(on) {
         this.maxHealth = on ? (2 + Math.floor(Math.random() * 4)) : 1;
+
         gameEvent.invoke('BOSS_HEALTH', on ? 1 : 0);
     },
 
@@ -59,12 +61,29 @@ cc.Class({
         this.health = this.maxHealth;
         this.isHeadShot = false;
         let p = stair.getEnemyPos();
-        this.node.setPosition(p.x > 540 ? 1200 : -100, p.y);
+        let node = this.node;
+
         let i = this.updateColor();
 
-        i == 0 && this.node.runAction(cc.moveTo(0.3, p));
-        i == 1 && this.node.runAction(cc.jumpTo(0.3, p, 50, 1));
-        i == 2 && this.node.runAction(cc.jumpTo(0.5, p, 20, 5));
+        if (this.maxHealth > 1) {
+            node.setPosition(p.x > 540 ? 1200 : -100, p.y + 200);
+            let seq = cc.spawn(cc.jumpTo(0.5, p, 300, 1), cc.rotateBy(0.5, 360 * node.scaleX));
+            node.runAction(seq);
+
+            let port = this.teleport;
+            port.setPosition(p.x > 540 ? 1400 : -300, p.y + 200);
+            port.scaleX = -node.scaleX;
+            port.runAction(cc.sequence(
+                cc.moveTo(0.1, p.x > 540 ? 1080 : 0, p.y + 200),
+                cc.delayTime(0.5),
+                cc.moveTo(0.1, port)
+            ));
+        } else {
+            node.setPosition(p.x > 540 ? 1200 : -100, p.y);
+            i == 0 && node.runAction(cc.moveTo(0.3, p));
+            i == 1 && node.runAction(cc.jumpTo(0.3, p, 50, 1));
+            i == 2 && node.runAction(cc.jumpTo(0.5, p, 20, 5));
+        }
     },
 
     updateColor() {
@@ -215,7 +234,7 @@ cc.Class({
         this.health--;
         if (this.maxHealth > 1) {
             node.runAction(cc.sequence(cc.moveBy(0.05, -30 * node.scaleX, 0), cc.moveTo(0.1, node)));
-            gameEvent.invoke('BOSS_HEALTH', (this.health + 0.001) / this.maxHealth);
+            gameEvent.invoke('BOSS_HEALTH', this.health / this.maxHealth);
         }
         this.dead = true;
         if (this.health > 0) return;

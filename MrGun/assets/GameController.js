@@ -31,6 +31,9 @@ cc.Class({
         this.bestScoreTxt.string = '0';
 
         this.seq = cc.spawn(cc.moveBy(0.5, 0, 100), cc.fadeOut(0.5));
+        this.seq2 = cc.sequence(cc.delayTime(0.5),
+            cc.spawn(cc.scaleTo(0.3, 1, 1), cc.moveTo(0.3, 0, 700)),
+            cc.callFunc(this.showHealthBar.bind(this)));
     },
 
     onHeadShot() {
@@ -38,20 +41,37 @@ cc.Class({
     },
 
     onEnemyKilled(headshot) {
-        this.score += headshot ? 2 : 1;
+        let s = (headshot ? 2 : 1) * this.boss;
+        this.score += s;
         this.scoreTxt.string = this.score;
 
-        this.subScore.string = '+' + (headshot ? 2 : 1);
+        this.subScore.string = '+' + s;
 
         let node = this.subScore.node;
         node.color = cc.color(headshot ? 'ffc800' : 'ffffff');
         node.opacity = 255;
         node.y = -200;
         node.runAction(this.seq);
+
+        node = this.lifeBar.node;
+        node.active = false;
+        this.lifeBar.progress < 0.1 && (node.parent.active = false);
+    },
+
+    showHealthBar() {
+        this.lifeBar.node.active = true;
     },
 
     onBossHealth(amount) {
-        this.lifeBar.node.active = amount > 0;
+        if (amount == 1) {
+            let node = this.lifeBar.node.parent;
+            node.active = true;
+            node.scale = 2;
+            node.y = 300;
+            node.runAction(this.seq2);
+        }
+        else amount += 0.001;
+
         this.lifeBar.progress = amount;
     },
 
@@ -64,6 +84,7 @@ cc.Class({
         this.mainMenu.active = false;
         this.actionPhase.active = true;
         this.score = 0;
+        this.boss = 1;
         this.scoreTxt.string = '0';
         gameEvent.invoke('GAME_START');
     },
