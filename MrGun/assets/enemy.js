@@ -35,7 +35,7 @@ cc.Class({
     },
 
     boss(on) {
-        this.maxHealth = on ? (2 + Math.floor(Math.random() * 4)) : 1;
+        this.maxHealth = on ? (3 + Math.floor(Math.random() * 3)) : 1;
 
         gameEvent.invoke('BOSS_HEALTH', on ? 1 : 0);
     },

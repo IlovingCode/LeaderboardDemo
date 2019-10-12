@@ -55,7 +55,7 @@ cc.Class({
 
         node = this.lifeBar.node;
         node.active = false;
-        this.lifeBar.progress < 0.1 && (node.parent.active = false);
+        (this.lifeBar.progress < 0.1) && (node.parent.active = false);
     },
 
     showHealthBar() {
@@ -64,6 +64,7 @@ cc.Class({
 
     onBossHealth(amount) {
         if (amount == 1) {
+            this.boss++;
             let node = this.lifeBar.node.parent;
             node.active = true;
             node.scale = 2;
@@ -92,6 +93,9 @@ cc.Class({
     onGameOver() {
         this.mainMenu.active = true;
         this.actionPhase.active = false;
+        let node = this.lifeBar.node;
+        node.active = false;
+        node.parent.active = false;
 
         if (this.score > this.bestScore) {
             this.bestScore = this.score;

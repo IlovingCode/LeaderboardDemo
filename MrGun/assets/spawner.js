@@ -67,7 +67,7 @@ cc.Class({
         let stack = this.stack;
         this.player.up(stack[id]);
         if (++id >= stack.length) id = 0;
-        this.enemy.boss(id % 6 == 0);
+        this.enemy.boss(id % 9 == 0);
         this.enemy.set(stack[id]);
         this.id = id;
     },
