@@ -12,7 +12,8 @@ cc.Class({
         min: 45,
         max: 90,
         bullet: cc.Prefab,
-        matLoader: require('MaterialLoader')
+        matLoader: require('MaterialLoader'),
+        particle: cc.ParticleSystem
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -61,6 +62,7 @@ cc.Class({
         this.node.scaleX = -scale;
         this.bulletPos.active = true;
         this.enabled = true;
+        this.particle.resetSystem();
     },
 
     fire() {
