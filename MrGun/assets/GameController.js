@@ -1,6 +1,5 @@
 var gameEvent = require('GameEvent');
 
-
 cc.Class({
     extends: cc.Component,
 

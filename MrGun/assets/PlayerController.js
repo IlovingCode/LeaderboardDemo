@@ -13,7 +13,8 @@ cc.Class({
         max: 90,
         bullet: cc.Prefab,
         matLoader: require('MaterialLoader'),
-        particle: cc.ParticleSystem
+        particle: cc.ParticleSystem,
+        armor: cc.Node,
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -24,6 +25,14 @@ cc.Class({
         this.bulletPool = cc.find('bulletPool');
         this.count = 1;
         this.seq = cc.sequence(cc.fadeTo(0.05, 150), cc.fadeOut(0.05));
+
+        this.seq2 = cc.sequence(
+            cc.spawn(
+                cc.rotateBy(0.5, -1000),
+                cc.jumpTo(0.5, cc.v2(
+                    -100, -500),
+                    500, 1)),
+            cc.callFunc(this.onRevive.bind(this)));
     },
 
     start() {
@@ -40,6 +49,8 @@ cc.Class({
         node.rotation = 0;
         node.scaleX = 1;
         this.gun.rotation = this.max;
+
+
     },
 
     onGameStart() {
@@ -60,8 +71,7 @@ cc.Class({
         this.gun.rotation = this.max;
         this.rot = Math.abs(this.rot);
         this.fireCount = 0;
-        let scale = this.node.scaleX;
-        this.node.scaleX = -scale;
+        this.node.scaleX *= -1;
         this.bulletPos.active = true;
         this.enabled = true;
         this.particle.resetSystem();
@@ -116,6 +126,11 @@ cc.Class({
         //if (this.dead) return;
         //this.dead = true;
         //this.bulletPos.active = false;
+        if (this.armor.active) {
+            this.armor.runAction(this.seq2);
+            return;
+        }
+
         let scale = this.node.scaleX;
         let seq = cc.sequence(
             cc.spawn(
@@ -125,6 +140,19 @@ cc.Class({
                     500, 1)),
             cc.callFunc(this.onFinish.bind(this)));
         this.node.runAction(seq);
+    },
+
+    onRevive() {
+        let node = this.armor;
+        node.active = false;
+        node.rotation = 0;
+        node.setPosition(0, 0);
+
+        this.gun.rotation = this.max;
+        this.rot = Math.abs(this.rot);
+        this.fireCount = 0;
+        this.bulletPos.active = true;
+        this.enemy.enabled = true;
     },
 
     onFinish() {

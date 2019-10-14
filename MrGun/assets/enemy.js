@@ -34,7 +34,7 @@ cc.Class({
         this.particlePool = cc.find('particlePool');
         this.player = cc.find('player').getComponent('PlayerController');
 
-        this.seq = cc.sequence(cc.delayTime(0.2), cc.fadeTo(0.05, 150), cc.fadeOut(0.05));
+        this.seq = cc.sequence(cc.delayTime(0.4), cc.fadeTo(0.05, 150), cc.fadeOut(0.05));
         this.seq2 = cc.spawn(cc.moveBy(0.5, 0, 100), cc.fadeOut(0.5));
     },
 
@@ -199,24 +199,24 @@ cc.Class({
             let d = cc.v2(p2.x - p1.x, p2.y - p1.y);
             let angle = 270 + Math.atan2(d.y, -d.x * this.node.scaleX) * 180 / Math.PI;
 
-
-            this.gun.rotation = angle;
+            node = this.gun;
+            node.rotation = angle;
             p1 = this.gun.convertToWorldSpaceAR(this.bulletPos);
-            this.gun.rotation = 90;
+            node.rotation = 90;
+
+            let r = angle - node.rotation;
             //cc.log(angle);
-
-            let seq = cc.sequence(cc.rotateTo(0.2, angle),
-                cc.callFunc(bullet.aimPlayer.bind(bullet,
-                    p1, p2, this.player
-                ))
-            );
-
             angle *= Math.PI / 180;
             d = cc.v2(Math.sin(angle) * -20, Math.cos(angle) * -20);
-            this.gun.runAction(cc.sequence(cc.delayTime(0.2), cc.moveBy(0.05, d), cc.moveTo(0.05, this.gun)));
+
+            let seq = cc.sequence(cc.rotateBy(0.3, r), cc.delayTime(0.1),
+                cc.callFunc(bullet.aimPlayer.bind(bullet,
+                    p1, p2, this.player
+                )), cc.moveBy(0.05, d), cc.moveTo(0.05, node), cc.rotateBy(0.2, -r)
+            );
 
             this.gunFire.runAction(this.seq);
-            this.gun.runAction(seq);
+            node.runAction(seq);
         } else gameEvent.invoke('BOSS_HIT', this.isHeadShot);
     },
 
