@@ -45,10 +45,14 @@ cc.Class({
     onHeadShot() {
         this.splash.runAction(this.seq3);
         this.perfect.node.scale = 0.3;
+        this.perfect.string = 'HEAD SHOT' + (this.combo > 1 ? (' x' + this.combo) : '');
         this.perfect.node.runAction(this.seq4);
     },
 
     onEnemyKilled(headshot) {
+        if (headshot) this.combo++;
+        else this.combo = 1;
+
         let s = (headshot ? 2 : 1) * this.boss;
         this.score += s;
         this.scoreTxt.string = this.score;
@@ -94,6 +98,7 @@ cc.Class({
         this.actionPhase.active = true;
         this.score = 0;
         this.boss = 1;
+        this.combo = 1;
         this.scoreTxt.string = '0';
         gameEvent.invoke('GAME_START');
     },

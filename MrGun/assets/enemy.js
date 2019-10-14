@@ -21,6 +21,7 @@ cc.Class({
         gunFire: cc.Node,
         coin: cc.Prefab,
         particle: cc.Prefab,
+        text: cc.Label,
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -34,6 +35,7 @@ cc.Class({
         this.player = cc.find('player').getComponent('PlayerController');
 
         this.seq = cc.sequence(cc.delayTime(0.2), cc.fadeTo(0.05, 150), cc.fadeOut(0.05));
+        this.seq2 = cc.spawn(cc.moveBy(0.5, 0, 100), cc.fadeOut(0.5));
     },
 
     boss(on) {
@@ -119,8 +121,7 @@ cc.Class({
     },
 
     onFaceBack() {
-        let scale = this.node.scaleX;
-        this.node.scaleX = -scale;
+        this.node.scaleX *= -1;
     },
 
     swap(p1, p2) {
@@ -251,13 +252,24 @@ cc.Class({
 
     kill() {
         let node = this.node;
-        this.health -= this.isHeadShot ? 2 : 1;
+        let damage = this.isHeadShot ? 2 : 1;
+        this.health -= damage;
         if (this.maxHealth > 1) {
             node.runAction(cc.sequence(cc.moveBy(0.05, -30 * node.scaleX, 0), cc.moveTo(0.1, node)));
             gameEvent.invoke('BOSS_HEALTH', this.health / this.maxHealth);
         }
         this.dead = true;
-        if (this.health > 0) return;
+        if (this.health > 0) {
+            let t = this.text.node;
+            t.y = 90;
+            t.scaleX = node.scaleX;
+            t.opacity = 255;
+            t.color = cc.color(this.isHeadShot ? 'ffc800' : 'ffffff');
+            this.text.string = -damage;
+
+            t.runAction(this.seq2);
+            return;
+        }
         let scale = node.scaleX;
         let seq = cc.sequence(
             cc.spawn(
