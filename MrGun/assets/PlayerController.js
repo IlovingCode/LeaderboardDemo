@@ -39,7 +39,7 @@ cc.Class({
         node.setPosition(200, 0);
         node.rotation = 0;
         node.scaleX = 1;
-        this.gun.rotation = 90;
+        this.gun.rotation = this.max;
     },
 
     onGameStart() {
@@ -57,6 +57,8 @@ cc.Class({
     },
 
     onFaceBack() {
+        this.gun.rotation = this.max;
+        this.rot = Math.abs(this.rot);
         this.fireCount = 0;
         let scale = this.node.scaleX;
         this.node.scaleX = -scale;

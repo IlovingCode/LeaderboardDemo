@@ -13,6 +13,7 @@ cc.Class({
         lifeBar: cc.ProgressBar,
         subScore: cc.Label,
         splash: cc.Node,
+        perfect: cc.Label,
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -32,12 +33,19 @@ cc.Class({
 
         this.seq = cc.spawn(cc.moveBy(0.5, 0, 100), cc.fadeOut(0.5));
         this.seq2 = cc.sequence(cc.delayTime(0.5),
-            cc.spawn(cc.scaleTo(0.3, 1, 1), cc.moveTo(0.3, 0, 700)),
+            cc.spawn(cc.scaleTo(0.3, 1, 1), cc.moveTo(0.3, 0, 800)),
             cc.callFunc(this.showHealthBar.bind(this)));
+
+        this.seq3 = cc.sequence(cc.fadeTo(0.1, 100), cc.fadeOut(0.5));
+        this.seq4 = cc.spawn(
+            cc.scaleTo(1, 1, 1),
+            cc.sequence(cc.fadeIn(0.2), cc.delayTime(0.3), cc.fadeOut(0.5)));
     },
 
     onHeadShot() {
-        this.splash.runAction(cc.sequence(cc.fadeTo(0.1, 100), cc.fadeOut(0.5)));
+        this.splash.runAction(this.seq3);
+        this.perfect.node.scale = 0.3;
+        this.perfect.node.runAction(this.seq4);
     },
 
     onEnemyKilled(headshot) {
@@ -68,7 +76,7 @@ cc.Class({
             let node = this.lifeBar.node.parent;
             node.active = true;
             node.scale = 2;
-            node.y = 300;
+            node.y = 250;
             node.runAction(this.seq2);
         }
         else amount += 0.001;

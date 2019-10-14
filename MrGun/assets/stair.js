@@ -15,7 +15,7 @@ cc.Class({
 
     set(pos, c) {
         let node = this.node;
-        if (c > 5 || Math.random() > 0.1) this.decoration.node.active = false;
+        if (c > this.decoList.length + 1 || Math.random() > 0.1) this.decoration.node.active = false;
         else {
             this.decoration.node.active = true;
             this.decoration.spriteFrame = this.decoList[c - 2];

@@ -251,7 +251,7 @@ cc.Class({
 
     kill() {
         let node = this.node;
-        this.health--;
+        this.health -= this.isHeadShot ? 2 : 1;
         if (this.maxHealth > 1) {
             node.runAction(cc.sequence(cc.moveBy(0.05, -30 * node.scaleX, 0), cc.moveTo(0.1, node)));
             gameEvent.invoke('BOSS_HEALTH', this.health / this.maxHealth);

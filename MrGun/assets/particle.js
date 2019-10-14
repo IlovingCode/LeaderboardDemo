@@ -28,7 +28,7 @@ cc.Class({
         let s = p1.node.scaleX;
         p.x += Math.random() * 500 * s;
         node.runAction(cc.sequence(
-            cc.jumpTo(this.delay * 0.3, p, 150 + Math.random() * 500, 1),
+            cc.jumpTo(this.delay * (Math.random() * 0.1 + 0.25), p, 150 + Math.random() * 500, 1),
             cc.moveBy(this.delay * (Math.random() + 0.3), (Math.random() + 0.1) * 300 * s, 0)));
         this.time = Math.random() + 0.3;
     },
