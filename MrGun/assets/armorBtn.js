@@ -14,6 +14,7 @@ cc.Class({
     start() {
         gameEvent.COIN_CHANGED.push(this.onCoinChanged.bind(this));
 
+        this.player = cc.find('player').getComponent('PlayerController');
         this.btn = this.node.getComponent(cc.Button);
         this.sprite = this.node.getComponent(cc.Sprite);
         this.coin = 0;
@@ -23,7 +24,7 @@ cc.Class({
     onCoinChanged(amount) {
         this.coin += amount;
 
-        let enough = this.coin >= this.price;
+        let enough = this.coin >= this.price && !this.player.armor.active;;
         this.btn.interactable = enough;
         this.sprite.spriteFrame = enough ? this.active : this.inactive;
     },
@@ -31,10 +32,8 @@ cc.Class({
     onBuyArmor() {
         if (this.coin < this.price) return;
 
+        this.player.armor.active = true;
         gameEvent.invoke('COIN_CHANGED', -this.price);
-
-        let player = cc.find('player').getComponent('PlayerController');
-        player.armor.active = true;
     },
 
     // update (dt) {},
