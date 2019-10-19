@@ -35,7 +35,7 @@ cc.Class({
         this.particlePool = cc.find('particlePool');
         this.player = cc.find('player').getComponent('PlayerController');
 
-        this.seq = cc.sequence(cc.delayTime(0.4), cc.fadeTo(0.05, 150), cc.fadeOut(0.05));
+        this.seq = cc.sequence(cc.delayTime(0.4), cc.fadeTo(0.05, 200), cc.fadeOut(0.05));
         this.seq2 = cc.spawn(cc.moveBy(0.5, 0, 100), cc.fadeOut(0.5));
     },
 
@@ -210,6 +210,7 @@ cc.Class({
             let p2 = node.convertToWorldSpaceAR(node.children[0]);
             let p1 = this.gun.convertToWorldSpaceAR(this.bulletPool);
             let d = cc.v2(p2.x - p1.x, p2.y - p1.y);
+            bullet.node.rotation = Math.atan2(d.y, -d.x) * 180 / Math.PI;
             let angle = 270 + Math.atan2(d.y, -d.x * this.node.scaleX) * 180 / Math.PI;
 
             node = this.gun;
@@ -218,7 +219,6 @@ cc.Class({
             node.rotation = 90;
 
             let r = angle - node.rotation;
-            //cc.log(angle);
             angle *= Math.PI / 180;
             d = cc.v2(Math.sin(angle) * -20, Math.cos(angle) * -20);
 

@@ -11,24 +11,25 @@ cc.Class({
 
     start() {
         let seq2 = cc.sequence(cc.fadeOut(0.3), cc.callFunc(this.onFinish.bind(this)));
-        this.seq = cc.spawn(cc.scaleTo(0.3, 10), seq2);
+        this.seq = cc.spawn(cc.scaleTo(0.3, 20), seq2);
     },
 
     onFinish() {
         let node = this.node;
         node.active = false;
         node.opacity = 255;
-        node.setScale(0.5);
+        node.setScale(1.0);
         this.target.checkAlive();
     },
 
     set(pos, rot, c, target) {
+        let node = this.node;
+        node.rotation = rot + 180;
         rot *= Math.PI / 180;
         this.vx = Math.cos(rot) * this.speed * c;
         this.vy = -Math.sin(rot) * this.speed * c;
         this.target = target;
 
-        let node = this.node;
         node.setPosition(pos);
         node.color = cc.Color.WHITE;
         node.active = true;

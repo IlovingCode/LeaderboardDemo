@@ -21,7 +21,7 @@ cc.Class({
         let node = this.node;
         node.setPosition(p1.node);
         node.opacity = 255;
-        node.color = p1.node.color;
+        //node.color = p1.node.color;
 
         node.active = true;
         let p = p1.stair.getCoinPos();

@@ -24,7 +24,7 @@ cc.Class({
         this.bulletPos = this.gun.children[0];
         this.bulletPool = cc.find('bulletPool');
         this.count = 1;
-        this.seq = cc.sequence(cc.fadeTo(0.05, 150), cc.fadeOut(0.05));
+        this.seq = cc.sequence(cc.fadeTo(0.05, 200), cc.fadeOut(0.05));
 
         this.seq2 = cc.sequence(
             cc.spawn(
@@ -56,6 +56,7 @@ cc.Class({
     },
 
     up(stair) {
+        gameEvent.invoke('PLAY_SOUND', 'ev_reload_4');
         let foot = stair.getFootPos();
         let p = stair.getEnemyPos();
         this.node.runAction(cc.sequence(

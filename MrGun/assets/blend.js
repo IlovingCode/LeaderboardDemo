@@ -25,7 +25,7 @@ var shader = {
         float r = uv.x * uv.x + uv.y * uv.y;
         float a = texture2D(texture, uv0).a + 0.001;
         a = step(a, a1f) * step(r, 0.23);
-        gl_FragColor = vec4(color.rgb, 0.13 * a);
+        gl_FragColor = vec4(color.rgb, 0.23 * a);
     }`,
     params: ['a1f'],
 
