@@ -30,7 +30,7 @@ cc.Class({
         p.x += Math.random() * 200 * s;
         node.runAction(cc.sequence(
             cc.jumpTo(this.delay * 0.3, p, 150 + Math.random() * 100, 1),
-            cc.moveBy(this.delay * 0.7, (Math.random() + 0.3) * 300 * s, 0)));
+            cc.moveBy(this.delay * 0.7, (Math.random() + 0.3) * 250 * s, 0)));
         this.time = -Math.random() * 0.3;
     },
 
@@ -48,6 +48,7 @@ cc.Class({
             if (Math.abs(p.x - t.x) < 10) {
                 p.active = false;
                 gameEvent.invoke('COIN_CHANGED', 1);
+                gameEvent.invoke('PLAY_SOUND', 'ev_coin');
             }
         }
 

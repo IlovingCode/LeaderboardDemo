@@ -22,6 +22,7 @@ cc.Class({
         coin: cc.Prefab,
         particle: cc.Prefab,
         text: cc.Label,
+        landParticle: cc.ParticleSystem,
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -58,6 +59,11 @@ cc.Class({
         gameEvent.invoke('ENEMY_KILLED', this.isHeadShot);
     },
 
+    onBossLand() {
+        this.landParticle.resetSystem();
+        gameEvent.invoke('PLAY_SOUND', 'ev_boss_appear_land');
+    },
+
     set(stair) {
         this.stair = stair;
         this.dead = false;
@@ -70,8 +76,9 @@ cc.Class({
         let i = this.updateColor();
 
         if (this.maxHealth > 1) {
+            gameEvent.invoke('PLAY_SOUND', 'ev_boss_appear_spin');
             node.setPosition(p.x > 540 ? 1200 : -100, p.y + 200);
-            let seq = cc.spawn(cc.jumpTo(0.5, p, 300, 1), cc.rotateBy(0.5, 360 * node.scaleX));
+            let seq = cc.spawn(cc.jumpTo(0.7, p, 300, 1), cc.rotateBy(0.7, 360 * node.scaleX));
             node.runAction(seq);
 
             let port = this.teleport;
@@ -79,7 +86,8 @@ cc.Class({
             port.scaleX = -node.scaleX;
             port.runAction(cc.sequence(
                 cc.moveTo(0.1, p.x > 540 ? 1080 : 0, p.y + 200),
-                cc.delayTime(0.5),
+                cc.delayTime(0.7),
+                cc.callFunc(this.onBossLand.bind(this)),
                 cc.moveTo(0.1, port)
             ));
         } else {
@@ -122,6 +130,7 @@ cc.Class({
 
     onFaceBack() {
         this.node.scaleX *= -1;
+        gameEvent.invoke('PLAY_SOUND', 'ev_foot_boss_land');
     },
 
     swap(p1, p2) {
@@ -153,7 +162,10 @@ cc.Class({
             for (let i = 0; i < 1; i += 0.1) {
                 hit.x = p1.x + (p2.x - p1.x) * i;
                 hit.y = p1.y + (p2.y - p1.y) * i;
-                if (bound.contains(hit)) return hit;
+                if (bound.contains(hit)) {
+                    gameEvent.invoke('PLAY_SOUND', 'ev_hit_torso');
+                    return hit;
+                }
             }
         }
 
@@ -173,10 +185,11 @@ cc.Class({
                 hit.x = p1.x + (p2.x - p1.x) * i;
                 hit.y = p1.y + (p2.y - p1.y) * i;
                 if (bound.contains(hit)) {
-                    cc.log('head shot');
+                    //cc.log('head shot');
                     this.isHeadShot = true;
                     this.spawnParticle((Math.random() + 0.5) * 20);
                     gameEvent.invoke('SPLASH');
+                    gameEvent.invoke('PLAY_SOUND', 'ev_hit_head');
                     return hit;
                 }
             }

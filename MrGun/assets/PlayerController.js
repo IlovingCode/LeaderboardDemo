@@ -49,8 +49,6 @@ cc.Class({
         node.rotation = 0;
         node.scaleX = 1;
         this.gun.rotation = this.max;
-
-
     },
 
     onGameStart() {
@@ -75,6 +73,7 @@ cc.Class({
         this.bulletPos.active = true;
         this.enabled = true;
         this.particle.resetSystem();
+        gameEvent.invoke('PLAY_SOUND', 'ev_foot_boss_land');
     },
 
     fire() {
@@ -103,6 +102,7 @@ cc.Class({
                 this.rot *= -1;
 
                 //this.gunFire.stopAllActions();
+                gameEvent.invoke('PLAY_SOUND', 'ev_gun_4');
 
                 a *= Math.PI / 180;
                 let d = cc.v2(Math.sin(a) * -20, Math.cos(a) * -20);
@@ -126,11 +126,14 @@ cc.Class({
         //if (this.dead) return;
         //this.dead = true;
         //this.bulletPos.active = false;
+        gameEvent.invoke('SPLASH');
         if (this.armor.active) {
             this.armor.runAction(this.seq2);
+            gameEvent.invoke('PLAY_SOUND', 'ev_armor_hit');
             return;
         }
 
+        gameEvent.invoke('PLAY_SOUND', 'ev_hit_head');
         let scale = this.node.scaleX;
         let seq = cc.sequence(
             cc.spawn(

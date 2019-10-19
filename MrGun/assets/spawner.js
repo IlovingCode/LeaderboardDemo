@@ -22,7 +22,7 @@ cc.Class({
         this.id = 0;
         this.prevC = 2;
         let pos = this.pos = cc.v2(0, this.player.node.y);
-        this.color = this.colors[Math.floor(Math.random() * this.colors.length)];
+        this.color = this.colors[0];
 
         let stack = this.stack;
         let count = this.count;
@@ -66,7 +66,7 @@ cc.Class({
         let stack = this.stack;
         this.player.up(stack[id]);
         if (++id >= stack.length) id = 0;
-        this.enemy.boss(id % 9 == 0);
+        this.enemy.boss(id && id % 9 == 0);
         this.enemy.set(stack[id]);
         this.id = id;
     },
@@ -90,7 +90,7 @@ cc.Class({
         let stack = this.stack;
         let y = this.player.node.y;
         let color = this.color;
-        let black = cc.Color.BLACK;
+        let black = this.colors[1];
         for (let i of stack) {
             let d = i.node.y - y;
 

@@ -1,31 +1,64 @@
+var bag = [0];
+var height = 50;
+
 cc.Class({
     extends: cc.Component,
 
     properties: {
         decoration: cc.Sprite,
         decoList: [cc.SpriteFrame],
+        patterns: [cc.Node]
     },
 
     // LIFE-CYCLE CALLBACKS:
 
     onLoad() {
-        this.stair = this.node.children[1];
-        this.wall = this.node.children[0];
+        let list = this.node.children;
+        this.stair = list[1];
+        this.wall = list[0];
+        this.pixel = list[2].children[0];
+    },
+
+    fillBag(pivot) {
+        let size = this.decoList.length;
+        let count = size;
+        let i = Math.floor(Math.random() * size);
+        while (count--) {
+            while (bag[i]) {
+                i += Math.floor(Math.random() * size);
+                i %= size;
+            }
+            bag[i] = count;
+        }
+
+        if (bag[size - 1] == pivot) {
+            bag[size - 1] = bag[1];
+            bag[1] = pivot;
+        }
+
+        bag.length = size;
+        //cc.log(bag);
     },
 
     set(pos, c) {
         let node = this.node;
-        if (c > this.decoList.length + 1 || Math.random() > 0.1) this.decoration.node.active = false;
+        if (Math.random() > 0.4) this.decoration.spriteFrame = null;
         else {
-            this.decoration.node.active = true;
-            this.decoration.spriteFrame = this.decoList[c - 2];
+            let p = bag.pop();
+            !bag.length && this.fillBag(p);
+            this.decoration.spriteFrame = this.decoList[p];
         }
+
+        let list = this.patterns;
+        let i = Math.floor(Math.random() * (list.length - 1));
+        for (let c = 0; c < list.length - 1; c++) list[c].active = c == i;
 
         // random position
         this.c = c;
         let x = 5 - Math.floor(Math.random() * (7 - c));
-        let y = c * 50;
-        let p = cc.v2(x * 50, y - this.stair.height);
+        let y = c * height;
+        let p = cc.v2(x * height, y - this.stair.height);
+        this.pixel.width = 1019 + p.x - y;
         this.stair.setPosition(p);
         this.wall.setPosition(p);
 
@@ -41,10 +74,10 @@ cc.Class({
     },
 
     updateColor(color) {
-        this.wall.color = color;
-        this.stair.color = color;
-        this.node.color = color;
-        this.decoration.node.color = color;
+        let list = this.node.children;
+        for (let c of list) c.color = color;
+        list = this.patterns;
+        for (let c of list) c.color = color;
     },
 
     swap(p1, p2) {
@@ -71,13 +104,13 @@ cc.Class({
                 hit.y = p1.y + (p2.y - p1.y) * i;
 
                 if (hit.y > bound.yMax) return null;
-                let c = Math.floor((hit.y - bound.yMin - 12) / 50);
+                let c = Math.floor((hit.y - bound.yMin - 12) / height);
                 if (node.scaleX < 0) {
-                    if (hit.x < bound.xMax - c * 50) {
+                    if (hit.x < bound.xMax - c * height) {
                         return hit;
                     }
                 } else {
-                    if (hit.x > c * 50 + bound.xMin) {
+                    if (hit.x > c * height + bound.xMin) {
                         return hit;
                     }
                 }
@@ -95,14 +128,14 @@ cc.Class({
         let stair = this.stair;
         let node = this.node;
         let c = this.c + 1;
-        return cc.v2((stair.x - c * 50) * node.scaleX + node.x, node.y);
+        return cc.v2((stair.x - c * height) * node.scaleX + node.x, node.y);
     },
 
     getFootPos() {
         let stair = this.stair;
         let node = this.node;
         let c = this.c + 1;
-        return cc.v2((stair.x - c * 50) * node.scaleX + node.x, node.y);
+        return cc.v2((stair.x - c * height) * node.scaleX + node.x, node.y);
     }
 
     // update (dt) {},

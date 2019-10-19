@@ -1,3 +1,5 @@
+var gameEvent = require('GameEvent');
+
 cc.Class({
     extends: cc.Component,
 
@@ -51,6 +53,7 @@ cc.Class({
             cc.callFunc(this.onHit.bind(this, target)));
 
         node.runAction(seq);
+        gameEvent.invoke('PLAY_SOUND', 'ev_gun_4');
     },
 
     update(dt) {

@@ -35,7 +35,7 @@ cc.Class({
             cc.spawn(cc.scaleTo(0.3, 1, 1), cc.moveTo(0.3, 0, 800)),
             cc.callFunc(this.showHealthBar.bind(this)));
 
-        this.seq3 = cc.sequence(cc.fadeTo(0.1, 100), cc.fadeOut(0.5));
+        this.seq3 = cc.sequence(cc.fadeTo(0.1, 200), cc.fadeOut(0.5));
         this.seq4 = cc.spawn(
             cc.scaleTo(1, 1, 1),
             cc.sequence(cc.fadeIn(0.2), cc.delayTime(0.3), cc.fadeOut(0.5)));
@@ -108,6 +108,7 @@ cc.Class({
         let node = this.lifeBar.node;
         node.active = false;
         node.parent.active = false;
+        gameEvent.invoke('PLAY_SOUND', 'ev_back_to_game');
 
         if (this.score > this.bestScore) {
             this.bestScore = this.score;
