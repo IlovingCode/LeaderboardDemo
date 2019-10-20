@@ -8,7 +8,9 @@ cc.Class({
     properties: {
         gun: cc.Node,
         gunFire: cc.Node,
-        rot: 1,
+        deltaSpeed: 2,
+        minSpeed: 30,
+        maxSpeed: 40,
         min: 45,
         max: 90,
         bullet: cc.Prefab,
@@ -38,6 +40,16 @@ cc.Class({
 
     start() {
         gameEvent.GAME_START.push(this.onGameStart.bind(this));
+        gameEvent.BOSS_HEALTH.push(this.setRot.bind(this));
+    },
+
+    setRot(amount) {
+        if (amount == 1) {
+            let rot = this.minSpeed + this.deltaSpeed * this.boss;
+            this.boss++;
+            rot > this.maxSpeed && (rot = this.maxSpeed);
+            this.rot = rot;
+        }
     },
 
     reset() {
@@ -50,6 +62,9 @@ cc.Class({
         node.rotation = 0;
         node.scaleX = 1;
         this.gun.rotation = this.max;
+
+        this.boss = 0;
+        this.setRot(1);
     },
 
     onGameStart() {

@@ -15,7 +15,9 @@ cc.Class({
     },
 
     onGameOver() {
-        this.node.active = false;
+        let node = this.node;
+        if (!node.active) return;
+        node.active = false;
         gameEvent.invoke('COIN_CHANGED', 1);
     },
 

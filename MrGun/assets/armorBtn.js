@@ -18,6 +18,7 @@ cc.Class({
         this.player = cc.find('player').getComponent('PlayerController');
         this.btn = this.node.getComponent(cc.Button);
         this.sprite = this.node.getComponent(cc.Sprite);
+        this.node.getComponentInChildren(cc.Label).string = this.price;
         this.coin = 0;
         this.onCoinChanged(0);
     },
