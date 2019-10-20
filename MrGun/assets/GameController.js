@@ -41,11 +41,11 @@ cc.Class({
             cc.sequence(cc.fadeIn(0.2), cc.delayTime(0.3), cc.fadeOut(0.5)));
     },
 
-    onHeadShot() {
+    onHeadShot(player) {
         this.splash.runAction(this.seq3);
         this.perfect.node.scale = 0.3;
         this.perfect.string = 'HEAD SHOT' + (this.combo > 1 ? (' x' + this.combo) : '');
-        this.perfect.node.runAction(this.seq4);
+        !player && this.perfect.node.runAction(this.seq4);
     },
 
     onEnemyKilled(headshot) {

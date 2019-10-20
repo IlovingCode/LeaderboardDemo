@@ -5,13 +5,17 @@ cc.Class({
 
     properties: {
         speed: 100,
+        bullet: cc.SpriteFrame,
+        glow: cc.SpriteFrame,
     },
 
     // LIFE-CYCLE CALLBACKS:
 
     start() {
         let seq2 = cc.sequence(cc.fadeOut(0.3), cc.callFunc(this.onFinish.bind(this)));
-        this.seq = cc.spawn(cc.scaleTo(0.3, 20), seq2);
+        this.seq = cc.spawn(cc.scaleTo(0.3, 2), seq2);
+
+        this.sprite = this.node.getComponent(cc.Sprite);
     },
 
     onFinish() {
@@ -19,6 +23,7 @@ cc.Class({
         node.active = false;
         node.opacity = 255;
         node.setScale(1.0);
+        this.sprite.spriteFrame = this.bullet;
         this.target.checkAlive();
     },
 
@@ -39,8 +44,9 @@ cc.Class({
     onHit(target) {
         let node = this.node;
         this.enabled = false;
+        this.sprite.spriteFrame = this.glow;
         node.runAction(this.seq);
-        node.color = target.node.color;
+        //node.color = target.node.color;
         target.kill();
     },
 

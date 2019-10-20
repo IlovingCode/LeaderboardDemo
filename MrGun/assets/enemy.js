@@ -42,6 +42,12 @@ cc.Class({
     boss(on) {
         this.maxHealth = on ? (3 + Math.floor(Math.random() * 3)) : 1;
 
+        let list = this.node.children;
+        let node = list[on ? 2 : 1];
+        node.active = true;
+        node = list[on ? 1 : 2];
+        node.active = false;
+
         gameEvent.invoke('BOSS_HEALTH', on ? 1 : 0);
     },
 
@@ -73,7 +79,7 @@ cc.Class({
         let p = stair.getEnemyPos();
         let node = this.node;
 
-        let i = this.updateColor();
+        //let i = this.updateColor();
 
         if (this.maxHealth > 1) {
             gameEvent.invoke('PLAY_SOUND', 'ev_boss_appear_spin');
@@ -91,6 +97,7 @@ cc.Class({
                 cc.moveTo(0.1, port)
             ));
         } else {
+            let i = Math.floor(Math.random() * sizeList.length);
             node.setPosition(p.x > 540 ? 1200 : -100, p.y);
             i == 0 && node.runAction(cc.moveTo(0.3, p));
             i == 1 && node.runAction(cc.jumpTo(0.3, p, 50, 1));

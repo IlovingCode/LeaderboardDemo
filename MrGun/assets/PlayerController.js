@@ -127,7 +127,7 @@ cc.Class({
         //if (this.dead) return;
         //this.dead = true;
         //this.bulletPos.active = false;
-        gameEvent.invoke('SPLASH');
+        gameEvent.invoke('SPLASH', this);
         if (this.armor.active) {
             this.armor.runAction(this.seq2);
             gameEvent.invoke('PLAY_SOUND', 'ev_armor_hit');
