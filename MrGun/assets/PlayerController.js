@@ -24,6 +24,7 @@ cc.Class({
         this.bulletPos = this.gun.children[0];
         this.bulletPool = cc.find('bulletPool');
         this.count = 1;
+        this.armor.active = false;
         this.seq = cc.sequence(cc.fadeTo(0.05, 200), cc.fadeOut(0.05));
 
         this.seq2 = cc.sequence(
@@ -150,7 +151,7 @@ cc.Class({
         let node = this.armor;
         node.active = false;
         node.rotation = 0;
-        node.setPosition(0, 0);
+        node.setPosition(14, 98);
 
         this.gun.rotation = this.max;
         this.rot = Math.abs(this.rot);
