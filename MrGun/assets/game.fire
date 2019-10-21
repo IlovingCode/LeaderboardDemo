@@ -26,9 +26,6 @@
         "__id__": 24
       },
       {
-        "__id__": 42
-      },
-      {
         "__id__": 43
       },
       {
@@ -36,6 +33,9 @@
       },
       {
         "__id__": 45
+      },
+      {
+        "__id__": 46
       }
     ],
     "_active": false,
@@ -62,8 +62,8 @@
     },
     "_scale": {
       "__type__": "cc.Vec3",
-      "x": 0.5140569133280332,
-      "y": 0.5140569133280332,
+      "x": 0.6692271269029958,
+      "y": 0.6692271269029958,
       "z": 1
     },
     "_quat": {
@@ -1166,17 +1166,17 @@
         "__id__": 29
       },
       {
-        "__id__": 33
+        "__id__": 34
       },
       {
-        "__id__": 39
+        "__id__": 40
       }
     ],
     "_active": true,
     "_level": 1,
     "_components": [
       {
-        "__id__": 41
+        "__id__": 42
       }
     ],
     "_prefab": null,
@@ -1399,6 +1399,9 @@
     "_components": [
       {
         "__id__": 32
+      },
+      {
+        "__id__": 33
       }
     ],
     "_prefab": null,
@@ -1412,7 +1415,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 118,
+      "width": 124,
       "height": 163
     },
     "_anchorPoint": {
@@ -1462,7 +1465,7 @@
       }
     ],
     "_prefab": null,
-    "_opacity": 255,
+    "_opacity": 0,
     "_color": {
       "__type__": "cc.Color",
       "r": 255,
@@ -1563,6 +1566,25 @@
     "_id": "37ULv/RcFDUbPSPVIOVwXT"
   },
   {
+    "__type__": "698b6cbh+tB35+zO2XoCU0g",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 29
+    },
+    "_enabled": false,
+    "interval": 0.1,
+    "sprites": [
+      {
+        "__uuid__": "88286229-c53f-4095-a5ab-95568fb55f9a"
+      },
+      {
+        "__uuid__": "3d9cc7d5-329f-4de9-8aee-0388ad75c7ff"
+      }
+    ],
+    "_id": "a9uyFh6BVOa7obZTgGyK3C"
+  },
+  {
     "__type__": "cc.Node",
     "_name": "gun",
     "_objFlags": 0,
@@ -1571,17 +1593,17 @@
     },
     "_children": [
       {
-        "__id__": 34
+        "__id__": 35
       },
       {
-        "__id__": 36
+        "__id__": 37
       }
     ],
     "_active": true,
     "_level": 2,
     "_components": [
       {
-        "__id__": 38
+        "__id__": 39
       }
     ],
     "_prefab": null,
@@ -1634,14 +1656,14 @@
     "_name": "direction",
     "_objFlags": 0,
     "_parent": {
-      "__id__": 33
+      "__id__": 34
     },
     "_children": [],
     "_active": true,
     "_level": 3,
     "_components": [
       {
-        "__id__": 35
+        "__id__": 36
       }
     ],
     "_prefab": null,
@@ -1694,7 +1716,7 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 34
+      "__id__": 35
     },
     "_enabled": true,
     "_srcBlendFactor": 770,
@@ -1722,14 +1744,14 @@
     "_name": "gun_fire",
     "_objFlags": 0,
     "_parent": {
-      "__id__": 33
+      "__id__": 34
     },
     "_children": [],
     "_active": true,
     "_level": 3,
     "_components": [
       {
-        "__id__": 37
+        "__id__": 38
       }
     ],
     "_prefab": null,
@@ -1782,7 +1804,7 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 36
+      "__id__": 37
     },
     "_enabled": true,
     "_srcBlendFactor": 770,
@@ -1810,7 +1832,7 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 33
+      "__id__": 34
     },
     "_enabled": true,
     "_srcBlendFactor": 770,
@@ -1845,7 +1867,7 @@
     "_level": 2,
     "_components": [
       {
-        "__id__": 40
+        "__id__": 41
       }
     ],
     "_prefab": null,
@@ -1898,7 +1920,7 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 39
+      "__id__": 40
     },
     "_enabled": true,
     "_srcBlendFactor": 770,
@@ -1999,10 +2021,10 @@
     },
     "_enabled": true,
     "gun": {
-      "__id__": 33
+      "__id__": 34
     },
     "gunFire": {
-      "__id__": 36
+      "__id__": 37
     },
     "deltaSpeed": 10,
     "minSpeed": 30,
@@ -2016,7 +2038,7 @@
       "__id__": 28
     },
     "particle": {
-      "__id__": 40
+      "__id__": 41
     },
     "armor": {
       "__id__": 30
@@ -2199,7 +2221,7 @@
     },
     "_id": "633ul3TORIN5L1lMVjdPPN",
     "_prefab": {
-      "__id__": 46
+      "__id__": 47
     },
     "_name": "Canvas",
     "_active": true,
@@ -2215,7 +2237,7 @@
   {
     "__type__": "cc.PrefabInfo",
     "root": {
-      "__id__": 45
+      "__id__": 46
     },
     "asset": {
       "__uuid__": "0cdf54dc-cb1c-44c2-b204-03040704c195"

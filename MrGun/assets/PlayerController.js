@@ -36,6 +36,8 @@ cc.Class({
                     -100, -500),
                     500, 1)),
             cc.callFunc(this.onRevive.bind(this)));
+
+        this.anim = this.node.getComponentInChildren('body');
     },
 
     start() {
@@ -73,6 +75,7 @@ cc.Class({
 
     up(stair) {
         gameEvent.invoke('PLAY_SOUND', 'ev_reload_4');
+        this.anim.enabled = true;
         let foot = stair.getFootPos();
         let p = stair.getEnemyPos();
         this.node.runAction(cc.sequence(
@@ -91,6 +94,7 @@ cc.Class({
         this.enabled = true;
         this.particle.resetSystem();
         gameEvent.invoke('PLAY_SOUND', 'ev_foot_boss_land');
+        this.anim.enabled = false;
     },
 
     fire() {
