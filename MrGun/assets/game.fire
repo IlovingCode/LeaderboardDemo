@@ -62,8 +62,8 @@
     },
     "_scale": {
       "__type__": "cc.Vec3",
-      "x": 0.6070974421975234,
-      "y": 0.6070974421975234,
+      "x": 1.1809926614295299,
+      "y": 1.1809926614295299,
       "z": 1
     },
     "_quat": {
@@ -1911,9 +1911,9 @@
     "_stopped": true,
     "playOnLoad": false,
     "autoRemoveOnFinish": false,
-    "totalParticles": 10,
+    "totalParticles": 20,
     "duration": 1,
-    "emissionRate": 5,
+    "emissionRate": 10,
     "life": 1.5,
     "lifeVar": 0.5,
     "_startColor": {

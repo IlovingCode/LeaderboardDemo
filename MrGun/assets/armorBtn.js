@@ -12,6 +12,7 @@ cc.Class({
     start() {
         this.armor = cc.find('player').getComponent('PlayerController').armor;
         gameEvent.COIN_CHANGED.push(this.onCoinChanged.bind(this));
+        gameEvent.GAME_OVER.push(this.onGameOver.bind(this));
 
         this.btn = this.node.getComponent(cc.Button);
         this.node.getComponentInChildren(cc.Label).string = this.price;
@@ -24,6 +25,10 @@ cc.Class({
 
         let enough = this.coin >= this.price && !this.armor.active;
         this.btn.interactable = enough;
+    },
+
+    onGameOver() {
+        this.onCoinChanged(0);
     },
 
     onBuyArmor() {
