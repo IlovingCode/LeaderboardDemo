@@ -770,7 +770,7 @@
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 771,
     "_spriteFrame": {
-      "__uuid__": "2c4f24d2-2089-45dd-a3b1-0bf41aba5b11"
+      "__uuid__": "8c41828f-b023-49a0-a12e-b4db0a6875ac"
     },
     "_type": 0,
     "_sizeMode": 0,
@@ -783,7 +783,7 @@
     "_fillStart": 0,
     "_fillRange": 0,
     "_isTrimmedMode": true,
-    "_state": 0,
+    "_state": 1,
     "_atlas": null,
     "_id": ""
   },
@@ -803,7 +803,7 @@
       }
     ],
     "_N$interactable": false,
-    "_N$enableAutoGrayEffect": false,
+    "_N$enableAutoGrayEffect": true,
     "_N$transition": 3,
     "transition": 3,
     "_N$normalColor": {
@@ -878,12 +878,6 @@
     },
     "_enabled": true,
     "price": 15,
-    "active": {
-      "__uuid__": "8c41828f-b023-49a0-a12e-b4db0a6875ac"
-    },
-    "inactive": {
-      "__uuid__": "2c4f24d2-2089-45dd-a3b1-0bf41aba5b11"
-    },
     "_id": ""
   },
   {

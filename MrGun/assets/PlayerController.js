@@ -170,7 +170,7 @@ cc.Class({
         let node = this.armor;
         node.active = false;
         node.rotation = 0;
-        node.setPosition(14, 98);
+        node.setPosition(0, 80);
 
         this.gun.rotation = this.max;
         this.rot = Math.abs(this.rot);
