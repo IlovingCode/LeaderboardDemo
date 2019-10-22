@@ -336,8 +336,8 @@
     },
     "_enabled": true,
     "_useOriginalSize": false,
-    "_string": "TAP TO PLAY",
-    "_N$string": "TAP TO PLAY",
+    "_string": "Bấm đây để bắt đầu",
+    "_N$string": "Bấm đây để bắt đầu",
     "_fontSize": 80,
     "_lineHeight": 80,
     "_enableWrapText": true,
@@ -441,7 +441,7 @@
     "node": {
       "__id__": 6
     },
-    "_enabled": true,
+    "_enabled": false,
     "_color": {
       "__type__": "cc.Color",
       "r": 0,
