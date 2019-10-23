@@ -45,7 +45,7 @@ cc.Class({
         this.splash.runAction(this.seq3);
         this.perfect.node.scale = 0.3;
         if (!player) {
-            this.perfect.string = 'HEAD SHOT' + (this.combo > 1 ? (' x' + this.combo) : '');
+            this.perfect.string = 'HOÀN HẢO' + (this.combo > 1 ? (' x' + this.combo) : '');
             this.perfect.node.runAction(this.seq4);
         } else this.combo = 1;
     },
