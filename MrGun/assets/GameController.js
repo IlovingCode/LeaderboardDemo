@@ -37,16 +37,17 @@ cc.Class({
 
         this.seq3 = cc.sequence(cc.fadeTo(0.1, 200), cc.fadeOut(0.5));
         this.seq4 = cc.spawn(
-            cc.scaleTo(1, 1, 1),
-            cc.sequence(cc.fadeIn(0.2), cc.delayTime(0.3), cc.fadeOut(0.5)));
+            cc.scaleTo(0.2, 1, 1),
+            cc.sequence(cc.fadeIn(0.2), cc.delayTime(0.5), cc.fadeOut(0.3)));
     },
 
     onHeadShot(player) {
         this.splash.runAction(this.seq3);
-        this.perfect.node.scale = 0.3;
+        let perfect = this.perfect;
+        perfect.node.scale = 3;
         if (!player) {
-            this.perfect.string = 'HOÀN HẢO' + (this.combo > 1 ? (' x' + this.combo) : '');
-            this.perfect.node.runAction(this.seq4);
+            perfect.string = 'HOÀN HẢO' + (this.combo > 1 ? (' x' + this.combo) : '');
+            perfect.node.runAction(this.seq4);
         } else this.combo = 1;
     },
 

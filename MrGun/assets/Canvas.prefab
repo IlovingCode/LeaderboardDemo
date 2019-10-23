@@ -2189,7 +2189,7 @@
     "_string": "HOÀN HẢO",
     "_N$string": "HOÀN HẢO",
     "_fontSize": 80,
-    "_lineHeight": 100,
+    "_lineHeight": 150,
     "_enableWrapText": true,
     "_N$file": null,
     "_isSystemFontUsed": true,
@@ -2240,11 +2240,11 @@
     "_color": {
       "__type__": "cc.Color",
       "r": 255,
-      "g": 200,
+      "g": 255,
       "b": 0,
       "a": 255
     },
-    "_width": 3,
+    "_width": 10,
     "_id": ""
   },
   {
