@@ -590,7 +590,7 @@
     },
     "_position": {
       "__type__": "cc.Vec3",
-      "x": -10,
+      "x": -64,
       "y": -147,
       "z": 0
     },
@@ -652,14 +652,14 @@
     },
     "_position": {
       "__type__": "cc.Vec3",
-      "x": -30,
+      "x": 111,
       "y": 0,
       "z": 0
     },
     "_scale": {
       "__type__": "cc.Vec3",
-      "x": 0.5,
-      "y": 0.5,
+      "x": 0.7,
+      "y": 0.7,
       "z": 1
     },
     "_rotationX": 0,
@@ -1522,8 +1522,8 @@
     "_color": {
       "__type__": "cc.Color",
       "r": 255,
-      "g": 255,
-      "b": 255,
+      "g": 200,
+      "b": 0,
       "a": 255
     },
     "_width": 2,
@@ -1578,8 +1578,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 140,
-      "height": 161
+      "width": 150,
+      "height": 150
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -2186,8 +2186,8 @@
     },
     "_enabled": true,
     "_useOriginalSize": false,
-    "_string": "HEAD SHOT",
-    "_N$string": "HEAD SHOT",
+    "_string": "HOÀN HẢO",
+    "_N$string": "HOÀN HẢO",
     "_fontSize": 80,
     "_lineHeight": 100,
     "_enableWrapText": true,
