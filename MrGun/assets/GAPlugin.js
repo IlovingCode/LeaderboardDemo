@@ -40,7 +40,7 @@ cc.Class({
     onGameStart() {
         this.playTime++;
         ga.GameAnalytics.addProgressionEvent(ga.EGAProgressionStatus.Complete,
-            'game', 'session', 'start' + this.playTime);
+            'game', 'session', 'start_' + this.playTime);
 
         let coin = this.game.coin - this.coin;
         if (coin > 0) {
@@ -52,7 +52,7 @@ cc.Class({
 
     onGameOver() {
         ga.GameAnalytics.addProgressionEvent(ga.EGAProgressionStatus.Complete,
-            'game', 'session', 'end' + this.playTime);
+            'game', 'session', 'end_' + this.playTime);
         ga.GameAnalytics.addProgressionEvent(ga.EGAProgressionStatus.Complete,
             'game', 'boss_' + this.game.boss, 'enemy_' + (this.spawner.id % 9), this.game.score);
     },
