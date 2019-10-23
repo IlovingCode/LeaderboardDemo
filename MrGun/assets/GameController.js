@@ -44,15 +44,17 @@ cc.Class({
     onHeadShot(player) {
         this.splash.runAction(this.seq3);
         this.perfect.node.scale = 0.3;
-        this.perfect.string = 'HOÀN HẢO' + (this.combo > 1 ? (' x' + this.combo) : '');
-        !player && this.perfect.node.runAction(this.seq4);
+        if (!player) {
+            this.perfect.string = 'HEAD SHOT' + (this.combo > 1 ? (' x' + this.combo) : '');
+            this.perfect.node.runAction(this.seq4);
+        } else this.combo = 1;
     },
 
     onEnemyKilled(headshot) {
         if (headshot) this.combo++;
         else this.combo = 1;
 
-        let s = (headshot ? 2 : 1) * this.boss;
+        let s = (headshot ? this.combo : 1) * this.boss;
         this.score += s;
         this.scoreTxt.string = this.score;
 
