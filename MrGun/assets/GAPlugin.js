@@ -13,8 +13,8 @@ cc.Class({
     // LIFE-CYCLE CALLBACKS:
 
     start() {
-        ga.GameAnalytics.setEnabledInfoLog(true);
-        ga.GameAnalytics.setEnabledVerboseLog(true);
+        //ga.GameAnalytics.setEnabledInfoLog(true);
+        //ga.GameAnalytics.setEnabledVerboseLog(true);
 
         //ga.GameAnalytics.setEnabledEventSubmission(false);
         ga.GameAnalytics.configureAvailableResourceCurrencies(['coin']);
