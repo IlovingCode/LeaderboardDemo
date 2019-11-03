@@ -86,6 +86,14 @@ let getUser = function (id) {
 const express = require('express');
 const app = express();
 
+app.use("", express.static('./'));
+
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
+
 app.get('/mygame/hello', (req, res) => {
     res.send('Hi');
 });
@@ -121,8 +129,8 @@ app.get('/mygame/user/:id/:score', (req, res) => {
 });
 
 app.get('/mygame/rank/:min/:max', (req, res) => {
-    let min = req.params.min;
-    let max = req.params.max;
+    let min = +req.params.min;
+    let max = +req.params.max;
     if (min < 0) min = 0;
     if (max < 0) max = 0;
     if (max < min) {
@@ -139,7 +147,7 @@ const leaderboard = loadLeaderboard(database);
 
 setInterval(() => {
     fs.writeFileSync('./data.json', JSON.stringify(database));
-}, 150000);
+}, 15000);
 
 const port = 8080;
 app.listen(port, '0.0.0.0', () => console.log(`app listening on port ${port}`))
