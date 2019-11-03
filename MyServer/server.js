@@ -54,6 +54,27 @@ let updateLeaderboard = function (id1, id2) {
     }
 }
 
+let getRank = function (min, max) {
+    let length = leaderboard.length;
+    let res = [];
+    while (--length > 0 && min <= max) {
+        let item = leaderboard[length];
+        if (!item) continue;
+        let data = item.data;
+        let start = item.start;
+        let count = start + data.length - 1;
+        if (count < min) continue;
+
+        while (min <= count && min <= max) {
+            let id = data[min - start];
+            res.push({ id: id, score: getUser(id).score });
+            min++;
+        }
+    }
+
+    return res;
+}
+
 let getUser = function (id) {
     if (!database[id]) {
         database[id] = { score: 0 };
@@ -97,6 +118,19 @@ app.get('/mygame/user/:id/:score', (req, res) => {
     }
 
     res.send(JSON.stringify(user));
+});
+
+app.get('/mygame/rank/:min/:max', (req, res) => {
+    let min = req.params.min;
+    let max = req.params.max;
+    if (min < 0) min = 0;
+    if (max < 0) max = 0;
+    if (max < min) {
+        let t = min;
+        min = max;
+        max = t;
+    }
+    res.send(JSON.stringify(getRank(min, max)));
 });
 
 const fs = require('fs');
