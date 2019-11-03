@@ -1,40 +1,6 @@
 /* eslint-env node */
 /* eslint no-console: ["off"] */
 
-const express = require('express')
-const app = express()
-
-const fs = require('fs');
-const database = JSON.parse(fs.readFileSync('./data.json', 'utf8'));
-const leaderboard = [];
-
-app.get('/mygame/hello', (req, res) => {
-    res.send('Hi');
-});
-
-app.get('/mygame/user/:id', (req, res) => {
-    res.send(JSON.stringify(getUser(req.params.id)));
-});
-
-app.get('/mygame/user/:id/:score', (req, res) => {
-    let score = +req.params.score;
-    let id = req.params.id;
-    let user = getUser(id);
-
-    let userScore = +user.score;
-    if (userScore < score) {
-        let arr = getLeaderboardItem(userScore);
-        arr.splice(arr.indexOf(id), 1);
-
-        arr = getLeaderboardItem(score);
-        arr.push(id);
-        user.score = score;
-
-        updateLeaderboard(score, userScore);
-    }
-    res.send(JSON.stringify(user));
-});
-
 let getLeaderboardItem = function (id) {
     let item = leaderboard[id];
 
@@ -48,9 +14,37 @@ let getLeaderboardItem = function (id) {
                 break;
             }
         }
+
+        leaderboard[id] = item;
     }
 
     return item;
+}
+
+let loadLeaderboard = function (db) {
+    let res = [];
+    let users = Object.keys(db);
+    for (let i of users) {
+        let score = +db[i].score;
+        let item = res[score];
+        if (!item) {
+            item = { start: 0, data: [] };
+            res[score] = item;
+        }
+        item.data.push(i);
+    }
+
+    let length = res.length;
+    let start = 0;
+    for (let i = length - 1; i > 0; i--) {
+        let item = res[i];
+        if (item) {
+            item.start = start;
+            start += item.data.length;
+        }
+    }
+
+    return res;
 }
 
 let updateLeaderboard = function (id1, id2) {
@@ -68,9 +62,50 @@ let getUser = function (id) {
     return database[id];
 }
 
+const express = require('express');
+const app = express();
+
+app.get('/mygame/hello', (req, res) => {
+    res.send('Hi');
+});
+
+app.get('/mygame/user/:id', (req, res) => {
+    let id = req.params.id;
+    let user = getUser(id);
+    let item = getLeaderboardItem(user.score);
+    user.rank = item.start + item.data.indexOf(id) + 1;
+    res.send(JSON.stringify(user));
+});
+
+app.get('/mygame/user/:id/:score', (req, res) => {
+    let score = +req.params.score;
+    let id = req.params.id;
+    let user = getUser(id);
+
+    let userScore = +user.score;
+    if (userScore < score) {
+        let item = getLeaderboardItem(userScore);
+        item.data.splice(item.data.indexOf(id), 1);
+
+        item = getLeaderboardItem(score);
+        item.data.push(id);
+        user.score = score;
+
+        updateLeaderboard(score, userScore);
+
+        user.rank = item.start + item.data.length;
+    }
+
+    res.send(JSON.stringify(user));
+});
+
+const fs = require('fs');
+const database = JSON.parse(fs.readFileSync('./data.json', 'utf8'));
+const leaderboard = loadLeaderboard(database);
+
 setInterval(() => {
     fs.writeFileSync('./data.json', JSON.stringify(database));
-}, 15000);
+}, 150000);
 
 const port = 8080;
 app.listen(port, '0.0.0.0', () => console.log(`app listening on port ${port}`))
