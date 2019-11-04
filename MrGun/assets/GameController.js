@@ -1,4 +1,5 @@
 var gameEvent = require('GameEvent');
+var tutorialCounter = 5;
 
 cc.Class({
     extends: cc.Component,
@@ -6,6 +7,7 @@ cc.Class({
     properties: {
         mainMenu: cc.Node,
         actionPhase: cc.Node,
+        tutorial: cc.Node,
         coinTxt: cc.Label,
         scoreTxt: cc.Label,
         bestScoreTxt: cc.Label,
@@ -53,6 +55,8 @@ cc.Class({
     },
 
     onEnemyKilled(headshot) {
+        tutorialCounter--;
+
         if (headshot) this.combo++;
         else this.combo = 1;
 
@@ -99,11 +103,22 @@ cc.Class({
     play() {
         this.mainMenu.active = false;
         this.actionPhase.active = true;
+
+        if (tutorialCounter > 0) {
+            this.tutorial.active = true;
+            cc.director.pause();
+        }
+
         this.score = 0;
         this.boss = 1;
         this.combo = 1;
         this.scoreTxt.string = '0';
         gameEvent.invoke('GAME_START');
+    },
+
+    hideTutorial() {
+        this.tutorial.active = false;
+        cc.director.resume();
     },
 
     onGameOver() {

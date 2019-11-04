@@ -1,10 +1,92 @@
 /* eslint-env node */
 /* eslint no-console: ["off"] */
 
-const express = require('express')
-const app = express()
+let getLeaderboardItem = function (id) {
+    let item = leaderboard[id];
 
-app.use("/client", express.static('../MyGame/builds/Client'));
+    if (!item) {
+        item = { start: 0, data: [] };
+        let length = leaderboard.length;
+        for (let i = id + 1; i < length; i++) {
+            let e = leaderboard[i];
+            if (e) {
+                item.start = e.start + e.data.length;
+                break;
+            }
+        }
+
+        leaderboard[id] = item;
+    }
+
+    return item;
+}
+
+let loadLeaderboard = function (db) {
+    let res = [];
+    let users = Object.keys(db);
+    for (let i of users) {
+        let score = +db[i].score;
+        let item = res[score];
+        if (!item) {
+            item = { start: 0, data: [] };
+            res[score] = item;
+        }
+        item.data.push(i);
+    }
+
+    let length = res.length;
+    let start = 0;
+    for (let i = length - 1; i > 0; i--) {
+        let item = res[i];
+        if (item) {
+            item.start = start;
+            start += item.data.length;
+        }
+    }
+
+    return res;
+}
+
+let updateLeaderboard = function (id1, id2) {
+    for (let i = id2; i < id1; i++) {
+        let e = leaderboard[i];
+        if (e) e.start++;
+    }
+}
+
+let getRank = function (min, max) {
+    let length = leaderboard.length;
+    let res = [];
+    while (--length > 0 && min <= max) {
+        let item = leaderboard[length];
+        if (!item) continue;
+        let data = item.data;
+        let start = item.start;
+        let count = start + data.length - 1;
+        if (count < min) continue;
+
+        while (min <= count && min <= max) {
+            let id = data[min - start];
+            res.push({ id: id, score: getUser(id).score });
+            min++;
+        }
+    }
+
+    return res;
+}
+
+let getUser = function (id) {
+    if (!database[id]) {
+        database[id] = { score: 0 };
+    }
+
+    return database[id];
+}
+
+const express = require('express');
+const app = express();
+
+app.use("", express.static('./'));
 
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -13,106 +95,59 @@ app.use(function(req, res, next) {
 });
 
 app.get('/mygame/hello', (req, res) => {
-  res.send('Hi');
+    res.send('Hi');
+});
+
+app.get('/mygame/user/:id', (req, res) => {
+    let id = req.params.id;
+    let user = getUser(id);
+    let item = getLeaderboardItem(user.score);
+    user.rank = item.start + item.data.indexOf(id) + 1;
+    res.send(JSON.stringify(user));
+});
+
+app.get('/mygame/user/:id/:score', (req, res) => {
+    let score = +req.params.score;
+    let id = req.params.id;
+    let user = getUser(id);
+
+    let userScore = +user.score;
+    if (userScore < score) {
+        let item = getLeaderboardItem(userScore);
+        item.data.splice(item.data.indexOf(id), 1);
+
+        item = getLeaderboardItem(score);
+        item.data.push(id);
+        user.score = score;
+
+        updateLeaderboard(score, userScore);
+
+        user.rank = item.start + item.data.length;
+    }
+
+    res.send(JSON.stringify(user));
+});
+
+app.get('/mygame/rank/:min/:max', (req, res) => {
+    let min = +req.params.min;
+    let max = +req.params.max;
+    if (min < 0) min = 0;
+    if (max < 0) max = 0;
+    if (max < min) {
+        let t = min;
+        min = max;
+        max = t;
+    }
+    res.send(JSON.stringify(getRank(min, max)));
 });
 
 const fs = require('fs');
 const database = JSON.parse(fs.readFileSync('./data.json', 'utf8'));
+const leaderboard = loadLeaderboard(database);
 
-const process = require('child_process');
-const lobbyList = [];
-let roomPort = 7770;
-
-const createLobby = function() {
-  const ls = process.spawn('../MyGame/builds/Server/Server.exe', ['-batchmode', '-nographics']);
-  console.log(ls.pid);
-  lobbyList.push(ls);
-};
-
-const findID = function(pid) {
-  for (i = 0; i < lobbyList.length; i++) {
-    if (lobbyList[i].pid == pid)
-      return i;
-  }
-  return -1;
-}
-
-const killProcess = function(pid) {
-  let id = findID(pid);
-  if (id == -1) return false;
-
-  lobbyList[id].kill();
-  lobbyList.splice(id, 1);
-  return true;
-}
-
-app.get('/mygame/user/:name', (req, res) => {
-  //console.log(req.url);
-  res.send(`${database[req.params.name]}`);
-});
-
-app.get('/mygame/port/:pid/:port', (req, res) => {
-  console.log(req.url);
-  if (lobbyList.length > 0
-    && lobbyList[lobbyList.length - 1].pid == req.params.pid
-    && roomPort == req.params.port) {
-    roomPort++;
-    if (roomPort > 7773)
-      roomPort = 7770;
-
-    createLobby();
-  }
-  res.send(`${roomPort}`);
-});
-
-app.get('/mygame/result/draw/:pid', (req, res) => {
-  console.log(req.url);
-  killProcess(req.params.pid);
-  res.send(`${lobbyList.length}`);
-});
-
-app.get('/mygame/result/:pid/:winner/:loser', (req, res) => {
-  console.log(req.url);
-  if (killProcess(req.params.pid)) {
-    if (database[req.params.winner] == undefined)
-      database[req.params.winner] = 30;
-    else
-      database[req.params.winner] += 30;
-
-    if (database[req.params.loser] == undefined || database[req.params.loser] < 25)
-      database[req.params.loser] = 0;
-    else
-      database[req.params.loser] -= 25;
-
+setInterval(() => {
     fs.writeFileSync('./data.json', JSON.stringify(database));
-  }
+}, 15000);
 
-  res.send(`${lobbyList.length}`);
-});
-
-const port = 8080
-const buildRequired = true;
-const buildType = 'WebGL';
-
-if (buildRequired) {
-  process.exec('cd ..');
-  process.exec('E:/Unity/Editor/Unity.exe -quit -batchmode -executeMethod AutoBuildScript.BuildServer',
-    function(error, stdout, stderr) {
-      if (error)
-        return;
-      console.log(`build Server done!!!`);
-      process.exec(`E:/Unity/Editor/Unity.exe -quit -batchmode -executeMethod AutoBuildScript.BuildClient${buildType}`,
-        function(error, stdout, stderr) {
-          if (error)
-            return;
-          console.log(`build Client done!!!`);
-          app.listen(port, '0.0.0.0', () => console.log(`app listening on port ${port}`))
-          createLobby();
-          if (buildType == 'WebGL')
-            process.exec(`start http://localhost:${port}/client/index.html`);
-        });
-    });
-} else {
-  app.listen(port, '0.0.0.0', () => console.log(`app listening on port ${port}`))
-  createLobby();
-}
+const port = 8080;
+app.listen(port, '0.0.0.0', () => console.log(`app listening on port ${port}`))
