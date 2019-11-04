@@ -183,5 +183,6 @@ cc.Class({
         //this.node.rotation = 0;
         //this.node.scaleX *= -1;
         gameEvent.invoke('GAME_OVER');
+        gameEvent.invoke('POST_GAME');
     },
 });

@@ -19,16 +19,17 @@ cc.Class({
 
     start() {
         gameEvent.GAME_OVER.push(this.onGameOver.bind(this));
+        gameEvent.POST_GAME.push(this.onPostGame.bind(this));
         gameEvent.ENEMY_KILLED.push(this.onEnemyKilled.bind(this));
         gameEvent.COIN_CHANGED.push(this.onCoinChanged.bind(this));
         gameEvent.BOSS_HEALTH.push(this.onBossHealth.bind(this));
 
         gameEvent.SPLASH.push(this.onHeadShot.bind(this));
 
-        this.bestScore = 0;
-        this.coin = 0;
-        this.coinTxt.string = '0';
-        this.bestScoreTxt.string = '0';
+        this.bestScore = cc.sys.localStorage.getItem('bestScore') || 0;
+        this.coin = cc.sys.localStorage.getItem('coin') || 0;
+        this.coinTxt.string = this.coin;
+        this.bestScoreTxt.string = this.bestScore;
 
         this.seq = cc.spawn(cc.moveBy(0.5, 0, 100), cc.fadeOut(0.5));
         this.seq2 = cc.sequence(cc.delayTime(0.5),
@@ -117,6 +118,11 @@ cc.Class({
             this.bestScore = this.score;
             this.bestScoreTxt.string = this.score;
         }
+    },
+
+    onPostGame() {
+        cc.sys.localStorage.setItem('bestScore', this.bestScore);
+        cc.sys.localStorage.setItem('coin', this.coin);
     }
 
     // update (dt) {},
