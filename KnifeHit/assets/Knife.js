@@ -18,7 +18,7 @@ cc.Class({
         this.seq2 = cc.sequence(cc.moveBy(0.1, 0, 30), cc.moveBy(0.1, 0, -30));
         this.seq3 = cc.sequence(cc.fadeTo(0.1, 200), cc.fadeOut(0.1));
         this.seq4 = cc.sequence(cc.moveTo(0.1, 0, this.y), cc.callFunc(this.onResume.bind(this)));
-        this.seq5 = cc.sequence(cc.spawn(cc.rotateBy(1, 1000), cc.jumpTo(1, 0, this.y - 2000, 0, 1))
+        this.seq5 = cc.sequence(cc.spawn(cc.rotateBy(1, 1300), cc.jumpTo(1, 0, this.y - 2000, 0, 1))
             , cc.callFunc(this.onFailed.bind(this)));
 
         gameEvent.TAP.push(this.onclick.bind(this));
@@ -35,7 +35,7 @@ cc.Class({
     },
 
     onFailed() {
-        cc.director.loadScene('game');
+        gameEvent.invoke('GAME_OVER');
     },
 
     onHit() {
@@ -55,6 +55,8 @@ cc.Class({
         }
         list.push(rotation);
 
+        gameEvent.invoke('HIT');
+
         knife.parent = node;
         knife.setSiblingIndex(0);
         knife.rotation = -rotation;
@@ -64,7 +66,7 @@ cc.Class({
         knife.setPosition(0, this.y - 200);
         knife.rotation = 0;
         cc.director.getScene().addChild(knife);
-        knife.setSiblingIndex(2);
+        knife.setSiblingIndex(1);
 
         node.runAction(this.seq2);
         this.cover.runAction(this.seq3);

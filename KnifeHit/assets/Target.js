@@ -14,8 +14,9 @@ cc.Class({
         this.seq3 = cc.sequence(cc.rotateBy(1, 200), cc.rotateBy(1, -200),
             cc.rotateBy(1, 200), cc.rotateBy(1, -500));
         this.seq4 = cc.sequence(cc.rotateBy(2, 100), cc.rotateBy(1, 500));
+        this.seq5 = cc.sequence(cc.rotateBy(1.5, 200), cc.rotateBy(1.5, -200));
 
-        let id = Math.floor(Math.random() * 4) + 1;
+        let id = Math.floor(Math.random() * 5) + 1;
         this.node.runAction(cc.repeatForever(this['seq' + id]));
     },
 });
