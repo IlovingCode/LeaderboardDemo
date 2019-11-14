@@ -4,7 +4,6 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
-        rot: 10,
         sprites: [cc.SpriteFrame],
     },
 
@@ -15,11 +14,12 @@ cc.Class({
     start() {
         let knife = this.knife = cc.find('knife');
         this.y = knife.y;
-        this.seq1 = cc.sequence(cc.moveTo(0.1, 0, -300), cc.callFunc(this.onHit.bind(this))
-            , cc.delayTime(0.2), cc.callFunc(this.onResume.bind(this)));
+        this.seq1 = cc.sequence(cc.moveTo(0.1, 0, -550), cc.callFunc(this.onHit.bind(this)));
         this.seq2 = cc.sequence(cc.moveBy(0.1, 0, 30), cc.moveBy(0.1, 0, -30));
         this.seq3 = cc.sequence(cc.fadeTo(0.1, 200), cc.fadeOut(0.1));
-        this.seq4 = cc.moveTo(0.1, 0, this.y);
+        this.seq4 = cc.sequence(cc.moveTo(0.1, 0, this.y), cc.callFunc(this.onResume.bind(this)));
+        this.seq5 = cc.sequence(cc.spawn(cc.rotateBy(1, 1000), cc.jumpTo(1, 0, this.y - 2000, 0, 1))
+            , cc.callFunc(this.onFailed.bind(this)));
 
         gameEvent.TAP.push(this.onclick.bind(this));
 
@@ -34,20 +34,26 @@ cc.Class({
         this.rotList = [];
     },
 
+    onFailed() {
+        cc.director.loadScene('game');
+    },
+
     onHit() {
+        this.pause = true;
         let list = this.rotList;
         let node = this.node;
-        let rotation = Math.floor(node.rotation) % 360;
+        let knife = this.knife;
+        let rotation = node.rotation;
+
+        while(rotation < 0) rotation += 360;
+        rotation = Math.floor(rotation) % 360;
         for (let r of list) {
             if (Math.abs(r - rotation) < 13) {
-                cc.director.loadScene('game');
-                break;
+                knife.runAction(this.seq5);
+                return;
             }
         }
-        this.pause = true;
         list.push(rotation);
-
-        let knife = this.knife;
 
         knife.parent = node;
         knife.setSiblingIndex(0);
@@ -71,9 +77,5 @@ cc.Class({
 
     onclick() {
         !this.pause && this.knife.runAction(this.seq1);
-    },
-
-    update(dt) {
-        this.node.rotation += this.rot * dt;
     },
 });
