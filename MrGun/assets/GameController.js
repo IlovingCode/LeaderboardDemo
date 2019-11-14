@@ -135,6 +135,16 @@ cc.Class({
         }
     },
 
+    onFacebookClick() {
+        FB.ui({
+            method: 'share',
+            href: 'http://dndmedia.vn/myvt/vthero/index.html',
+            quote: `I scored ${this.bestScore} in this game. Enjoy it!!!`
+        }, function (response) {
+            cc.log(response);
+        });
+    },
+
     onPostGame() {
         cc.sys.localStorage.setItem('bestScore', this.bestScore);
         cc.sys.localStorage.setItem('coin', this.coin);
