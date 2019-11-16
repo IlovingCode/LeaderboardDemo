@@ -16,7 +16,7 @@ cc.Class({
 
         this.btn = this.node.getComponent(cc.Button);
         this.node.getComponentInChildren(cc.Label).string = this.price;
-        this.coin = 0;
+        this.coin = +cc.sys.localStorage.getItem('coin') || 0;
         this.onCoinChanged(0);
     },
 

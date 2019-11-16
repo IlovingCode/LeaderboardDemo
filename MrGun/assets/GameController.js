@@ -29,7 +29,7 @@ cc.Class({
         gameEvent.SPLASH.push(this.onHeadShot.bind(this));
 
         this.bestScore = cc.sys.localStorage.getItem('bestScore') || 0;
-        this.coin = cc.sys.localStorage.getItem('coin') || 0;
+        this.coin = +cc.sys.localStorage.getItem('coin') || 0;
         this.coinTxt.string = this.coin;
         this.bestScoreTxt.string = this.bestScore;
 
