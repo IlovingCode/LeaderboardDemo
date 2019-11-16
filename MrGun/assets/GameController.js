@@ -138,8 +138,10 @@ cc.Class({
     onFacebookClick() {
         FB.ui({
             method: 'share',
-            href: 'http://dndmedia.vn/myvt/vthero/index.html',
-            quote: `I scored ${this.bestScore} in this game. Enjoy it!!!`
+            href: cc.sys.os == cc.sys.OS_IOS
+                ? 'https://apps.apple.com/vn/app/my-viettel-đơn-giản-tiện-ích/id1014838705'
+                : 'https://play.google.com/store/apps/details?id=com.vttm.vietteldiscovery',
+            quote: `Tôi đã đạt được ${this.bestScore} điểm với trò chơi Viettel Hero trong ứng dụng My Viettel. Bạn có thể vượt qua tôi không?`
         }, function (response) {
             cc.log(response);
         });
