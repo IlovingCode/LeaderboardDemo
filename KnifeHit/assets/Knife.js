@@ -48,7 +48,7 @@ cc.Class({
         while(rotation < 0) rotation += 360;
         rotation = Math.floor(rotation) % 360;
         for (let r of list) {
-            if (Math.abs(r - rotation) < 13) {
+            if (Math.abs(r - rotation) < 9) {
                 knife.runAction(this.seq5);
                 return;
             }
@@ -68,6 +68,7 @@ cc.Class({
         cc.director.getScene().addChild(knife);
         knife.setSiblingIndex(1);
 
+        this.cover.stopAllActions();
         node.runAction(this.seq2);
         this.cover.runAction(this.seq3);
         knife.runAction(this.seq4);
