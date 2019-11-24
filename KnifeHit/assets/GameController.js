@@ -34,10 +34,27 @@ cc.Class({
             content.addChild(obj);
         }
 
-        this.stage.node.color = isBoss ? cc.Color.RED : cc.Color.WHITE;
+        let stageObj = this.stage;
+        stageObj.node.color = isBoss ? cc.color(255, 100, 100) : cc.Color.WHITE;
 
-        this.stage.string = 'Stage ' + stage;
+        stageObj.string = isBoss ? ('Boss ' + Math.floor(stage / 5)) : ('Stage ' + stage);
         this.score.string = score;
+
+        let list = stageObj.node.children;
+        let m = stage % list.length - 1;
+        m < 0 && (m = list.length - 1);
+        for (let i = 0; i < m; i++) {
+            if (isBoss) {
+                list[i].active = false;
+            }
+            else list[i].color = cc.color(255, 200, 0);
+        }
+
+        list[m].runAction(cc.sequence(
+            cc.scaleTo(0.1, 1.5), cc.scaleTo(0.1, 1),
+            isBoss ? cc.tintTo(0.1, 255, 100, 100) : cc.tintTo(0.1, 255, 200, 0),
+            isBoss && cc.moveTo(0.3, 0, list[m].y),
+        ));
     },
 
     onHit() {
@@ -46,8 +63,20 @@ cc.Class({
         let count = --this.count;
         this.content.children[count].color = cc.Color.BLACK;
 
-        if (!count)
-            cc.director.loadScene('game');
+        if (!count) {
+            let isBoss = stage % 5 == 0;
+            if (isBoss) {
+                let stageObj = this.stage;
+                let list = stageObj.node.children;
+                let m = list.length - 1;
+
+                list[m].runAction(cc.sequence(
+                    cc.tintTo(0.1, 255, 255, 255),
+                    cc.moveTo(0.3, 106, list[m].y),
+                    cc.callFunc(cc.director.loadScene.bind(cc.director, 'game', null, null))
+                ));
+            } else cc.director.loadScene('game');
+        } else gameEvent.invoke('KNIFE');
     },
 
     onGameOver() {

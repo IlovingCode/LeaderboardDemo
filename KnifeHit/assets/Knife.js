@@ -12,9 +12,10 @@ cc.Class({
     // onLoad () {},
 
     start() {
+        let node = this.node;
         let knife = this.knife = cc.find('knife');
         this.y = knife.y;
-        this.seq1 = cc.sequence(cc.moveTo(0.1, 0, -550), cc.callFunc(this.onHit.bind(this)));
+        this.seq1 = cc.sequence(cc.moveTo(0.1, 0, node.y - 350), cc.callFunc(this.onHit.bind(this)));
         this.seq2 = cc.sequence(cc.moveBy(0.1, 0, 30), cc.moveBy(0.1, 0, -30));
         this.seq3 = cc.sequence(cc.fadeTo(0.1, 200), cc.fadeOut(0.1));
         this.seq4 = cc.sequence(cc.moveTo(0.1, 0, this.y), cc.callFunc(this.onResume.bind(this)));
@@ -22,8 +23,8 @@ cc.Class({
             , cc.callFunc(this.onFailed.bind(this)));
 
         gameEvent.TAP.push(this.onclick.bind(this));
+        gameEvent.KNIFE.push(this.onKnife.bind(this));
 
-        let node = this.node;
         let sprite = node.children[0];
         let id = Math.floor(Math.random() * this.sprites.length);
         sprite.getComponent(cc.Sprite).spriteFrame = this.sprites[id];
@@ -32,6 +33,12 @@ cc.Class({
         this.cover.setContentSize(sprite);
 
         this.rotList = [];
+        knife.setPosition(0, this.y - 200);
+        knife.runAction(this.seq4);
+
+        this.pause = true;
+        sprite.scale = 0;
+        sprite.runAction(cc.sequence(cc.scaleTo(0.2, 1.15), cc.scaleTo(0.1, 1)));
     },
 
     onFailed() {
@@ -45,7 +52,7 @@ cc.Class({
         let knife = this.knife;
         let rotation = node.rotation;
 
-        while(rotation < 0) rotation += 360;
+        while (rotation < 0) rotation += 360;
         rotation = Math.floor(rotation) % 360;
         for (let r of list) {
             if (Math.abs(r - rotation) < 9) {
@@ -62,15 +69,18 @@ cc.Class({
         knife.rotation = -rotation;
         knife.setPosition(node.convertToNodeSpaceAR(knife));
 
-        this.knife = knife = cc.instantiate(knife);
+        this.cover.stopAllActions();
+        node.runAction(this.seq2);
+        this.cover.runAction(this.seq3);
+    },
+
+    onKnife() {
+        let knife = this.knife = cc.instantiate(this.knife);
         knife.setPosition(0, this.y - 200);
         knife.rotation = 0;
         cc.director.getScene().addChild(knife);
         knife.setSiblingIndex(1);
 
-        this.cover.stopAllActions();
-        node.runAction(this.seq2);
-        this.cover.runAction(this.seq3);
         knife.runAction(this.seq4);
     },
 
