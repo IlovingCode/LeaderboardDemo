@@ -1,0 +1,31 @@
+{
+  "ver": "2.2.0",
+  "uuid": "4612728a-c871-497d-8b6d-e63dacf88107",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "premultiplyAlpha": false,
+  "subMetas": {
+    "Moonlight_2": {
+      "ver": "1.0.4",
+      "uuid": "14ebb809-e8a2-450b-adee-84d00604d06d",
+      "rawTextureUuid": "4612728a-c871-497d-8b6d-e63dacf88107",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": 0,
+      "offsetY": 0,
+      "trimX": 0,
+      "trimY": 0,
+      "width": 1941,
+      "height": 1941,
+      "rawWidth": 1941,
+      "rawHeight": 1941,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "subMetas": {}
+    }
+  }
+}

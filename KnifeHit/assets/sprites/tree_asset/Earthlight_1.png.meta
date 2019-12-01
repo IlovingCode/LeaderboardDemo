@@ -1,0 +1,31 @@
+{
+  "ver": "2.2.0",
+  "uuid": "46ca755b-59f1-4e12-aba7-237b95ef650d",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "premultiplyAlpha": false,
+  "subMetas": {
+    "Earthlight_1": {
+      "ver": "1.0.4",
+      "uuid": "0eca2dcf-1b9b-4ed2-ac4f-001557115efe",
+      "rawTextureUuid": "46ca755b-59f1-4e12-aba7-237b95ef650d",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": 0,
+      "offsetY": 0,
+      "trimX": 0,
+      "trimY": 0,
+      "width": 2190,
+      "height": 2181,
+      "rawWidth": 2190,
+      "rawHeight": 2181,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "subMetas": {}
+    }
+  }
+}
