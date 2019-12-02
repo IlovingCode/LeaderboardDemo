@@ -6,6 +6,7 @@ cc.Class({
     properties: {
         collisionAngle: 9,
         sprites: [cc.SpriteFrame],
+        earth: cc.SpriteFrame,
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -26,7 +27,7 @@ cc.Class({
         knife.active = true;
         this.enabled = true;
         let y = this.y = knife.y;
-        this.seq1 = cc.sequence(cc.moveTo(0.1, 0, node.y - 350), cc.callFunc(this.onHit.bind(this)));
+        this.seq1 = cc.sequence(cc.moveTo(0.1, 0, node.y - 430), cc.callFunc(this.onHit.bind(this)));
         this.seq2 = cc.sequence(cc.moveBy(0.1, 0, 30), cc.moveBy(0.1, 0, -30));
         this.seq3 = cc.sequence(cc.fadeTo(0.1, 200), cc.fadeOut(0.1));
         this.seq4 = cc.sequence(cc.moveTo(0.1, 0, this.y), cc.callFunc(this.onResume.bind(this)));
@@ -39,7 +40,8 @@ cc.Class({
 
         let sprite = node.children[0];
         let id = Math.floor(Math.random() * this.sprites.length);
-        sprite.getComponent(cc.Sprite).spriteFrame = this.sprites[id];
+        this.current = this.sprites[id];
+        sprite.getComponent(cc.Sprite).spriteFrame = this.current;
 
         this.cover = node.children[1];
         this.cover.setContentSize(sprite);
@@ -89,7 +91,17 @@ cc.Class({
     },
 
     onStage() {
-        this.node.runAction(cc.sequence(cc.scaleTo(0.15, 1.2), cc.scaleTo(0.1, 0)));
+        this.node.runAction(cc.sequence(cc.scaleTo(0.15, 1.2),
+            cc.callFunc(this.onEarth.bind(this, true)), cc.scaleTo(0.1, 1),
+            cc.delayTime(1),
+            cc.scaleTo(0.15, 1.2),
+            cc.callFunc(this.onEarth.bind(this, false)), cc.scaleTo(0.1, 0)));
+    },
+
+    onEarth(isOn) {
+        let list = this.node.children;
+        let sprite = list[list.length - 2].getComponent(cc.Sprite);
+        sprite.spriteFrame = isOn ? this.earth : this.current;
     },
 
     onKnife() {

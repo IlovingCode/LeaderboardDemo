@@ -30,8 +30,8 @@ cc.Class({
             cc.rotateBy(4 - level * 0.1, 100),
             cc.rotateBy(2 - level * 0.1, 500));
         this.seq5 = cc.sequence(
-            cc.rotateBy(4 - level * 0.1, 300),
-            cc.rotateBy(4 - level * 0.1, -300));
+            cc.rotateBy(4 - level * 0.1, 350),
+            cc.rotateBy(4 - level * 0.1, -350));
 
         this.node.runAction(cc.repeatForever(this['seq' + id]));
 

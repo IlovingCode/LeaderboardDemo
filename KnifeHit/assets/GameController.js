@@ -25,7 +25,7 @@ cc.Class({
 
         let content = this.content;
         let template = content.children[0];
-        let count = this.count = (isBoss ? 13 : 7) + Math.floor(Math.random() * 3);
+        let count = this.count = (isBoss ? 9 : 5) + Math.floor(Math.random() * 3);
         while (--count > 0) {
             let obj = cc.instantiate(template);
             content.addChild(obj);
@@ -93,21 +93,25 @@ cc.Class({
                 let m = list.length - 1;
 
                 list[m].runAction(cc.sequence(
+                    cc.delayTime(1.3),
                     cc.tintTo(0.1, 255, 255, 255),
-                    cc.moveTo(0.3, 106, list[m].y)
+                    cc.moveTo(0.3, 106, list[m].y),
+                    cc.callFunc(this.onPostBoss.bind(this))
                 ));
-
-                let preBoss = this.preBoss;
-                preBoss.once('finished', cc.director.loadScene.bind(cc.director, 'game', null, null));
-                preBoss.play('postBoss');
             } else {
                 stageObj.node.runAction(cc.sequence(
-                    cc.delayTime(0.4),
+                    cc.delayTime(1.7),
                     cc.callFunc(cc.director.loadScene.bind(cc.director, 'game', null, null))
                 ));
             }
             gameEvent.invoke('STAGE');
         } else gameEvent.invoke('KNIFE');
+    },
+
+    onPostBoss() {
+        let preBoss = this.preBoss;
+        preBoss.once('finished', cc.director.loadScene.bind(cc.director, 'game', null, null));
+        preBoss.play('postBoss');
     },
 
     onGameOver() {
