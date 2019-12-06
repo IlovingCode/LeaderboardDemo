@@ -1,6 +1,7 @@
 # Features
 - add level: done
 - update asset: done
+- add obstacle: done
 
 # Time
 - 10/11/19: 19h - 21h
@@ -10,3 +11,4 @@
 - 24/11/19: full day - 6h
 - 25/11/19: full day - 6h
 - 02/12/19: 8h - 12h
+- 06/12/19: 8h - 12h

@@ -7,6 +7,7 @@ cc.Class({
         collisionAngle: 9,
         sprites: [cc.SpriteFrame],
         earth: cc.SpriteFrame,
+        obstacle: cc.Node,
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -21,7 +22,7 @@ cc.Class({
         gameEvent.START.push(this.onGameStart.bind(this));
     },
 
-    onGameStart() {
+    onGameStart(count) {
         let node = this.node;
         let knife = this.knife;
         knife.active = true;
@@ -40,20 +41,49 @@ cc.Class({
 
         let sprite = node.children[0];
         let id = Math.floor(Math.random() * this.sprites.length);
-        this.current = this.sprites[id];
-        sprite.getComponent(cc.Sprite).spriteFrame = this.current;
+        sprite.getComponent(cc.Sprite).spriteFrame = this.sprites[id];
 
         this.cover = node.children[1];
         this.cover.setContentSize(sprite);
 
-        this.rotList = [];
         knife.setPosition(0, y - 200);
         knife.runAction(this.seq4);
 
         this.pause = true;
         sprite.scale = 0;
-        sprite.runAction(cc.sequence(cc.scaleTo(0.2, 1.15), cc.scaleTo(0.1, 1)));
+        sprite.runAction(cc.sequence(cc.scaleTo(0.2, 1.15)
+            , cc.callFunc(this.spawnObstacle.bind(this, count))
+            , cc.scaleTo(0.1, 1)));
         node.getComponent('Target').enabled = true;
+    },
+
+    spawnObstacle(count) {
+        count = 11 - count;
+        let c = this.collisionAngle;
+        let m = Math.floor(360 / c);
+        let a = Math.floor(Math.random() * m);
+        let r = this.node.width * 0.5;
+        let node = this.obstacle;
+        node.active = true;
+        let list = this.rotList = [];
+        while (--count > 0) {
+            a += 3 + Math.floor(Math.random() * m);
+            a > m && (a -= m);
+
+            let rot = a * c;
+            let obj = cc.instantiate(node);
+            obj.parent = this.node;
+            obj.setSiblingIndex(0);
+            obj.rotation = -rot;
+
+            list.push((rot + 87) % 360);
+            cc.log(rot);
+
+            rot *= Math.PI / 180;
+            obj.setPosition(r * Math.cos(rot), r * Math.sin(rot));
+        }
+
+        node.active = false;
     },
 
     onFailed() {
@@ -92,16 +122,15 @@ cc.Class({
 
     onStage() {
         this.node.runAction(cc.sequence(cc.scaleTo(0.15, 1.2),
-            cc.callFunc(this.onEarth.bind(this, true)), cc.scaleTo(0.1, 1),
+            cc.callFunc(this.onEarth.bind(this)), cc.scaleTo(0.1, 1),
             cc.delayTime(1),
-            cc.scaleTo(0.15, 1.2),
-            cc.callFunc(this.onEarth.bind(this, false)), cc.scaleTo(0.1, 0)));
+            cc.scaleTo(0.15, 1.2), cc.scaleTo(0.1, 0)));
     },
 
-    onEarth(isOn) {
+    onEarth() {
         let list = this.node.children;
-        let sprite = list[list.length - 2].getComponent(cc.Sprite);
-        sprite.spriteFrame = isOn ? this.earth : this.current;
+        let sprite = list[list.length - 3].getComponent(cc.Sprite);
+        sprite.spriteFrame = this.earth;
     },
 
     onKnife() {

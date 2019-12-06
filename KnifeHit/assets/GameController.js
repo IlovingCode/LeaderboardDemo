@@ -32,7 +32,7 @@ cc.Class({
         }
 
         let stageObj = this.stage;
-        stageObj.node.color = isBoss ? cc.color(255, 100, 100) : cc.Color.WHITE;
+        stageObj.node.color = isBoss ? cc.color(255, 100, 100) : cc.color('FFC80D');
 
         stageObj.string = isBoss ? ('Boss ' + Math.floor(stage / 5)) : ('Stage ' + stage);
         this.score.string = score;
@@ -44,12 +44,12 @@ cc.Class({
             if (isBoss) {
                 list[i].active = false;
             }
-            else list[i].color = cc.color(255, 200, 0);
+            else list[i].color = cc.color(141, 191, 44);
         }
 
         list[m].runAction(cc.sequence(
             cc.scaleTo(0.1, 1.5), cc.scaleTo(0.1, 1),
-            isBoss ? cc.tintTo(0.1, 255, 100, 100) : cc.tintTo(0.1, 255, 200, 0),
+            cc.tintTo(0.1, 141, 191, 44),
             isBoss && cc.moveTo(0.3, 0, list[m].y),
         ));
 
@@ -75,14 +75,14 @@ cc.Class({
 
         //this.stage.enabled = true;
         this.content.active = true;
-        gameEvent.invoke('START');
+        gameEvent.invoke('START', this.count);
     },
 
     onHit() {
         score++;
         this.score.string = score;
         let count = --this.count;
-        this.content.children[count].color = cc.Color.BLACK;
+        this.content.children[count].color = cc.color('281E5A');
 
         if (!count) {
             let isBoss = stage % 5 == 0;
@@ -94,7 +94,7 @@ cc.Class({
 
                 list[m].runAction(cc.sequence(
                     cc.delayTime(1.3),
-                    cc.tintTo(0.1, 255, 255, 255),
+                    cc.tintTo(0.1, 0, 0, 0),
                     cc.moveTo(0.3, 106, list[m].y),
                     cc.callFunc(this.onPostBoss.bind(this))
                 ));
