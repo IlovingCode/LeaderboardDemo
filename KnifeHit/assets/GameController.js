@@ -1,5 +1,5 @@
 var gameEvent = require('GameEvent');
-var bestScore = 0;
+var Profile = require('Profile');
 var score = 0;
 var stage = 0;
 
@@ -11,24 +11,33 @@ cc.Class({
         score: cc.Label,
         stage: cc.Label,
         preBoss: cc.Animation,
-        postBoss: cc.Animation,
     },
 
     // LIFE-CYCLE CALLBACKS:
 
     onLoad() {
         gameEvent.resetAll();
-        gameEvent.HIT.push(this.onHit.bind(this));
-        gameEvent.GAME_OVER.push(this.onGameOver.bind(this));
-
-        let isBoss = ++stage % 5 == 0;
 
         let content = this.content;
         let template = content.children[0];
-        let count = this.count = (isBoss ? 9 : 5) + Math.floor(Math.random() * 3);
+        let count = 11;
         while (--count > 0) {
             let obj = cc.instantiate(template);
             content.addChild(obj);
+        }
+    },
+
+    reset() {
+        let isBoss = ++stage % 5 == 0;
+
+        let content = this.content;
+        let list = content.children;
+        let length = list.length;
+        let count = this.count = (isBoss ? 9 : 5) + Math.floor(Math.random() * 3);
+        for (let i = 0; i < length; ++i) {
+            let node = list[i];
+            node.active = i < count;
+            node.color = cc.color('8DBF2C');
         }
 
         let stageObj = this.stage;
@@ -37,7 +46,7 @@ cc.Class({
         stageObj.string = isBoss ? ('Boss ' + Math.floor(stage / 5)) : ('Stage ' + stage);
         this.score.string = score;
 
-        let list = stageObj.node.children;
+        list = stageObj.node.children;
         let m = stage % list.length - 1;
         m < 0 && (m = list.length - 1);
         for (let i = 0; i < m; i++) {
@@ -53,29 +62,33 @@ cc.Class({
             isBoss && cc.moveTo(0.3, 0, list[m].y),
         ));
 
+        gameEvent.invoke('RESET');
         let preBoss = this.preBoss;
 
         if (isBoss) {
             content.active = false;
-            this.enabled = false;
             preBoss.node.active = true;
             preBoss.once('finished', this.onFinish.bind(this));
         } else {
             preBoss.node.active = false;
+            this.onFinish();
         }
     },
 
     onFinish() {
-        this.enabled = true;
-    },
-
-    start() {
         cc.find('Camera').on('touchstart', gameEvent.invoke.bind(gameEvent, 'TAP'));
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN, gameEvent.invoke.bind(gameEvent, 'TAP'), this);
 
         //this.stage.enabled = true;
         this.content.active = true;
         gameEvent.invoke('START', this.count);
+    },
+
+    start() {
+        gameEvent.HIT.push(this.onHit.bind(this));
+        gameEvent.GAME_OVER.push(this.onGameOver.bind(this));
+
+        this.reset();
     },
 
     onHit() {
@@ -101,7 +114,7 @@ cc.Class({
             } else {
                 stageObj.node.runAction(cc.sequence(
                     cc.delayTime(1.7),
-                    cc.callFunc(cc.director.loadScene.bind(cc.director, 'game', null, null))
+                    cc.callFunc(this.reset.bind(this))
                 ));
             }
             gameEvent.invoke('STAGE');
@@ -110,15 +123,15 @@ cc.Class({
 
     onPostBoss() {
         let preBoss = this.preBoss;
-        preBoss.once('finished', cc.director.loadScene.bind(cc.director, 'game', null, null));
+        preBoss.once('finished', this.reset.bind(this));
         preBoss.play('postBoss');
     },
 
     onGameOver() {
-        if (score > bestScore) bestScore = score;
+        Profile.setBestScore(score);
         score = 0;
         stage = 0;
-        cc.director.loadScene('game');
+        cc.director.loadScene('main');
     }
 
     // update (dt) {},

@@ -8,10 +8,12 @@ cc.Class({
     },
 
     // LIFE-CYCLE CALLBACKS:
-
-    // onLoad () {},
-
     start() {
+        gameEvent.GAME_OVER.push(this.onGameOver.bind(this));
+        gameEvent.START.push(this.reset.bind(this));
+    },
+
+    reset() {
         let id = 1;
         let level = Math.floor(stage / 5);
         if (++stage % 5 == 0) id = Math.floor(Math.random() * 4) + 2;
@@ -34,8 +36,6 @@ cc.Class({
             cc.rotateBy(4 - level * 0.1, -350));
 
         this.node.runAction(cc.repeatForever(this['seq' + id]));
-
-        gameEvent.GAME_OVER.push(this.onGameOver.bind(this));
     },
 
     onGameOver() {

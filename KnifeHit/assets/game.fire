@@ -50,8 +50,8 @@
     },
     "_scale": {
       "__type__": "cc.Vec3",
-      "x": 0.1,
-      "y": 0.1,
+      "x": 0.20885416666666667,
+      "y": 0.20885416666666667,
       "z": 1
     },
     "_quat": {
@@ -697,7 +697,7 @@
     "node": {
       "__id__": 8
     },
-    "_enabled": false,
+    "_enabled": true,
     "_id": "513u2mW39KcKC8vDqWWFR2"
   },
   {
@@ -2440,7 +2440,6 @@
     "preBoss": {
       "__id__": 56
     },
-    "postBoss": null,
     "_id": "17QRC+S+ZH268txoqBLpey"
   }
 ]

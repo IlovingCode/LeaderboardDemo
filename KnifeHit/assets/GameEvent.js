@@ -20,7 +20,7 @@ gameEvent.reset = function(name) {
     } else gameEvent[name] = [];
 }
 
-gameEvent.list = ['TAP', 'HIT', 'GAME_OVER', 'KNIFE', 'STAGE', 'START'];
+gameEvent.list = ['TAP', 'HIT', 'GAME_OVER', 'KNIFE', 'STAGE', 'START', 'RESET'];
 
 gameEvent.resetAll = function() {
     gameEvent.reset(gameEvent.list);

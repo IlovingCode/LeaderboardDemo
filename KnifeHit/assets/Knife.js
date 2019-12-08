@@ -15,11 +15,27 @@ cc.Class({
     // onLoad () {},
 
     start() {
-        this.enabled = false;
         let knife = this.knife = cc.find('knife');
-        knife.active = false;
+        let y = this.y = knife.y;
 
+        gameEvent.TAP.push(this.onclick.bind(this));
+        gameEvent.KNIFE.push(this.onKnife.bind(this));
+        gameEvent.STAGE.push(this.onStage.bind(this));
         gameEvent.START.push(this.onGameStart.bind(this));
+        gameEvent.RESET.push(this.reset.bind(this));
+
+        this.seq1 = cc.sequence(cc.moveTo(0.1, 0, this.node.y - 430), cc.callFunc(this.onHit.bind(this)));
+        this.seq2 = cc.sequence(cc.moveBy(0.1, 0, 30), cc.moveBy(0.1, 0, -30));
+        this.seq3 = cc.sequence(cc.fadeTo(0.1, 200), cc.fadeOut(0.1));
+        this.seq4 = cc.sequence(cc.moveTo(0.1, 0, y), cc.callFunc(this.onResume.bind(this)));
+        this.seq5 = cc.sequence(cc.spawn(cc.rotateBy(1, 1300), cc.jumpTo(1, 0, y - 2000, 0, 1))
+            , cc.callFunc(this.onFailed.bind(this)));
+    },
+
+    reset() {
+        this.enabled = false;
+        this.knife.active = false;
+        this.pause = true;
     },
 
     onGameStart(count) {
@@ -27,17 +43,6 @@ cc.Class({
         let knife = this.knife;
         knife.active = true;
         this.enabled = true;
-        let y = this.y = knife.y;
-        this.seq1 = cc.sequence(cc.moveTo(0.1, 0, node.y - 430), cc.callFunc(this.onHit.bind(this)));
-        this.seq2 = cc.sequence(cc.moveBy(0.1, 0, 30), cc.moveBy(0.1, 0, -30));
-        this.seq3 = cc.sequence(cc.fadeTo(0.1, 200), cc.fadeOut(0.1));
-        this.seq4 = cc.sequence(cc.moveTo(0.1, 0, this.y), cc.callFunc(this.onResume.bind(this)));
-        this.seq5 = cc.sequence(cc.spawn(cc.rotateBy(1, 1300), cc.jumpTo(1, 0, y - 2000, 0, 1))
-            , cc.callFunc(this.onFailed.bind(this)));
-
-        gameEvent.TAP.push(this.onclick.bind(this));
-        gameEvent.KNIFE.push(this.onKnife.bind(this));
-        gameEvent.STAGE.push(this.onStage.bind(this));
 
         let sprite = node.children[0];
         let id = Math.floor(Math.random() * this.sprites.length);
@@ -46,15 +51,14 @@ cc.Class({
         this.cover = node.children[1];
         this.cover.setContentSize(sprite);
 
-        knife.setPosition(0, y - 200);
+        knife.setPosition(0, this.y - 200);
         knife.runAction(this.seq4);
 
-        this.pause = true;
         sprite.scale = 0;
+        node.scale = 1;
         sprite.runAction(cc.sequence(cc.scaleTo(0.2, 1.15)
             , cc.callFunc(this.spawnObstacle.bind(this, count))
             , cc.scaleTo(0.1, 1)));
-        node.getComponent('Target').enabled = true;
     },
 
     spawnObstacle(count) {
@@ -77,7 +81,7 @@ cc.Class({
             obj.rotation = -rot;
 
             list.push((rot + 87) % 360);
-            cc.log(rot);
+            //cc.log(rot);
 
             rot *= Math.PI / 180;
             obj.setPosition(r * Math.cos(rot), r * Math.sin(rot));
@@ -94,8 +98,8 @@ cc.Class({
         this.pause = true;
         let list = this.rotList;
         let node = this.node;
-        let knife = this.knife;
         let rotation = node.rotation;
+        let knife = this.knife;
 
         while (rotation < 0) rotation += 360;
         rotation = Math.floor(rotation) % 360;
@@ -106,8 +110,11 @@ cc.Class({
                 return;
             }
         }
-        list.push(rotation);
 
+        knife = cc.instantiate(knife);
+        cc.director.getScene().addChild(knife);
+
+        list.push(rotation);
         gameEvent.invoke('HIT');
 
         knife.parent = node;
@@ -121,10 +128,20 @@ cc.Class({
     },
 
     onStage() {
+        this.knife.active = false;
         this.node.runAction(cc.sequence(cc.scaleTo(0.15, 1.2),
             cc.callFunc(this.onEarth.bind(this)), cc.scaleTo(0.1, 1),
             cc.delayTime(1),
-            cc.scaleTo(0.15, 1.2), cc.scaleTo(0.1, 0)));
+            cc.scaleTo(0.15, 1.2), cc.scaleTo(0.1, 0),
+            cc.callFunc(this.clear.bind(this))));
+    },
+
+    clear() {
+        let list = this.node.children;
+        let count = list.length - 3;
+        for (let i = 0; i < count; ++i) {
+            list[i].destroy();
+        }
     },
 
     onEarth() {
@@ -134,10 +151,9 @@ cc.Class({
     },
 
     onKnife() {
-        let knife = this.knife = cc.instantiate(this.knife);
+        let knife = this.knife;
+        //knife.stopAllActions();
         knife.setPosition(0, this.y - 200);
-        knife.rotation = 0;
-        cc.director.getScene().addChild(knife);
         knife.setSiblingIndex(1);
 
         knife.runAction(this.seq4);
@@ -148,6 +164,10 @@ cc.Class({
     },
 
     onclick() {
-        !this.pause && this.knife.runAction(this.seq1);
+        if (!this.pause) {
+            let knife = this.knife;
+            knife.stopAllActions();
+            knife.runAction(this.seq1);
+        }
     },
 });
