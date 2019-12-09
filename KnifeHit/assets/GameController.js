@@ -41,6 +41,7 @@ cc.Class({
         }
 
         let stageObj = this.stage;
+        stageObj.enabled = true;
         stageObj.node.color = isBoss ? cc.color(255, 100, 100) : cc.color('FFC80D');
 
         stageObj.string = isBoss ? ('Boss ' + Math.floor(stage / 5)) : ('Stage ' + stage);
@@ -69,6 +70,8 @@ cc.Class({
             content.active = false;
             preBoss.node.active = true;
             preBoss.once('finished', this.onFinish.bind(this));
+            preBoss.play();
+            gameEvent.invoke('PLAY_SOUND', 'preboss');
         } else {
             preBoss.node.active = false;
             this.onFinish();
@@ -125,6 +128,7 @@ cc.Class({
         let preBoss = this.preBoss;
         preBoss.once('finished', this.reset.bind(this));
         preBoss.play('postBoss');
+        gameEvent.invoke('PLAY_SOUND', 'endboss');
     },
 
     onGameOver() {

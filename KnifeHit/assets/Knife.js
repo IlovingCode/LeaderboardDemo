@@ -88,6 +88,7 @@ cc.Class({
         }
 
         node.active = false;
+        gameEvent.invoke('PLAY_SOUND', 'targetappear');
     },
 
     onFailed() {
@@ -107,6 +108,7 @@ cc.Class({
         for (let r of list) {
             if (Math.abs(r - rotation) < angle) {
                 knife.runAction(this.seq5);
+                gameEvent.invoke('PLAY_SOUND', 'gameover');
                 return;
             }
         }
@@ -116,6 +118,7 @@ cc.Class({
 
         list.push(rotation);
         gameEvent.invoke('HIT');
+        gameEvent.invoke('PLAY_SOUND', 'hit');
 
         knife.parent = node;
         knife.setSiblingIndex(0);
@@ -148,6 +151,7 @@ cc.Class({
         let list = this.node.children;
         let sprite = list[list.length - 3].getComponent(cc.Sprite);
         sprite.spriteFrame = this.earth;
+        gameEvent.invoke('PLAY_SOUND', 'unlock');
     },
 
     onKnife() {
