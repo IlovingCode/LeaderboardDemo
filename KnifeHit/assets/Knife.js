@@ -7,7 +7,6 @@ cc.Class({
         collisionAngle: 9,
         sprites: [cc.SpriteFrame],
         earth: cc.SpriteFrame,
-        obstacle: cc.Node,
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -17,6 +16,9 @@ cc.Class({
     start() {
         let knife = this.knife = cc.find('knife');
         let y = this.y = knife.y;
+        let node = this.node;
+        this.obstacle = node.children[2];
+        this.star = node.children[3];
 
         gameEvent.TAP.push(this.onclick.bind(this));
         gameEvent.KNIFE.push(this.onKnife.bind(this));
@@ -24,7 +26,7 @@ cc.Class({
         gameEvent.START.push(this.onGameStart.bind(this));
         gameEvent.RESET.push(this.reset.bind(this));
 
-        this.seq1 = cc.sequence(cc.moveTo(0.1, 0, this.node.y - 430), cc.callFunc(this.onHit.bind(this)));
+        this.seq1 = cc.sequence(cc.moveTo(0.1, 0, node.y - 430), cc.callFunc(this.onHit.bind(this)));
         this.seq2 = cc.sequence(cc.moveBy(0.1, 0, 30), cc.moveBy(0.1, 0, -30));
         this.seq3 = cc.sequence(cc.fadeTo(0.1, 200), cc.fadeOut(0.1));
         this.seq4 = cc.sequence(cc.moveTo(0.1, 0, y), cc.callFunc(this.onResume.bind(this)));
@@ -58,6 +60,7 @@ cc.Class({
         node.scale = 1;
         sprite.runAction(cc.sequence(cc.scaleTo(0.2, 1.15)
             , cc.callFunc(this.spawnObstacle.bind(this, count))
+            , cc.callFunc(this.spawnStar.bind(this))
             , cc.scaleTo(0.1, 1)));
     },
 
@@ -65,13 +68,13 @@ cc.Class({
         count = 11 - count;
         let c = this.collisionAngle;
         let m = Math.floor(360 / c);
-        let a = Math.floor(Math.random() * m);
+        let a = 0;
         let r = this.node.width * 0.5;
         let node = this.obstacle;
         node.active = true;
         let list = this.rotList = [];
         while (--count > 0) {
-            a += 3 + Math.floor(Math.random() * m);
+            a += 5 + Math.floor(Math.random() * m);
             a > m && (a -= m);
 
             let rot = a * c;
@@ -89,6 +92,42 @@ cc.Class({
 
         node.active = false;
         gameEvent.invoke('PLAY_SOUND', 'targetappear');
+    },
+
+    spawnStar() {
+        let count = Math.floor((Math.random() - 0.5) * 7);
+        let c = this.collisionAngle;
+        let m = Math.floor(360 / c);
+        let a = -4;
+        let r = this.node.width * 0.5;
+        let node = this.star;
+        node.active = true;
+        let list = this.rotList;
+        let list2 = this.starList = [];
+        let angle = this.collisionAngle * 2;
+        while (count > 0) {
+            a += 4;
+            a > m && (a -= m);
+            let rot = a * c;
+
+            let t = (rot + 87) % 360;
+            for (let i of list) if (Math.abs(t - i) < angle) t = -1;
+            if (t < 0) continue;
+            for (let i of list2) if (Math.abs(t - i) < angle) t = -1;
+
+            --count;
+            let obj = cc.instantiate(node);
+            obj.parent = this.node;
+            obj.setSiblingIndex(0);
+            obj.rotation = -rot + 90;
+            cc.log(rot);
+            list2.push(obj);
+
+            rot *= Math.PI / 180;
+            obj.setPosition(r * Math.cos(rot), r * Math.sin(rot));
+        }
+
+        node.active = false;
     },
 
     onFailed() {
@@ -113,12 +152,23 @@ cc.Class({
             }
         }
 
+        list.push(rotation);
+        gameEvent.invoke('PLAY_SOUND', 'hit');
+
+        list = this.starList;
+        for (let i of list) {
+            let r = (90 - i.rotation + 87) % 360;
+            if (Math.abs(r - rotation) < angle) {
+                i.runAction(cc.sequence(cc.spawn(
+                    cc.scaleTo(0.3, 2), cc.fadeOut(0.3)),
+                    cc.callFunc(gameEvent.invoke.bind(gameEvent, 'PLAY_SOUND', 'coin'))));
+                break;
+            }
+        }
+
         knife = cc.instantiate(knife);
         cc.director.getScene().addChild(knife);
-
-        list.push(rotation);
         gameEvent.invoke('HIT');
-        gameEvent.invoke('PLAY_SOUND', 'hit');
 
         knife.parent = node;
         knife.setSiblingIndex(0);
@@ -141,7 +191,7 @@ cc.Class({
 
     clear() {
         let list = this.node.children;
-        let count = list.length - 3;
+        let count = list.length - 4;
         for (let i = 0; i < count; ++i) {
             list[i].destroy();
         }
@@ -149,7 +199,7 @@ cc.Class({
 
     onEarth() {
         let list = this.node.children;
-        let sprite = list[list.length - 3].getComponent(cc.Sprite);
+        let sprite = list[list.length - 4].getComponent(cc.Sprite);
         sprite.spriteFrame = this.earth;
         gameEvent.invoke('PLAY_SOUND', 'unlock');
     },
