@@ -7,6 +7,7 @@ cc.Class({
         collisionAngle: 9,
         sprites: [cc.SpriteFrame],
         earth: cc.SpriteFrame,
+        dot: cc.Node,
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -25,19 +26,20 @@ cc.Class({
         gameEvent.STAGE.push(this.onStage.bind(this));
         gameEvent.START.push(this.onGameStart.bind(this));
         gameEvent.RESET.push(this.reset.bind(this));
+        gameEvent.REVIVE.push(this.onRevive.bind(this));
+        gameEvent.SHOW_REVIVE.push(this.onShowRevive.bind(this));
 
         this.seq1 = cc.sequence(cc.moveTo(0.1, 0, node.y - 430), cc.callFunc(this.onHit.bind(this)));
         this.seq2 = cc.sequence(cc.moveBy(0.1, 0, 30), cc.moveBy(0.1, 0, -30));
         this.seq3 = cc.sequence(cc.fadeTo(0.1, 200), cc.fadeOut(0.1));
         this.seq4 = cc.sequence(cc.moveTo(0.1, 0, y), cc.callFunc(this.onResume.bind(this)));
-        this.seq5 = cc.sequence(cc.spawn(cc.rotateBy(1, 1300), cc.jumpTo(1, 0, y - 2000, 0, 1))
-            , cc.callFunc(this.onFailed.bind(this)));
     },
 
     reset() {
         this.enabled = false;
         this.knife.active = false;
         this.pause = true;
+        this.revive = -1;
     },
 
     onGameStart(count) {
@@ -134,6 +136,19 @@ cc.Class({
         gameEvent.invoke('GAME_OVER');
     },
 
+    onRevive() {
+        this.revive = 0;
+        this.knife.stopAllActions();
+        this.onKnife();
+    },
+
+    onShowRevive(isOn) {
+        this.knife.runAction(cc.sequence(cc.spawn(
+            cc.rotateBy(1, 1300), cc.jumpTo(1, 0, this.y - 2000, 0, 1))
+            , cc.delayTime(isOn ? 0.1 : 2)
+            , cc.callFunc(this.onFailed.bind(this))));
+    },
+
     onHit() {
         this.pause = true;
         let list = this.rotList;
@@ -146,7 +161,12 @@ cc.Class({
         let angle = this.collisionAngle;
         for (let r of list) {
             if (Math.abs(r - rotation) < angle) {
-                knife.runAction(this.seq5);
+                let dot = this.dot;
+                dot.opacity = 150;
+                dot.scale = 0;
+                dot.setPosition(knife);
+                dot.runAction(cc.spawn(cc.scaleTo(0.2, 0.7), cc.fadeOut(0.3)));
+                gameEvent.invoke('FAILED', this.revive);
                 gameEvent.invoke('PLAY_SOUND', 'gameover');
                 return;
             }
@@ -159,6 +179,7 @@ cc.Class({
         for (let i of list) {
             let r = (90 - i.rotation + 87) % 360;
             if (Math.abs(r - rotation) < angle) {
+                gameEvent.invoke('COIN');
                 i.runAction(cc.sequence(cc.spawn(
                     cc.scaleTo(0.3, 2), cc.fadeOut(0.3)),
                     cc.callFunc(gameEvent.invoke.bind(gameEvent, 'PLAY_SOUND', 'coin'))));
@@ -207,6 +228,7 @@ cc.Class({
     onKnife() {
         let knife = this.knife;
         //knife.stopAllActions();
+        knife.rotation = 0;
         knife.setPosition(0, this.y - 200);
         knife.setSiblingIndex(1);
 

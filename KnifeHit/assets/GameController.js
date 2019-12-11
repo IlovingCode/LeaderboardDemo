@@ -11,6 +11,8 @@ cc.Class({
         score: cc.Label,
         stage: cc.Label,
         preBoss: cc.Animation,
+        pixel: cc.Node,
+        revive: cc.Node,
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -90,8 +92,33 @@ cc.Class({
     start() {
         gameEvent.HIT.push(this.onHit.bind(this));
         gameEvent.GAME_OVER.push(this.onGameOver.bind(this));
+        gameEvent.FAILED.push(this.onFailed.bind(this));
+        gameEvent.COIN.push(this.onCoin.bind(this));
 
+        this.coin = Profile.coin;
         this.reset();
+    },
+
+    onCoin() {
+        this.coin++;
+    },
+
+    onRevive() {
+        this.revive.active = false;
+        gameEvent.invoke('REVIVE');
+    },
+
+    onFailed(hasRevive) {
+        let revive = this.revive;
+        if (hasRevive < 0) {
+            //TODO
+            revive.active = true;
+            revive.scale = 0;
+            revive.runAction(cc.sequence(cc.scaleTo(0.1, 1.2), cc.scaleTo(0.2, 1)));
+        };
+
+        gameEvent.invoke('SHOW_REVIVE', !revive.active);
+        this.pixel.runAction(cc.sequence(cc.fadeTo(0.1, 150), cc.fadeOut(0.2)));
     },
 
     onHit() {

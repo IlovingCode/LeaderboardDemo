@@ -7,21 +7,22 @@ let gameEvent = module.exports = {};
 //        evt[i]();
 //}
 
-gameEvent.invoke = function(name, arg1, arg2) {
+gameEvent.invoke = function (name, arg1, arg2) {
     let evt = this[name];
     for (let i in evt)
         evt[i](arg1, arg2);
 }
 
-gameEvent.reset = function(name) {
+gameEvent.reset = function (name) {
     if (typeof (name) == 'object') {
         for (let i in name)
             gameEvent[name[i]] = [];
     } else gameEvent[name] = [];
 }
 
-gameEvent.list = ['TAP', 'HIT', 'GAME_OVER', 'KNIFE', 'STAGE', 'START', 'RESET', 'PLAY_SOUND'];
+gameEvent.list = ['TAP', 'HIT', 'GAME_OVER', 'KNIFE', 'STAGE', 'START'
+    , 'RESET', 'PLAY_SOUND', 'FAILED', 'COIN', 'REVIVE', 'SHOW_REVIVE'];
 
-gameEvent.resetAll = function() {
+gameEvent.resetAll = function () {
     gameEvent.reset(gameEvent.list);
 }
