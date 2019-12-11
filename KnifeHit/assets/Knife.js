@@ -20,6 +20,7 @@ cc.Class({
         let node = this.node;
         this.obstacle = node.children[2];
         this.star = node.children[3];
+        this.revive = -1;
 
         gameEvent.TAP.push(this.onclick.bind(this));
         gameEvent.KNIFE.push(this.onKnife.bind(this));
@@ -39,13 +40,10 @@ cc.Class({
         this.enabled = false;
         this.knife.active = false;
         this.pause = true;
-        this.revive = -1;
     },
 
     onGameStart(count) {
         let node = this.node;
-        let knife = this.knife;
-        knife.active = true;
         this.enabled = true;
 
         let sprite = node.children[0];
@@ -54,9 +52,6 @@ cc.Class({
 
         this.cover = node.children[1];
         this.cover.setContentSize(sprite);
-
-        knife.setPosition(0, this.y - 200);
-        knife.runAction(this.seq4);
 
         sprite.scale = 0;
         node.scale = 1;
@@ -130,6 +125,11 @@ cc.Class({
         }
 
         node.active = false;
+
+        let knife = this.knife;
+        knife.active = true;
+        knife.setPosition(0, this.y - 200);
+        knife.runAction(this.seq4);
     },
 
     onFailed() {
@@ -137,20 +137,21 @@ cc.Class({
     },
 
     onRevive() {
+        this.node.active = true;
         this.revive = 0;
         this.knife.stopAllActions();
         this.onKnife();
     },
 
     onShowRevive(isOn) {
+        this.node.active = !isOn;
         this.knife.runAction(cc.sequence(cc.spawn(
             cc.rotateBy(1, 1300), cc.jumpTo(1, 0, this.y - 2000, 0, 1))
-            , cc.delayTime(isOn ? 0.1 : 2)
+            , cc.delayTime(isOn ? 2 : 0.1)
             , cc.callFunc(this.onFailed.bind(this))));
     },
 
     onHit() {
-        this.pause = true;
         let list = this.rotList;
         let node = this.node;
         let rotation = node.rotation;
@@ -177,6 +178,7 @@ cc.Class({
 
         list = this.starList;
         for (let i of list) {
+            if (i.opacity < 255) continue;
             let r = (90 - i.rotation + 87) % 360;
             if (Math.abs(r - rotation) < angle) {
                 gameEvent.invoke('COIN');
@@ -241,6 +243,7 @@ cc.Class({
 
     onclick() {
         if (!this.pause) {
+            this.pause = true;
             let knife = this.knife;
             knife.stopAllActions();
             knife.runAction(this.seq1);

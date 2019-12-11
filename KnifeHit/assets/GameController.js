@@ -2,6 +2,7 @@ var gameEvent = require('GameEvent');
 var Profile = require('Profile');
 var score = 0;
 var stage = 0;
+var coin = 0;
 
 cc.Class({
     extends: cc.Component,
@@ -9,16 +10,19 @@ cc.Class({
     properties: {
         content: cc.Node,
         score: cc.Label,
+        coin: cc.Label,
         stage: cc.Label,
         preBoss: cc.Animation,
         pixel: cc.Node,
         revive: cc.Node,
+        price: 0,
     },
 
     // LIFE-CYCLE CALLBACKS:
 
     onLoad() {
         gameEvent.resetAll();
+        Profile.load(); // for play test
 
         let content = this.content;
         let template = content.children[0];
@@ -27,6 +31,8 @@ cc.Class({
             let obj = cc.instantiate(template);
             content.addChild(obj);
         }
+
+        this.seq = cc.sequence(cc.fadeTo(0.1, 150), cc.fadeOut(0.2));
     },
 
     reset() {
@@ -95,30 +101,37 @@ cc.Class({
         gameEvent.FAILED.push(this.onFailed.bind(this));
         gameEvent.COIN.push(this.onCoin.bind(this));
 
-        this.coin = Profile.coin;
+        coin = Profile.coin;
+        this.coin.string = coin;
+        this.revive.active = false;
         this.reset();
     },
 
     onCoin() {
-        this.coin++;
+        coin++;
+        this.coin.string = coin;
     },
 
     onRevive() {
+        coin -= this.price;
+        this.coin.string = coin;
+
         this.revive.active = false;
+        this.pixel.runAction(this.seq);
         gameEvent.invoke('REVIVE');
     },
 
     onFailed(hasRevive) {
         let revive = this.revive;
-        if (hasRevive < 0) {
+        if (hasRevive < 0 && coin >= this.price) {
             //TODO
             revive.active = true;
             revive.scale = 0;
             revive.runAction(cc.sequence(cc.scaleTo(0.1, 1.2), cc.scaleTo(0.2, 1)));
         };
 
-        gameEvent.invoke('SHOW_REVIVE', !revive.active);
-        this.pixel.runAction(cc.sequence(cc.fadeTo(0.1, 150), cc.fadeOut(0.2)));
+        gameEvent.invoke('SHOW_REVIVE', revive.active);
+        this.pixel.runAction(this.seq);
     },
 
     onHit() {
@@ -159,7 +172,7 @@ cc.Class({
     },
 
     onGameOver() {
-        Profile.setBestScore(score);
+        Profile.set(score, coin);
         score = 0;
         stage = 0;
         cc.director.loadScene('main');
