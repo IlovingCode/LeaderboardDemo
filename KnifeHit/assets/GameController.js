@@ -104,7 +104,6 @@ cc.Class({
         coin = Profile.coin;
         this.coin.string = coin;
         this.revive.active = false;
-        this.reset();
     },
 
     onCoin() {
@@ -175,7 +174,6 @@ cc.Class({
         Profile.set(score, coin);
         score = 0;
         stage = 0;
-        cc.director.loadScene('main');
     }
 
     // update (dt) {},

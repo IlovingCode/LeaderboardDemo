@@ -53,8 +53,8 @@
     },
     "_scale": {
       "__type__": "cc.Vec3",
-      "x": 0.20885416666666667,
-      "y": 0.20885416666666667,
+      "x": 0.21762817851505603,
+      "y": 0.21762817851505603,
       "z": 1
     },
     "_quat": {
@@ -925,9 +925,6 @@
     "_level": 1,
     "_components": [
       {
-        "__id__": 89
-      },
-      {
         "__id__": 90
       },
       {
@@ -938,6 +935,9 @@
       },
       {
         "__id__": 93
+      },
+      {
+        "__id__": 94
       }
     ],
     "_prefab": null,
@@ -3407,14 +3407,14 @@
         "__id__": 81
       },
       {
-        "__id__": 84
+        "__id__": 85
       }
     ],
     "_active": true,
     "_level": 2,
     "_components": [
       {
-        "__id__": 88
+        "__id__": 89
       }
     ],
     "_prefab": null,
@@ -3564,7 +3564,9 @@
     "duration": 0.1,
     "zoomScale": 1.2,
     "clickEvents": [
-      null
+      {
+        "__id__": 84
+      }
     ],
     "_N$interactable": true,
     "_N$enableAutoGrayEffect": false,
@@ -3624,6 +3626,16 @@
     "_id": "178jc/qTBKsYUkUJXsBmpX"
   },
   {
+    "__type__": "cc.ClickEvent",
+    "target": {
+      "__id__": 22
+    },
+    "component": "",
+    "_componentId": "b8135hFJItFk5UuF8W+b7JH",
+    "handler": "play",
+    "customEventData": ""
+  },
+  {
     "__type__": "cc.Node",
     "_name": "bestScore",
     "_objFlags": 0,
@@ -3632,14 +3644,14 @@
     },
     "_children": [
       {
-        "__id__": 85
+        "__id__": 86
       }
     ],
     "_active": true,
     "_level": 3,
     "_components": [
       {
-        "__id__": 87
+        "__id__": 88
       }
     ],
     "_prefab": null,
@@ -3692,14 +3704,14 @@
     "_name": "tittle",
     "_objFlags": 0,
     "_parent": {
-      "__id__": 84
+      "__id__": 85
     },
     "_children": [],
     "_active": true,
     "_level": 3,
     "_components": [
       {
-        "__id__": 86
+        "__id__": 87
       }
     ],
     "_prefab": null,
@@ -3752,7 +3764,7 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 85
+      "__id__": 86
     },
     "_enabled": true,
     "_useOriginalSize": false,
@@ -3777,7 +3789,7 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 84
+      "__id__": 85
     },
     "_enabled": true,
     "_useOriginalSize": false,
@@ -3919,7 +3931,7 @@
       "__id__": 81
     },
     "bestScore": {
-      "__id__": 87
+      "__id__": 88
     },
     "mainMenu": {
       "__id__": 80

@@ -34,17 +34,19 @@ cc.Class({
         this.seq2 = cc.sequence(cc.moveBy(0.1, 0, 30), cc.moveBy(0.1, 0, -30));
         this.seq3 = cc.sequence(cc.fadeTo(0.1, 200), cc.fadeOut(0.1));
         this.seq4 = cc.sequence(cc.moveTo(0.1, 0, y), cc.callFunc(this.onResume.bind(this)));
+
+        this.reset();
     },
 
     reset() {
-        this.enabled = false;
+        this.node.opacity = 0;
         this.knife.active = false;
         this.pause = true;
     },
 
     onGameStart(count) {
         let node = this.node;
-        this.enabled = true;
+        node.opacity = 255;
 
         let sprite = node.children[0];
         let id = Math.floor(Math.random() * this.sprites.length);
@@ -128,11 +130,14 @@ cc.Class({
 
         let knife = this.knife;
         knife.active = true;
+        knife.rotation = 0;
         knife.setPosition(0, this.y - 200);
         knife.runAction(this.seq4);
     },
 
     onFailed() {
+        this.clear();
+        this.reset();
         gameEvent.invoke('GAME_OVER');
     },
 
