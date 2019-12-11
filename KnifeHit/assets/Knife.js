@@ -6,6 +6,7 @@ cc.Class({
     properties: {
         collisionAngle: 9,
         sprites: [cc.SpriteFrame],
+        glows: [cc.SpriteFrame],
         earth: cc.SpriteFrame,
         dot: cc.Node,
     },
@@ -18,6 +19,7 @@ cc.Class({
         let knife = this.knife = cc.find('knife');
         let y = this.y = knife.y;
         let node = this.node;
+        this.knifeList = node.children[1];
         this.obstacle = node.children[2];
         this.star = node.children[3];
         this.revive = -1;
@@ -39,6 +41,7 @@ cc.Class({
     },
 
     reset() {
+        this.node.active = true;
         this.node.opacity = 0;
         this.knife.active = false;
         this.pause = true;
@@ -48,11 +51,14 @@ cc.Class({
         let node = this.node;
         node.opacity = 255;
 
-        let sprite = node.children[0];
+        let sprite = node.children[4];
         let id = Math.floor(Math.random() * this.sprites.length);
         sprite.getComponent(cc.Sprite).spriteFrame = this.sprites[id];
 
-        this.cover = node.children[1];
+        let glow = node.children[0];
+        glow.getComponent(cc.Sprite).spriteFrame = this.glows[id];
+
+        this.cover = node.children[5];
         this.cover.setContentSize(sprite);
 
         sprite.scale = 0;
@@ -68,8 +74,9 @@ cc.Class({
         let c = this.collisionAngle;
         let m = Math.floor(360 / c);
         let a = 0;
-        let r = this.node.width * 0.5;
-        let node = this.obstacle;
+        let r = this.node.width * 0.52;
+        let parent = this.obstacle;
+        let node = parent.children[0];
         node.active = true;
         let list = this.rotList = [];
         while (--count > 0) {
@@ -78,11 +85,10 @@ cc.Class({
 
             let rot = a * c;
             let obj = cc.instantiate(node);
-            obj.parent = this.node;
-            obj.setSiblingIndex(0);
-            obj.rotation = -rot;
+            obj.parent = parent;
+            obj.rotation = -rot - 135;
 
-            list.push((rot + 87) % 360);
+            list.push((rot + 90) % 360);
             //cc.log(rot);
 
             rot *= Math.PI / 180;
@@ -98,8 +104,9 @@ cc.Class({
         let c = this.collisionAngle;
         let m = Math.floor(360 / c);
         let a = -4;
-        let r = this.node.width * 0.5;
-        let node = this.star;
+        let r = this.node.width * 0.6;
+        let parent = this.star;
+        let node = parent.children[0];
         node.active = true;
         let list = this.rotList;
         let list2 = this.starList = [];
@@ -109,17 +116,16 @@ cc.Class({
             a > m && (a -= m);
             let rot = a * c;
 
-            let t = (rot + 87) % 360;
+            let t = (rot + 90) % 360;
             for (let i of list) if (Math.abs(t - i) < angle) t = -1;
             if (t < 0) continue;
             for (let i of list2) if (Math.abs(t - i) < angle) t = -1;
 
             --count;
             let obj = cc.instantiate(node);
-            obj.parent = this.node;
-            obj.setSiblingIndex(0);
+            obj.parent = parent;
             obj.rotation = -rot + 90;
-            cc.log(rot);
+            //cc.log(rot);
             list2.push(obj);
 
             rot *= Math.PI / 180;
@@ -138,6 +144,7 @@ cc.Class({
     onFailed() {
         this.clear();
         this.reset();
+        this.revive = -1;
         gameEvent.invoke('GAME_OVER');
     },
 
@@ -184,7 +191,7 @@ cc.Class({
         list = this.starList;
         for (let i of list) {
             if (i.opacity < 255) continue;
-            let r = (90 - i.rotation + 87) % 360;
+            let r = (90 - i.rotation + 90) % 360;
             if (Math.abs(r - rotation) < angle) {
                 gameEvent.invoke('COIN');
                 i.runAction(cc.sequence(cc.spawn(
@@ -195,11 +202,10 @@ cc.Class({
         }
 
         knife = cc.instantiate(knife);
-        cc.director.getScene().addChild(knife);
+        //cc.director.getScene().addChild(knife);
         gameEvent.invoke('HIT');
 
-        knife.parent = node;
-        knife.setSiblingIndex(0);
+        knife.parent = this.knifeList;
         knife.rotation = -rotation;
         knife.setPosition(node.convertToNodeSpaceAR(knife));
 
@@ -218,8 +224,20 @@ cc.Class({
     },
 
     clear() {
-        let list = this.node.children;
-        let count = list.length - 4;
+        let list = this.obstacle.children;
+        let count = list.length;
+        for (let i = 1; i < count; ++i) {
+            list[i].destroy();
+        }
+
+        list = this.star.children;
+        count = list.length;
+        for (let i = 1; i < count; ++i) {
+            list[i].destroy();
+        }
+
+        list = this.knifeList.children;
+        count = list.length;
         for (let i = 0; i < count; ++i) {
             list[i].destroy();
         }
@@ -227,7 +245,7 @@ cc.Class({
 
     onEarth() {
         let list = this.node.children;
-        let sprite = list[list.length - 4].getComponent(cc.Sprite);
+        let sprite = list[4].getComponent(cc.Sprite);
         sprite.spriteFrame = this.earth;
         gameEvent.invoke('PLAY_SOUND', 'unlock');
     },

@@ -2,10 +2,10 @@
 - add level: done
 - update asset: done
 - add obstacle: done
-- add star: request
-- add second chance (revive): request 
+- add star: done
+- add second chance (revive): done 
 - add play button: done 
-- add sfx + bg music: request
+- add sfx + bg music: done
 - add save score: done 
 
 # Time
@@ -20,3 +20,4 @@
 - 08/12/19: 7h - 1h
 - 09/12/19: 8h - 12h
 - 10/12/19: 9h - 12h
+- 11/12/19: 9h - 12h

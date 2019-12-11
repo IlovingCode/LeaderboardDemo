@@ -174,6 +174,7 @@ cc.Class({
         Profile.set(score, coin);
         score = 0;
         stage = 0;
+        this.revive.active = false;
     }
 
     // update (dt) {},
