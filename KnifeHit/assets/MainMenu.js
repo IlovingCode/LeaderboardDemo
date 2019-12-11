@@ -1,4 +1,5 @@
 var Profile = require('Profile');
+var gameEvent = require('GameEvent');
 
 cc.Class({
     extends: cc.Component,
@@ -6,6 +7,9 @@ cc.Class({
     properties: {
         playBtn: cc.Node,
         bestScore: cc.Label,
+
+        mainMenu: cc.Node,
+        actionPhase: cc.Node,
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -21,13 +25,27 @@ cc.Class({
             cc.delayTime(2)
         )));
 
-        Profile.load();
         this.bestScore.string = Profile.bestScore;
+
+        this.switch(true);
+
+        gameEvent.GAME_OVER.push(this.onGameOver.bind(this));
     },
 
-    play() {
-        cc.director.loadScene('game');
+    switch(isOn) {
+        this.mainMenu.active = isOn;
+        this.actionPhase.active = !isOn;
     },
+
+    onGameOver() {
+        this.switch(true);
+    },
+    
+    play() {
+        this.switch(false);
+    },
+
+
 
     // update (dt) {},
 });

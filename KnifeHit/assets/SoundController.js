@@ -4,6 +4,7 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
+        volume: 1.0,
         clips: {
             type: cc.AudioClip,
             default: []
@@ -17,7 +18,7 @@ cc.Class({
     start() {
         this.audio = new cc.Audio();
         this.audio.setLoop(false);
-        this.audio.setVolume(1.0);
+        this.audio.setVolume(this.volume);
         gameEvent.PLAY_SOUND.push(this.play.bind(this));
     },
 
