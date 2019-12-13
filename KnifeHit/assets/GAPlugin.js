@@ -18,8 +18,8 @@ cc.Class({
 
         //ga.GameAnalytics.setEnabledEventSubmission(false);
         ga.GameAnalytics.configureAvailableResourceCurrencies(['coin']);
-        ga.GameAnalytics.configureAvailableResourceItemTypes(['kill', 'item']);
-        ga.GameAnalytics.configureAvailableCustomDimensions01(['headshot', 'armor']);
+        ga.GameAnalytics.configureAvailableResourceItemTypes(['collect', 'item']);
+        ga.GameAnalytics.configureAvailableCustomDimensions01(['star', 'revive']);
 
         ga.GameAnalytics.configureBuild(this.version);
         ga.GameAnalytics.initialize(this.key, this.secret);
@@ -27,14 +27,14 @@ cc.Class({
 
         gameEvent.GAME_START.push(this.onGameStart.bind(this));
         gameEvent.GAME_OVER.push(this.onGameOver.bind(this));
-        gameEvent.COIN_CHANGED.push(this.onCoinChanged.bind(this));
+        gameEvent.REVIVE.push(this.onCoinChanged.bind(this));
 
         ga.GameAnalytics.addProgressionEvent(ga.EGAProgressionStatus.Complete, 'game', 'launch');
         this.playTime = 0;
         this.coin = 0;
 
         this.game = cc.find('Canvas').getComponent('GameController');
-        this.spawner = cc.find('Camera').getComponent('spawner');
+        //this.spawner = cc.find('Camera').getComponent('spawner');
     },
 
     onGameStart() {
@@ -42,26 +42,28 @@ cc.Class({
         ga.GameAnalytics.addProgressionEvent(ga.EGAProgressionStatus.Complete,
             'game', 'session', 'start_' + this.playTime);
 
-        let coin = this.game.coin - this.coin;
+        let data = this.game.getCoin();
+        let coin = data - this.coin;
         if (coin > 0) {
             ga.GameAnalytics.addResourceEvent(ga.EGAResourceFlowType.Source,
-                'coin', coin, 'kill', 'headshot');
-            this.coin = this.game.coin;
+                'coin', coin, 'collect', 'star');
+            this.coin = data;
         }
     },
 
     onGameOver() {
+        let data = this.game.getData();
         ga.GameAnalytics.addProgressionEvent(ga.EGAProgressionStatus.Complete,
             'game', 'session', 'end_' + this.playTime);
         ga.GameAnalytics.addProgressionEvent(ga.EGAProgressionStatus.Complete,
-            'game', 'boss_' + this.game.boss, 'enemy_' + (this.spawner.id % 9), this.game.score);
+            'game', 'boss_' + Math.floor(data[0] / 5), 'stage_' + data[0], data[1]);
     },
 
     onCoinChanged(amount) {
         if (amount > 0) return;
         ga.GameAnalytics.addResourceEvent(ga.EGAResourceFlowType.Sink,
-            'coin', -amount, 'item', 'armor');
+            'coin', -amount, 'item', 'revive');
 
-        this.coin -= amount;
+        this.coin += amount;
     },
 });

@@ -100,6 +100,7 @@ cc.Class({
         gameEvent.GAME_OVER.push(this.onGameOver.bind(this));
         gameEvent.FAILED.push(this.onFailed.bind(this));
         gameEvent.COIN.push(this.onCoin.bind(this));
+        gameEvent.GAME_START.push(this.onGameStart.bind(this));
 
         coin = Profile.coin;
         this.coin.string = coin;
@@ -117,7 +118,7 @@ cc.Class({
 
         this.revive.active = false;
         this.pixel.runAction(this.seq);
-        gameEvent.invoke('REVIVE');
+        gameEvent.invoke('REVIVE', -this.price);
     },
 
     onFailed(hasRevive) {
@@ -172,10 +173,21 @@ cc.Class({
 
     onGameOver() {
         Profile.set(score, coin);
+        this.revive.active = false;
+    },
+
+    getData() {
+        return [stage, score];
+    },
+
+    getCoin(){
+        return coin;
+    },
+    
+    onGameStart() {
         score = 0;
         stage = 0;
-        this.revive.active = false;
-    }
+    },
 
     // update (dt) {},
 });

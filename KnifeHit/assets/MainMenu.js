@@ -43,6 +43,7 @@ cc.Class({
     
     play() {
         this.switch(false);
+        gameEvent.invoke('GAME_START');
         this.node.getComponent('GameController').reset();
     },
 

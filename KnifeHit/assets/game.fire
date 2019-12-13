@@ -53,8 +53,8 @@
     },
     "_scale": {
       "__type__": "cc.Vec3",
-      "x": 0.5140569133280332,
-      "y": 0.5140569133280332,
+      "x": 0.20885416666666667,
+      "y": 0.20885416666666667,
       "z": 1
     },
     "_quat": {
@@ -4227,9 +4227,9 @@
     "node": {
       "__id__": 27
     },
-    "_enabled": false,
-    "key": "game key",
-    "secret": "secret key",
+    "_enabled": true,
+    "key": "93a15ab52ab0f56be83c3ce4a46c84ef",
+    "secret": "111a0e033ab31760d0db3e423b22515e2a7ff79f",
     "version": "0.0.1",
     "_id": "8fzZdmg/ZHQ7wUn0io3Ctl"
   }

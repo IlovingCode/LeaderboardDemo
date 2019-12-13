@@ -62,6 +62,6 @@ cc.Class({
         ga.GameAnalytics.addResourceEvent(ga.EGAResourceFlowType.Sink,
             'coin', -amount, 'item', 'armor');
 
-        this.coin -= amount;
+        this.coin += amount;
     },
 });
