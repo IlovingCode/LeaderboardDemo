@@ -56,13 +56,13 @@ cc.Class({
         this.score.string = score;
 
         list = stageObj.node.children;
-        let m = stage % list.length - 1;
-        m < 0 && (m = list.length - 1);
-        for (let i = 0; i < m; i++) {
-            if (isBoss) {
-                list[i].active = false;
-            }
-            else list[i].color = cc.color(141, 191, 44);
+        length = list.length;
+        let m = stage % length - 1;
+        m < 0 && (m = length - 1);
+        for (let i = 0; i < length; i++) {
+            let t = list[i];
+            t.active = !isBoss || i >= m;
+            t.color = cc.color(i < m ? '8DBF2C' : '281E5A');
         }
 
         list[m].runAction(cc.sequence(
@@ -174,16 +174,18 @@ cc.Class({
     onGameOver() {
         Profile.set(score, coin);
         this.revive.active = false;
+        let list = this.stage.node.children;
+        list[list.length - 1].x = 106;
     },
 
     getData() {
         return [stage, score];
     },
 
-    getCoin(){
+    getCoin() {
         return coin;
     },
-    
+
     onGameStart() {
         score = 0;
         stage = 0;

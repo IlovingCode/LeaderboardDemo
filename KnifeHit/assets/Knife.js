@@ -7,7 +7,9 @@ cc.Class({
         collisionAngle: 9,
         sprites: [cc.SpriteFrame],
         glows: [cc.SpriteFrame],
+        trees: [cc.SpriteFrame],
         earth: cc.SpriteFrame,
+        earthglow: cc.SpriteFrame,
         dot: cc.Node,
     },
 
@@ -19,9 +21,11 @@ cc.Class({
         let knife = this.knife = cc.find('knife');
         let y = this.y = knife.y;
         let node = this.node;
-        this.knifeList = node.children[1];
-        this.obstacle = node.children[2];
-        this.star = node.children[3];
+        node.children[0].opacity = 0;
+        this.knifeList = node.children[2];
+        this.obstacle = node.children[3];
+        this.star = node.children[4];
+        this.cover = node.children[6];
         this.revive = -1;
 
         gameEvent.TAP.push(this.onclick.bind(this));
@@ -36,13 +40,15 @@ cc.Class({
         this.seq2 = cc.sequence(cc.moveBy(0.1, 0, 30), cc.moveBy(0.1, 0, -30));
         this.seq3 = cc.sequence(cc.fadeTo(0.1, 200), cc.fadeOut(0.1));
         this.seq4 = cc.sequence(cc.moveTo(0.1, 0, y), cc.callFunc(this.onResume.bind(this)));
+        this.seq5 = cc.sequence(cc.fadeIn(0.3), cc.delayTime(1), cc.fadeOut(0.2));
 
         this.reset();
     },
 
     reset() {
-        this.node.active = true;
-        this.node.opacity = 0;
+        let node = this.node;
+        node.active = true;
+        node.opacity = 0;
         this.knife.active = false;
         this.pause = true;
     },
@@ -51,14 +57,13 @@ cc.Class({
         let node = this.node;
         node.opacity = 255;
 
-        let sprite = node.children[4];
+        let sprite = node.children[5];
         let id = Math.floor(Math.random() * this.sprites.length);
         sprite.getComponent(cc.Sprite).spriteFrame = this.sprites[id];
 
-        let glow = node.children[0];
+        let glow = node.children[1];
         glow.getComponent(cc.Sprite).spriteFrame = this.glows[id];
 
-        this.cover = node.children[5];
         this.cover.setContentSize(sprite);
 
         sprite.scale = 0;
@@ -245,8 +250,11 @@ cc.Class({
 
     onEarth() {
         let list = this.node.children;
-        let sprite = list[4].getComponent(cc.Sprite);
+        let sprite = list[5].getComponent(cc.Sprite);
+        let glow = list[1].getComponent(cc.Sprite);
         sprite.spriteFrame = this.earth;
+        glow.spriteFrame = this.earthglow;
+        list[0].runAction(this.seq5);
         gameEvent.invoke('PLAY_SOUND', 'unlock');
     },
 
@@ -258,6 +266,10 @@ cc.Class({
         knife.setSiblingIndex(1);
 
         knife.runAction(this.seq4);
+
+        let list = this.trees;
+        let id = Math.floor(Math.random() * list.length);
+        knife.getComponent(cc.Sprite).spriteFrame = list[id];
     },
 
     onResume() {
