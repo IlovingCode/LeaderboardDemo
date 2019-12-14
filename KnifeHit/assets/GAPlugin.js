@@ -31,10 +31,11 @@ cc.Class({
 
         ga.GameAnalytics.addProgressionEvent(ga.EGAProgressionStatus.Complete, 'game', 'launch');
         this.playTime = 0;
-        this.coin = 0;
 
         this.game = cc.find('Canvas').getComponent('GameController');
         //this.spawner = cc.find('Camera').getComponent('spawner');
+
+        this.coin = this.game.getCoin();
     },
 
     onGameStart() {
