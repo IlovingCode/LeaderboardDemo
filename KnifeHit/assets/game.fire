@@ -53,8 +53,8 @@
     },
     "_scale": {
       "__type__": "cc.Vec3",
-      "x": 0.1160372583045422,
-      "y": 0.1160372583045422,
+      "x": 0.593186372745491,
+      "y": 0.593186372745491,
       "z": 1
     },
     "_quat": {
@@ -305,8 +305,8 @@
     },
     "_scale": {
       "__type__": "cc.Vec3",
-      "x": 0.8,
-      "y": 0.8,
+      "x": 1,
+      "y": 1,
       "z": 1
     },
     "_rotationX": 0,
@@ -1464,12 +1464,6 @@
     "_level": 1,
     "_components": [
       {
-        "__id__": 100
-      },
-      {
-        "__id__": 101
-      },
-      {
         "__id__": 102
       },
       {
@@ -1477,6 +1471,12 @@
       },
       {
         "__id__": 104
+      },
+      {
+        "__id__": 105
+      },
+      {
+        "__id__": 106
       }
     ],
     "_prefab": null,
@@ -1928,9 +1928,9 @@
     "_opacity": 255,
     "_color": {
       "__type__": "cc.Color",
-      "r": 141,
-      "g": 191,
-      "b": 44,
+      "r": 255,
+      "g": 255,
+      "b": 255,
       "a": 255
     },
     "_contentSize": {
@@ -2081,8 +2081,8 @@
     "_color": {
       "__type__": "cc.Color",
       "r": 255,
-      "g": 99,
-      "b": 99,
+      "g": 255,
+      "b": 255,
       "a": 255
     },
     "_contentSize": {
@@ -2544,7 +2544,7 @@
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 771,
     "_spriteFrame": {
-      "__uuid__": "c1ea2573-5b22-48ad-9d88-d46ff044d894"
+      "__uuid__": "36705be7-71ae-4e3d-9ad5-9a12b5c4139f"
     },
     "_type": 0,
     "_sizeMode": 0,
@@ -2673,7 +2673,7 @@
     "_color": {
       "__type__": "cc.Color",
       "r": 255,
-      "g": 194,
+      "g": 245,
       "b": 0,
       "a": 255
     },
@@ -3250,7 +3250,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 476.41,
+      "width": 387.54,
       "height": 150
     },
     "_anchorPoint": {
@@ -3293,8 +3293,8 @@
     },
     "_enabled": true,
     "_useOriginalSize": false,
-    "_string": "Boss Fight",
-    "_N$string": "Boss Fight",
+    "_string": "Màn khó",
+    "_N$string": "Màn khó",
     "_fontSize": 100,
     "_lineHeight": 150,
     "_enableWrapText": true,
@@ -3773,8 +3773,8 @@
     },
     "_enabled": true,
     "_useOriginalSize": false,
-    "_string": "Second Chance",
-    "_N$string": "Second Chance",
+    "_string": "Tiếp tục nào?",
+    "_N$string": "Tiếp tục nào?",
     "_fontSize": 80,
     "_lineHeight": 100,
     "_enableWrapText": true,
@@ -3946,14 +3946,17 @@
         "__id__": 91
       },
       {
-        "__id__": 95
+        "__id__": 93
+      },
+      {
+        "__id__": 97
       }
     ],
     "_active": true,
     "_level": 2,
     "_components": [
       {
-        "__id__": 99
+        "__id__": 101
       }
     ],
     "_prefab": null,
@@ -4003,7 +4006,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "playbutton",
+    "_name": "logo",
     "_objFlags": 0,
     "_parent": {
       "__id__": 90
@@ -4014,9 +4017,97 @@
     "_components": [
       {
         "__id__": 92
+      }
+    ],
+    "_prefab": null,
+    "_opacity": 255,
+    "_color": {
+      "__type__": "cc.Color",
+      "r": 255,
+      "g": 255,
+      "b": 255,
+      "a": 255
+    },
+    "_contentSize": {
+      "__type__": "cc.Size",
+      "width": 690,
+      "height": 282
+    },
+    "_anchorPoint": {
+      "__type__": "cc.Vec2",
+      "x": 0.5,
+      "y": 0.5
+    },
+    "_position": {
+      "__type__": "cc.Vec3",
+      "x": 0,
+      "y": 570,
+      "z": 0
+    },
+    "_scale": {
+      "__type__": "cc.Vec3",
+      "x": 1,
+      "y": 1,
+      "z": 1
+    },
+    "_rotationX": 0,
+    "_rotationY": 0,
+    "_quat": {
+      "__type__": "cc.Quat",
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "w": 1
+    },
+    "_skewX": 0,
+    "_skewY": 0,
+    "groupIndex": 0,
+    "_id": "fbBnze+aBKl5vQwJFs2ChC"
+  },
+  {
+    "__type__": "cc.Sprite",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 91
+    },
+    "_enabled": true,
+    "_srcBlendFactor": 770,
+    "_dstBlendFactor": 771,
+    "_spriteFrame": {
+      "__uuid__": "628b04bd-d657-44ce-b003-bd277f62eac1"
+    },
+    "_type": 0,
+    "_sizeMode": 0,
+    "_fillType": 0,
+    "_fillCenter": {
+      "__type__": "cc.Vec2",
+      "x": 0,
+      "y": 0
+    },
+    "_fillStart": 0,
+    "_fillRange": 0,
+    "_isTrimmedMode": true,
+    "_state": 0,
+    "_atlas": null,
+    "_id": "f7LxngRrtIIp6W4TYYnDfa"
+  },
+  {
+    "__type__": "cc.Node",
+    "_name": "playbutton",
+    "_objFlags": 0,
+    "_parent": {
+      "__id__": 90
+    },
+    "_children": [],
+    "_active": true,
+    "_level": 3,
+    "_components": [
+      {
+        "__id__": 94
       },
       {
-        "__id__": 93
+        "__id__": 95
       }
     ],
     "_prefab": null,
@@ -4069,7 +4160,7 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 91
+      "__id__": 93
     },
     "_enabled": true,
     "_srcBlendFactor": 770,
@@ -4097,14 +4188,14 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 91
+      "__id__": 93
     },
     "_enabled": true,
     "duration": 0.1,
     "zoomScale": 1.2,
     "clickEvents": [
       {
-        "__id__": 94
+        "__id__": 96
       }
     ],
     "_N$interactable": true,
@@ -4160,7 +4251,7 @@
     "hoverSprite": null,
     "_N$disabledSprite": null,
     "_N$target": {
-      "__id__": 91
+      "__id__": 93
     },
     "_id": "178jc/qTBKsYUkUJXsBmpX"
   },
@@ -4183,14 +4274,14 @@
     },
     "_children": [
       {
-        "__id__": 96
+        "__id__": 98
       }
     ],
     "_active": true,
     "_level": 3,
     "_components": [
       {
-        "__id__": 98
+        "__id__": 100
       }
     ],
     "_prefab": null,
@@ -4204,7 +4295,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 83.42,
+      "width": 66.74,
       "height": 150
     },
     "_anchorPoint": {
@@ -4215,7 +4306,7 @@
     "_position": {
       "__type__": "cc.Vec3",
       "x": 0,
-      "y": 250,
+      "y": 67,
       "z": 0
     },
     "_scale": {
@@ -4243,14 +4334,14 @@
     "_name": "tittle",
     "_objFlags": 0,
     "_parent": {
-      "__id__": 95
+      "__id__": 97
     },
     "_children": [],
     "_active": true,
     "_level": 3,
     "_components": [
       {
-        "__id__": 97
+        "__id__": 99
       }
     ],
     "_prefab": null,
@@ -4264,7 +4355,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 440.2,
+      "width": 451.34,
       "height": 100
     },
     "_anchorPoint": {
@@ -4275,7 +4366,7 @@
     "_position": {
       "__type__": "cc.Vec3",
       "x": 0,
-      "y": 200,
+      "y": 161,
       "z": 0
     },
     "_scale": {
@@ -4303,13 +4394,13 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 96
+      "__id__": 98
     },
     "_enabled": true,
     "_useOriginalSize": false,
-    "_string": "Best Score",
-    "_N$string": "Best Score",
-    "_fontSize": 90,
+    "_string": "Điểm cao nhất",
+    "_N$string": "Điểm cao nhất",
+    "_fontSize": 70,
     "_lineHeight": 100,
     "_enableWrapText": true,
     "_N$file": null,
@@ -4328,13 +4419,13 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 95
+      "__id__": 97
     },
     "_enabled": true,
     "_useOriginalSize": false,
     "_string": "0",
     "_N$string": "0",
-    "_fontSize": 150,
+    "_fontSize": 120,
     "_lineHeight": 150,
     "_enableWrapText": true,
     "_N$file": null,
@@ -4468,10 +4559,10 @@
     },
     "_enabled": true,
     "playBtn": {
-      "__id__": 91
+      "__id__": 93
     },
     "bestScore": {
-      "__id__": 98
+      "__id__": 100
     },
     "mainMenu": {
       "__id__": 90

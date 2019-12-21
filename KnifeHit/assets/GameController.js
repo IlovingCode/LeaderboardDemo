@@ -50,9 +50,9 @@ cc.Class({
 
         let stageObj = this.stage;
         stageObj.enabled = true;
-        stageObj.node.color = isBoss ? cc.color(255, 100, 100) : cc.color('FFC80D');
+        stageObj.node.color = isBoss ? cc.color(255, 100, 100) : cc.color('8DBF2C');
 
-        stageObj.string = isBoss ? ('Boss ' + Math.floor(stage / 5)) : ('Stage ' + stage);
+        stageObj.string = isBoss ? ('Màn khó ' + Math.floor(stage / 5)) : ('Màn ' + stage);
         this.score.string = score;
 
         list = stageObj.node.children;
