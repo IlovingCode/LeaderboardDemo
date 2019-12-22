@@ -150,7 +150,7 @@ cc.Class({
 
                 list[m].runAction(cc.sequence(
                     cc.delayTime(1.3),
-                    cc.tintTo(0.1, 0, 0, 0),
+                    cc.tintTo(0.1, 40, 30, 90),
                     cc.moveTo(0.3, 106, list[m].y),
                     cc.callFunc(this.onPostBoss.bind(this))
                 ));
