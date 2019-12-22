@@ -7,6 +7,7 @@
 - add play button: done 
 - add sfx + bg music: done
 - add save score: done 
+- add more rotate type from Knife Hit for normal and boss stage 
 
 # Time
 - 10/11/19: 19h - 21h
