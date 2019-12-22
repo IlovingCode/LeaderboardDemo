@@ -50,7 +50,7 @@ cc.Class({
 
         let stageObj = this.stage;
         stageObj.enabled = true;
-        stageObj.node.color = isBoss ? cc.color(255, 100, 100) : cc.color('8DBF2C');
+        stageObj.node.color = isBoss ? cc.color(255, 100, 100) : cc.color('FF9900');
 
         stageObj.string = isBoss ? ('Màn khó ' + Math.floor(stage / 5)) : ('Màn ' + stage);
         this.score.string = score;
@@ -62,12 +62,12 @@ cc.Class({
         for (let i = 0; i < length; i++) {
             let t = list[i];
             t.active = !isBoss || i >= m;
-            t.color = cc.color(i < m ? '8DBF2C' : '281E5A');
+            t.color = cc.color(i < m ? 'FF9900' : '281E5A');
         }
 
         list[m].runAction(cc.sequence(
             cc.scaleTo(0.1, 1.5), cc.scaleTo(0.1, 1),
-            cc.tintTo(0.1, 141, 191, 44),
+            cc.tintTo(0.1, 255, 153, 0),
             isBoss && cc.moveTo(0.3, 0, list[m].y),
         ));
 
