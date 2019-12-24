@@ -53,7 +53,7 @@ cc.Class({
         this.pause = true;
     },
 
-    onGameStart(count) {
+    onGameStart(count, stage) {
         let node = this.node;
         node.opacity = 255;
 
@@ -68,8 +68,9 @@ cc.Class({
 
         sprite.scale = 0;
         node.scale = 1;
+        this.rotList = [];
         sprite.runAction(cc.sequence(cc.scaleTo(0.2, 1.15)
-            , cc.callFunc(this.spawnObstacle.bind(this, count))
+            , stage > 1 && cc.callFunc(this.spawnObstacle.bind(this, count))
             , cc.callFunc(this.spawnStar.bind(this))
             , cc.scaleTo(0.1, 1)));
     },
@@ -83,7 +84,7 @@ cc.Class({
         let parent = this.obstacle;
         let node = parent.children[0];
         node.active = true;
-        let list = this.rotList = [];
+        let list = this.rotList;
         while (--count > 0) {
             a += 5 + Math.floor(Math.random() * m);
             a > m && (a -= m);
@@ -153,11 +154,13 @@ cc.Class({
         gameEvent.invoke('GAME_OVER');
     },
 
-    onRevive() {
-        this.node.active = true;
-        this.revive = 0;
+    onRevive(amount) {
         this.knife.stopAllActions();
-        this.onKnife();
+        if (amount < 0) {
+            this.node.active = true;
+            this.revive = 0;
+            this.onKnife();
+        } else this.onFailed();
     },
 
     onShowRevive(isOn) {

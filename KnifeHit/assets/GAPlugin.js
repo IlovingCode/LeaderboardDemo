@@ -61,7 +61,7 @@ cc.Class({
     },
 
     onCoinChanged(amount) {
-        if (amount > 0) return;
+        if (amount >= 0) return;
         ga.GameAnalytics.addResourceEvent(ga.EGAResourceFlowType.Sink,
             'coin', -amount, 'item', 'revive');
 

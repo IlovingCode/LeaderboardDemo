@@ -92,7 +92,7 @@ cc.Class({
 
         //this.stage.enabled = true;
         this.content.active = true;
-        gameEvent.invoke('START', this.count);
+        gameEvent.invoke('START', this.count, stage);
     },
 
     start() {
@@ -110,6 +110,10 @@ cc.Class({
     onCoin() {
         coin++;
         this.coin.string = coin;
+    },
+
+    onRefuse() {
+        gameEvent.invoke('REVIVE', 0);
     },
 
     onRevive() {
