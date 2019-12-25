@@ -25,9 +25,7 @@ cc.Class({
             cc.delayTime(2)
         )));
 
-        this.bestScore.string = Profile.bestScore;
-
-        this.switch(true);
+        this.onGameOver();
 
         gameEvent.GAME_OVER.push(this.onGameOver.bind(this));
     },
@@ -38,9 +36,10 @@ cc.Class({
     },
 
     onGameOver() {
+        this.bestScore.string = Profile.bestScore;
         this.switch(true);
     },
-    
+
     play() {
         this.switch(false);
         gameEvent.invoke('GAME_START');
