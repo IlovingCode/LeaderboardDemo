@@ -53,8 +53,8 @@
     },
     "_scale": {
       "__type__": "cc.Vec3",
-      "x": 0.26425451014034484,
-      "y": 0.26425451014034484,
+      "x": 0.16864727775942226,
+      "y": 0.16864727775942226,
       "z": 1
     },
     "_quat": {
@@ -3212,7 +3212,7 @@
     "_position": {
       "__type__": "cc.Vec3",
       "x": 0,
-      "y": 0,
+      "y": 35,
       "z": 0
     },
     "_scale": {
@@ -3292,7 +3292,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 349.19,
+      "width": 387.54,
       "height": 150
     },
     "_anchorPoint": {
@@ -3337,7 +3337,7 @@
     "_useOriginalSize": false,
     "_string": "Màn khó",
     "_N$string": "Màn khó",
-    "_fontSize": 90,
+    "_fontSize": 100,
     "_lineHeight": 150,
     "_enableWrapText": true,
     "_N$file": null,
@@ -3862,7 +3862,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 285.25,
+      "width": 253.55,
       "height": 100
     },
     "_anchorPoint": {
@@ -3907,7 +3907,7 @@
     "_useOriginalSize": false,
     "_string": "Bỏ qua",
     "_N$string": "Bỏ qua",
-    "_fontSize": 90,
+    "_fontSize": 80,
     "_lineHeight": 100,
     "_enableWrapText": true,
     "_N$file": null,
@@ -4618,8 +4618,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 339.89,
-      "height": 100
+      "width": 424.36,
+      "height": 120
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -4663,8 +4663,8 @@
     "_useOriginalSize": false,
     "_string": "Điểm cao",
     "_N$string": "Điểm cao",
-    "_fontSize": 80,
-    "_lineHeight": 100,
+    "_fontSize": 100,
+    "_lineHeight": 120,
     "_enableWrapText": true,
     "_N$file": null,
     "_isSystemFontUsed": true,
