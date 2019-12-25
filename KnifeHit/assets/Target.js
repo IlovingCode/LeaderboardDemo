@@ -57,23 +57,31 @@ cc.Class({
     },
 
     seq6(level) {
+        level *= 0.5;
         return cc.sequence(
-            cc.rotateBy(2 - level, 100),
-            cc.rotateBy(2 - level, -100),
-            cc.rotateBy(2 - level, 100),
-            cc.rotateBy(2 - level, -200)
+            cc.rotateBy(1 - level, 50),
+            cc.rotateBy(1 - level, -50),
+            cc.rotateBy(1 - level, 50),
+            cc.rotateBy(1 - level, -50),
+            cc.rotateBy(1 - level, 50),
+            cc.rotateBy(1 - level, -100)
         );
     },
 
     seq7(level) {
         return cc.sequence(
             cc.rotateBy(2 - level, 200),
+            cc.rotateBy(2 - level, 300),
             cc.rotateBy(2 - level, 400),
+            cc.rotateBy(2 - level, 500),
             cc.rotateBy(2 - level, 600),
+            cc.rotateBy(2 - level, 700),
             cc.rotateBy(2 - level, 800),
+            cc.rotateBy(2 - level, 700),
             cc.rotateBy(2 - level, 600),
+            cc.rotateBy(2 - level, 500),
             cc.rotateBy(2 - level, 400),
-            cc.rotateBy(2 - level, 200)
+            cc.rotateBy(2 - level, 300)
         );
     },
 
