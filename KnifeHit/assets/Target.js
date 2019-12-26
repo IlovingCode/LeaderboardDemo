@@ -15,9 +15,11 @@ cc.Class({
     },
 
     reset() {
-        let level = Math.floor(stage / 5);
+        let level = Math.floor(stage++ / 5);
         let id = 0;
-        ++stage > 1 && (id = Math.floor(Math.random() * (stage % 5 == 0 ? 8 : 3)));
+        if (stage > 1)
+            if (stage % 5 == 0) id = 3 + Math.floor(Math.random() * 5);
+            else id = Math.floor(Math.random() * 3);
 
         this.node.runAction(cc.repeatForever(this['seq' + id](Math.min(level, 10) * delta)));
     },
