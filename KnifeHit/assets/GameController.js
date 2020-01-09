@@ -67,7 +67,7 @@ cc.Class({
 
         list[m].runAction(cc.sequence(
             cc.scaleTo(0.1, 1.5), cc.scaleTo(0.1, 1),
-            isBoss ? cc.tintTo(0.1, 255, 0, 0) : cc.tintTo(0.1, 255, 153, 0),
+            isBoss ? cc.tintTo(0.1, 255, 100, 100) : cc.tintTo(0.1, 255, 153, 0),
             isBoss && cc.moveTo(0.3, 0, list[m].y),
         ));
 
