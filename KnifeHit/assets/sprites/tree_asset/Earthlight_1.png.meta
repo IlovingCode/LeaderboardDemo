@@ -1,10 +1,15 @@
 {
-  "ver": "2.2.0",
+  "ver": "2.3.4",
   "uuid": "46ca755b-59f1-4e12-aba7-237b95ef650d",
   "type": "sprite",
   "wrapMode": "clamp",
   "filterMode": "bilinear",
   "premultiplyAlpha": false,
+  "genMipmaps": false,
+  "packable": true,
+  "width": 2190,
+  "height": 2181,
+  "platformSettings": {},
   "subMetas": {
     "Earthlight_1": {
       "ver": "1.0.4",

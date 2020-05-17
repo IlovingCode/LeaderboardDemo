@@ -1,10 +1,15 @@
 {
-  "ver": "2.2.0",
+  "ver": "2.3.4",
   "uuid": "ffcc0730-7ffc-46da-bc15-4d3ce3744c5a",
   "type": "sprite",
   "wrapMode": "clamp",
   "filterMode": "bilinear",
   "premultiplyAlpha": false,
+  "genMipmaps": false,
+  "packable": true,
+  "width": 2127,
+  "height": 2148,
+  "platformSettings": {},
   "subMetas": {
     "halolight": {
       "ver": "1.0.4",

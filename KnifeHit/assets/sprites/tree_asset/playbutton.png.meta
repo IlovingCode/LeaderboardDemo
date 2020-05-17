@@ -1,10 +1,15 @@
 {
-  "ver": "2.2.0",
+  "ver": "2.3.4",
   "uuid": "63ddd269-f444-4df9-a12f-b78c18a0e292",
   "type": "sprite",
   "wrapMode": "clamp",
   "filterMode": "bilinear",
   "premultiplyAlpha": false,
+  "genMipmaps": false,
+  "packable": true,
+  "width": 309,
+  "height": 312,
+  "platformSettings": {},
   "subMetas": {
     "playbutton": {
       "ver": "1.0.4",

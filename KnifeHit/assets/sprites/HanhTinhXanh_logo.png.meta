@@ -1,10 +1,15 @@
 {
-  "ver": "2.2.0",
+  "ver": "2.3.4",
   "uuid": "dbc55285-34b7-478a-ba75-37a46c32d2e0",
   "type": "sprite",
   "wrapMode": "clamp",
   "filterMode": "bilinear",
   "premultiplyAlpha": false,
+  "genMipmaps": false,
+  "packable": true,
+  "width": 460,
+  "height": 188,
+  "platformSettings": {},
   "subMetas": {
     "HanhTinhXanh_logo": {
       "ver": "1.0.4",

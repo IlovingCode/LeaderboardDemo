@@ -1,10 +1,15 @@
 {
-  "ver": "2.2.0",
+  "ver": "2.3.4",
   "uuid": "fcbc3a6e-0c22-4bf8-a42a-9aa551c813bc",
   "type": "sprite",
   "wrapMode": "clamp",
   "filterMode": "bilinear",
   "premultiplyAlpha": false,
+  "genMipmaps": false,
+  "packable": true,
+  "width": 1941,
+  "height": 1941,
+  "platformSettings": {},
   "subMetas": {
     "Moonlight_1": {
       "ver": "1.0.4",

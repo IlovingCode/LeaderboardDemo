@@ -1,10 +1,15 @@
 {
-  "ver": "2.2.0",
+  "ver": "2.3.4",
   "uuid": "3b6ef211-479b-44f4-8d5d-cb94e50375d4",
   "type": "sprite",
   "wrapMode": "clamp",
   "filterMode": "bilinear",
   "premultiplyAlpha": false,
+  "genMipmaps": false,
+  "packable": true,
+  "width": 750,
+  "height": 750,
+  "platformSettings": {},
   "subMetas": {
     "moon_1": {
       "ver": "1.0.4",

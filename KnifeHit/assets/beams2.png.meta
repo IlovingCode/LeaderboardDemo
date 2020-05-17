@@ -1,10 +1,15 @@
 {
-  "ver": "2.2.0",
+  "ver": "2.3.4",
   "uuid": "6e9ca5a4-87ab-4f70-bae0-98387c2ccaf2",
   "type": "sprite",
   "wrapMode": "clamp",
   "filterMode": "bilinear",
   "premultiplyAlpha": false,
+  "genMipmaps": false,
+  "packable": true,
+  "width": 756,
+  "height": 756,
+  "platformSettings": {},
   "subMetas": {
     "beams2": {
       "ver": "1.0.4",

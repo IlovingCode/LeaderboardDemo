@@ -1,10 +1,15 @@
 {
-  "ver": "2.2.0",
+  "ver": "2.3.4",
   "uuid": "cdf9cb21-2fc1-4d54-acd6-d92ba9bfebbb",
   "type": "sprite",
   "wrapMode": "clamp",
   "filterMode": "bilinear",
   "premultiplyAlpha": false,
+  "genMipmaps": false,
+  "packable": true,
+  "width": 158,
+  "height": 512,
+  "platformSettings": {},
   "subMetas": {
     "knife_2": {
       "ver": "1.0.4",

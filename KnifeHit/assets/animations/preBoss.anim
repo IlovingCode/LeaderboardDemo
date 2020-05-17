@@ -11,16 +11,6 @@
     "paths": {
       "beams2": {
         "props": {
-          "rotation": [
-            {
-              "frame": 0,
-              "value": 0
-            },
-            {
-              "frame": 2,
-              "value": 99
-            }
-          ],
           "opacity": [
             {
               "frame": 0,
@@ -41,6 +31,16 @@
             {
               "frame": 2,
               "value": 0
+            }
+          ],
+          "angle": [
+            {
+              "frame": 0,
+              "value": 0
+            },
+            {
+              "frame": 2,
+              "value": -99
             }
           ]
         }
